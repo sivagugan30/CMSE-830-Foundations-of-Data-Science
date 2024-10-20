@@ -106,11 +106,11 @@ elif st.session_state.page == 'types_of_players':
             score_name = f"{selected_category.lower()}_score"
             df[score_name] = df[selected_columns].mean(axis=1)
 
-            # Get top 5 players based on the creativity score
-            top_players = df.sort_values(by=score_name, ascending=False).head(5)
+            # Get top 10 players based on the creativity score
+            top_players = df.sort_values(by=score_name, ascending=False).head(10)
 
             # Display top players
-            st.write(f"Top 5 Players - {selected_category}")
+            st.write(f"Top 10 Players - {selected_category}")
             st.write(top_players[['player_name', 'overall_rating'] + selected_columns])
 
         with col2:
@@ -141,21 +141,17 @@ elif st.session_state.page == 'types_of_players':
             y=selected_columns[1],
             color=score_name,  # Use creativity score for color
             hover_name='player_name',
-            title=f"2D Plot of Players: {selected_columns[0].replace('_', ' ').title()} vs {selected_columns[1].replace('_', ' ').title()}",
-            template='plotly_white'
+            title=f"Joint Plot : {selected_columns[0].replace('_', ' ').title()} vs {selected_columns[1].replace('_', ' ').title()}",
+            template='plotly_white',
+            marginal_x = 'histogram',
+            marginal_y = 'histogram'
         )
-
-        # Highlight top 5 players in red
-        for player in top_players['player_name']:
-            fig_2d_1.add_trace(
-                px.scatter(
-                    top_players[top_players['player_name'] == player],
-                    x=selected_columns[0],
-                    y=selected_columns[1],
-                    color_discrete_sequence=['red']
-                ).data[0]
-            )
-
+        fig_2d_1.update_traces(
+            selector = dict(type='histogram'),
+            nbinsx = 10,
+            nbinsy = 10,
+            marker_color='rgba(255, 0, 0, 0.8)'
+        )
         st.plotly_chart(fig_2d_1, use_container_width=True)
 
         # Plot 2
@@ -165,78 +161,212 @@ elif st.session_state.page == 'types_of_players':
             y=selected_columns[3],
             color=score_name,  # Use creativity score for color
             hover_name='player_name',
-            title=f"2D Plot of Players: {selected_columns[2].replace('_', ' ').title()} vs {selected_columns[3].replace('_', ' ').title()}",
-            template='plotly_white'
+            title=f"Joint Plot : {selected_columns[2].replace('_', ' ').title()} vs {selected_columns[3].replace('_', ' ').title()}",
+            template='plotly_white',
+            marginal_x = 'histogram',
+            marginal_y = 'histogram'
         )
-
-        # Highlight top 5 players in red
-        for player in top_players['player_name']:
-            fig_2d_2.add_trace(
-                px.scatter(
-                    top_players[top_players['player_name'] == player],
-                    x=selected_columns[2],
-                    y=selected_columns[3],
-                    color_discrete_sequence=['red']
-                ).data[0]
-            )
+        fig_2d_2.update_traces(
+            selector = dict(type='histogram'),
+            nbinsx = 10,
+            nbinsy = 10,
+            marker_color='rgba(255, 0, 0, 0.8)'
+        )
 
         st.plotly_chart(fig_2d_2, use_container_width=True)
 
-# Individual Player Analysis Section
-elif st.session_state.page == 'individual_player_analysis':
-    st.title("Individual Player Analysis Section")
 
-    # Sidebar for filters
+
+
+
+
+
+
+
+
+elif st.session_state.page == 'individual_player_analysis':
     st.sidebar.title("Filters")
     team_selected = st.sidebar.selectbox("Select a Team", df['team'].unique())
     position_selected = st.sidebar.selectbox("Select a Position", df['core_position'].unique())
+    
+    # Filter players based on selected team and position
     players_filtered = df[(df['team'] == team_selected) & (df['core_position'] == position_selected)]
+
+    # Set Mbappe as the default player selection if he is available in the filtered list
     player_selected = st.sidebar.selectbox("Select a Player", players_filtered['player_name'].unique())
 
     # Get player data
     player_data = df[df['player_name'] == player_selected]
 
     if not player_data.empty:
-        # Create columns for layout
-        left_col, right_col = st.columns([1, 2])
+        # Display player's name as the title
+        st.title(f"{player_selected}")
 
-        # Left Column: Player Filters and Details
-        with left_col:
-            # Display player's current details
-            st.subheader("Current Player Details")
-            st.write(f"**Team**: {player_data['team'].values[0]}")
-            st.write(f"**Age**: {player_data['age'].values[0]}")
-            st.write(f"**Overall Rating**: {player_data['overall_rating'].values[0]}")
-            st.write(f"**Potential**: {player_data['potential'].values[0]}")
-            st.write(f"**Position**: {player_data['core_position'].values[0]}")
-            st.write(f"**Height**: {player_data['height'].values[0]}")
-            st.write(f"**Weight**: {player_data['weight'].values[0]}")
+        # Create DataFrame for player personal details in a custom format
+        # Create DataFrame for player personal details in a row-wise format
+        player_details = pd.DataFrame({
+            'Attribute': [
+                'Height',
+                'Weight',
+                'Foot',
+                'Age',
+                'Overall Rating',
+                'Best Position',
+                'Contract Start',
+                'Contract End',
+                'No of Positions',
+                'Wage',
+                'Market Value',
+                'Position'
+            ],
+            'Value': [
+                player_data['height'].values[0],
+                player_data['weight'].values[0],
+                player_data['foot'].values[0],
+                player_data['age'].values[0],
+                player_data['overall_rating'].values[0],
+                player_data['best_position'].values[0],
+                player_data['contract_start'].values[0],
+                player_data['contract_end'].values[0],
+                player_data['no_of_playable_positions'].values[0],
+                player_data['wage'].values[0],
+                player_data['market_value'].values[0],
+                player_data['core_position'].values[0],
+            ]
+        })
 
-        # Right Column: Skills Visualization
-        with right_col:
-            # Create a list of skill columns
-            skill_columns = [
-                                'finishing', 'dribbling', 'curve', 'crossing', 'heading_accuracy',
-                                'long_shots', 'shot_power', 'short_passing', 'vision', 'ball_control',
-                                'standing_tackle', 'sliding_tackle', 'interceptions', 'defensive_awareness',
-                                'gk_diving', 'gk_handling', 'gk_kicking', 'gk_positioning', 'gk_reflexes'
-                            ]
 
-            # Filter skills for the selected player
-            player_skills = player_data[skill_columns].T.reset_index()
-            player_skills.columns = ['Skill', 'Value']
+        # Create two columns for layout
+        col1, col2 = st.columns([1, 2])  # Adjust the width ratio as needed
 
-            # Visualizing Top Skills with Plotly
-            st.subheader(f"Top 5 Skills for {player_selected}")
-            top_skills = player_skills.nlargest(5, 'Value')
-            fig_top = px.bar(top_skills, x='Skill', y='Value', title=f'Top Skills of {player_selected}', template='plotly_white')
+        # Display the DataFrame in the first column
+        with col1:
+            st.subheader("Player Details")
+            st.write(player_details)  # This will fit the left side of the screen.
+
+        # Define categories and calculate scores
+        categories = {
+            "Creative": ['vision', 'short_passing', 'dribbling', 'long_passing'],
+            "Athletic": ['sprint_speed', 'stamina', 'strength', 'acceleration'],
+            "Defensive": ['standing_tackle', 'interceptions', 'defensive_awareness', 'sliding_tackle'],
+            "Goalkeeping": ['gk_diving', 'gk_reflexes', 'gk_handling', 'gk_positioning'],
+            "Attacking": ['finishing', 'shot_power', 'volleys', 'crossing']
+        }
+
+        radar_values = []
+        for category, skills in categories.items():
+            score = player_data[skills].mean(axis=1).values[0]
+            radar_values.append(score)
+
+        radar_categories = list(categories.keys())
+
+        # Calculate average scores for players in the same position
+        position_data = df[df['core_position'] == position_selected]
+        avg_category_scores = {category: position_data[skills].mean(axis=1).mean() for category, skills in categories.items()}
+        avg_radar_values = list(avg_category_scores.values())
+
+        fig_radar_compare = go.Figure()
+
+        # Add trace for the selected player
+        fig_radar_compare.add_trace(go.Scatterpolar(
+            r=radar_values,
+            theta=radar_categories,
+            fill='toself',
+            name=f"{player_selected}",
+            marker=dict(size=8, color='rgba(0, 123, 255, 0.7)')
+        ))
+
+        # Add trace for average performance
+        fig_radar_compare.add_trace(go.Scatterpolar(
+            r=avg_radar_values,
+            theta=radar_categories,
+            fill='toself',
+            name=f'Avg {position_selected}',
+            marker=dict(size=8, color='rgba(255, 0, 0, 0.5)')
+        ))
+
+        fig_radar_compare.update_layout(
+            polar=dict(
+                radialaxis=dict(visible=True, range=[0, 100]),
+            ),
+            showlegend=True,
+            template='plotly_dark',
+            title=f"{player_selected} vs average {position_selected.lower()}s (Benchmarking)"
+        )
+
+        # Display the radar plot in the second column
+        with col2:
+            st.plotly_chart(fig_radar_compare, use_container_width=True)
+
+        # Filter skills excluding goalkeeping skills
+        non_gk_skills = [
+            'finishing', 'dribbling', 'curve', 'crossing', 'heading_accuracy',
+            'long_shots', 'shot_power', 'short_passing', 'vision', 'ball_control',
+            'standing_tackle', 'sliding_tackle', 'interceptions', 'defensive_awareness',
+            'sprint_speed', 'stamina', 'strength', 'acceleration', 'balance'
+        ]
+
+        # Get player skills
+        player_skills = player_data[non_gk_skills].T.reset_index()
+        player_skills.columns = ['Skill', 'Value']
+
+        # Get top 5 and bottom 5 skills
+        top_skills = player_skills.nlargest(5, 'Value')
+        bottom_skills = player_skills.nsmallest(5, 'Value')
+
+        # Create two columns for side-by-side layout
+        col1, col2 = st.columns(2)
+
+        # Top Skills Bar Plot
+        with col1:
+            fig_top = px.bar(
+                top_skills,
+                x='Skill',
+                y='Value',
+                title=f'Top Skills of {player_selected}',
+                template='plotly_white'
+            )
             st.plotly_chart(fig_top, use_container_width=True)
 
-            # Visualizing Bottom Skills with Plotly
-            st.subheader(f"Bottom 5 Skills for {player_selected}")
-            bottom_skills = player_skills.nsmallest(5, 'Value')
-            fig_bottom = px.bar(bottom_skills, x='Skill', y='Value', title=f'Bottom Skills of {player_selected}', template='plotly_white')
+        # Bottom Skills Bar Plot
+        with col2:
+            fig_bottom = px.bar(
+                bottom_skills,
+                x='Skill',
+                y='Value',
+                title=f'Bottom Skills of {player_selected}',
+                template='plotly_white'
+            )
             st.plotly_chart(fig_bottom, use_container_width=True)
+       
+        # Scatter Plot for User-Selected Skills
+        st.subheader("Scatter Plot: Compare Skills")
+
+        # Set default values for X and Y skills
+        skill_x = st.selectbox("Select Skill for X-axis", non_gk_skills, index=non_gk_skills.index('shot_power'))
+        skill_y = st.selectbox("Select Skill for Y-axis", non_gk_skills, index=non_gk_skills.index('ball_control'))
+
+        fig_scatter = px.scatter(
+            df,
+            x=skill_x,
+            y=skill_y,
+            hover_name='player_name',
+            title=f"Scatter Plot: {skill_x.replace('_', ' ').title()} vs {skill_y.replace('_', ' ').title()}",
+            template='plotly_white'
+        )
+
+        # Highlight the selected player in red
+        fig_scatter.add_trace(go.Scatter(
+            x=[player_data[skill_x].values[0]],
+            y=[player_data[skill_y].values[0]],
+            mode='markers',
+            marker=dict(color='red', size=20, symbol='star'),
+            name=f"{player_selected}"
+        ))
+
+        st.plotly_chart(fig_scatter, use_container_width=True)
+
+
 # What Player to Buy Section
 elif st.session_state.page == 'what_player_to_buy':
     st.title("What Player to Buy?")
@@ -279,13 +409,21 @@ elif st.session_state.page == 'what_player_to_buy':
             y=skill2,
             color='market_value',
             hover_name='player_name',
-            title=f"Comparison of {skill1.replace('_', ' ').title()} vs {skill2.replace('_', ' ').title()}",
+            title=f"Joint Plot : {skill1.replace('_', ' ').title()} vs {skill2.replace('_', ' ').title()}",
             labels={
                 skill1: skill1.replace('_', ' ').title(),
                 skill2: skill2.replace('_', ' ').title()
             },
-            template='plotly_white'
+            template='plotly_white',
+            marginal_x = 'histogram',
+            marginal_y = 'histogram'
         )
+        fig_skill_comparison.update_traces(
+                selector=dict(type='histogram'),
+                marker_color='rgba(255, 0, 0, 0.8)',  # Set the histogram color to a semi-transparent blue.
+                nbinsx = 10,
+                nbinsy = 10
+            )
         st.plotly_chart(fig_skill_comparison, use_container_width=True)
 
 
@@ -433,6 +571,9 @@ if st.session_state.page == 'hypothesis_testing':
 
 
 
+
+
 # Footer
 st.sidebar.markdown("---")
 st.sidebar.write("Created by Sivagugan Jayachandran")
+
