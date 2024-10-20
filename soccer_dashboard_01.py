@@ -27,11 +27,11 @@ def set_background(image_path):
         unsafe_allow_html=True
     )
 
-pic = '/Users/sivaguganjayachandran/Documents/python programming/soccer/pic3.jpg'
+pic = 'pic3.jpg'
 set_background(pic)
 
 # Load data
-df = pd.read_csv('/Users/sivaguganjayachandran/Documents/python programming/soccer/cleaned_df.csv')
+df = pd.read_csv('cleaned_df.csv')
 df = df.drop('Unnamed: 0', axis=1)
 
 # Check for duplicate columns and log them
