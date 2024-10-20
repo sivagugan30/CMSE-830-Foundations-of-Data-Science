@@ -396,7 +396,7 @@ if st.session_state.page == 'hypothesis_testing':
                       )
         st.plotly_chart(fig2)
 
-    elif selected_hypothesis == "6. Weight and Athletic Metrics":
+    elif selected_hypothesis == "6. Weight vs Agility":
         st.header("Weight and Athletic Metrics")
         st.write("Does a player's weight affect their athleticism? Let’s dive into how weight influences speed and stamina, minus the heavy lifting of confusion!")
 
@@ -427,10 +427,8 @@ if st.session_state.page == 'hypothesis_testing':
     elif selected_hypothesis == "5. Branded Players and Market Value":
         st.write("Players with a higher international reputation often have inflated market values, reflecting their global recognition, fan engagement, and commercial appeal. This brand power not only boosts their value in the transfer market but also enhances merchandise sales and sponsorship opportunities for clubs, making them key assets beyond just their on-field contributions.")
 
-    elif selected_hypothesis == "6. Weight and Athletic Metrics":
+    elif selected_hypothesis == "6. Weight vs Agility":
         st.write("Weight significantly impacts athletic performance. Finding the right balance can be key to maximizing speed and agility while maintaining stamina.")
-
-
 
 
 
