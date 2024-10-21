@@ -404,7 +404,7 @@ elif st.session_state.page == 'what_player_to_buy':
         st.write(filtered_players[['player_name', 'market_value', 'age', skill1, skill2]].head(20))
 
         fig_skill_comparison = px.scatter(
-            filtered_players,
+            filtered_players.head(20),
             x=skill1,
             y=skill2,
             color='market_value',
