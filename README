@@ -1,0 +1,13 @@
+Soccer Analytics Dashboard
+Explore soccer player data interactively using the Soccer Analytics Dashboard built with Streamlit, Plotly, and Pandas. 
+This app provides insights into player performance, player categories, and recommendations.
+
+Features
+Home: Introduction to the dashboard.
+Hypothesis Testing: Statistical analysis of player performance.
+Player Categories: Displays top players across categories like Creative, Athletic, Defensive, and Goalkeeping with visualizations.
+Player Analysis: Detailed player insights and comparisons.
+Recommendations: Helps choose the best player based on selected attributes.
+
+Setup Instructions
+To explore the app, visit: https://cmse-830-foundations-of-data-science-vrxpxiiz5xrjhh8vrnztve.streamlit.app/
