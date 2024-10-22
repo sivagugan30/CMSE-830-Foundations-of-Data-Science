@@ -854,8 +854,7 @@ if st.session_state.page == 'data_collection_preparation':
 
     st.write("At first glance, mean and mode imputations significantly distort the data. In contrast, linear and stochastic regression methods maintain the positive correlation essential for modeling, although they lack variance. MICE and KNN, however, strike a balance between variability and correlation")
 
-    st.write("I prefer Stochastic Regression, as I believe it best reconstructs the missing data while preserving proper ranges of correlation and variance. This method effectively captures the underlying data structure, making it a more reliable choice for imputation")
-
+    st.write("Based on the plots above, stochastic regression appears to be the best fit for imputing missing data. It effectively reconstructs missing values while preserving variable relationships, ensuring correlation and variance are maintained")
 
 
 
@@ -950,7 +949,9 @@ if st.session_state.page == 'data_collection_preparation':
     # Update layout
     fig_scatter.update_layout(title_text='Scatter Plots for Foot Data', height=700)
     st.plotly_chart(fig_scatter)
-
+    
+# Add a comment for the SMOTE plot
+st.write("In this plot, the majority class on the right is neither over- nor under-sampled, while the minority class on the left has been oversampled using the SMOTE algorithm. This technique generates synthetic samples for the minority class, resulting in a distribution that mirrors the original variable but with an increased number of data points. This helps improve model performance by addressing class imbalance.")
 
 
 
