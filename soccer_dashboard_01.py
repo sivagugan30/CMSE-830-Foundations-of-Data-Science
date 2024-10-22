@@ -632,37 +632,37 @@ if st.session_state.page == 'data_collection_preparation':
     # Read the datasets
     stats_df = pd.read_csv('stats_df.csv')
     personal_df = pd.read_csv('personal_df.csv')
-    # Create subplots to display two DataFrames side by side
-    fig = make_subplots(
-        rows=1, cols=2, 
-        subplot_titles=("Stats DataFrame", "Personal DataFrame"),
-        column_widths=[0.5, 0.5]
-    )
     
-    # Add the stats_df table
+    # Create a figure with two subplots
+    fig = go.Figure()
+    
+    # Add the stats_df table to the first subplot
     fig.add_trace(
         go.Table(
-            header=dict(values=list(stats_df.columns), fill_color='lightgray'),
-            cells=dict(values=[stats_df[col] for col in stats_df.columns])
+            header=dict(values=list(stats_df.columns), fill_color='lightgray', align='left'),
+            cells=dict(values=[stats_df[col] for col in stats_df.columns], align='left')
         ),
         row=1, col=1
     )
     
-    # Add the personal_df table
+    # Add the personal_df table to the second subplot
     fig.add_trace(
         go.Table(
-            header=dict(values=list(personal_df.columns), fill_color='lightgray'),
-            cells=dict(values=[personal_df[col] for col in personal_df.columns])
+            header=dict(values=list(personal_df.columns), fill_color='lightgray', align='left'),
+            cells=dict(values=[personal_df[col] for col in personal_df.columns], align='left')
         ),
         row=1, col=2
     )
     
-    # Update layout
-    fig.update_layout(height=600, title_text="Stats and Personal DataFrames Side by Side")
+    # Update layout to include two columns
+    fig.update_layout(
+        height=600,
+        title_text="Stats and Personal DataFrames Side by Side",
+        showlegend=False
+    )
     
     # Display in Streamlit
-    st.plotly_chart(fig)
-        
+    st.plotly_chart(fig)    
     # Merge datasets
     df = pd.merge(personal_df, stats_df, on=['player_name', 'team', 'best_position'])
 
