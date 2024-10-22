@@ -623,7 +623,7 @@ if st.session_state.page == 'data_collection_preparation':
     from sklearn.linear_model import LinearRegression
     from sklearn.experimental import enable_iterative_imputer  # noqa
     from sklearn.impute import IterativeImputer, KNNImputer
-    import streamlit as st
+    from plotly.subplots import make_subplots
 
     # Set display options and warnings
     pd.set_option('display.max_columns', None)
