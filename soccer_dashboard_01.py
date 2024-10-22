@@ -842,6 +842,9 @@ if st.session_state.page == 'data_collection_preparation':
     new_count.columns = ['Foot', 'Count']
     st.write(new_count)
 
+    
+
+    
     # Visualize the new class distribution
     fig_after_smote = px.bar(new_count, x='Foot', y='Count', title='Class Balance - Foot Column (After SMOTE)')
     st.plotly_chart(fig_after_smote)
@@ -850,6 +853,8 @@ if st.session_state.page == 'data_collection_preparation':
     resampled_data = pd.DataFrame(X_resampled, columns=numeric_columns)  # Use numeric_columns for the columns
     resampled_data['foot'] = y_resampled
 
+    st.write(resampled_data.head())
+    
     # Scatter plots for visualizing before and after SMOTE
     fig_scatter = make_subplots(rows=2, cols=2, subplot_titles=('Before SMOTE: Right Foot', 'After SMOTE: Right Foot',
                                                                 'Before SMOTE: Left Foot', 'After SMOTE: Left Foot'))
