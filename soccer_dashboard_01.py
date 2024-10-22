@@ -829,6 +829,7 @@ if st.session_state.page == 'data_collection_preparation':
     fig_original = px.bar(original_count, x='Foot', y='Count', title='Class Imbalance - Foot Column (Original)')
     st.plotly_chart(fig_original)
 
+    numeric_columns = df.describe().columns.to_list()
     # Apply SMOTE for class balancing
     X = df[numeric_columns]  # Use numeric_columns for features
     y = df['foot']  # Target
