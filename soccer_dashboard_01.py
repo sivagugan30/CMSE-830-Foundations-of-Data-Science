@@ -656,13 +656,16 @@ if st.session_state.page == 'data_collection_preparation':
     missing_indices = np.random.choice(df1.index, num_missing, replace=False)
     df1.loc[missing_indices, 'penalties'] = np.nan
 
-    st.write('Induced Missingness in the Penalties Column: MCAR (Missing Completely at Random) - Missingness is independent of other columns')
-
+    
     # Plot induced missingness
     st.subheader("Induced Missingness in the Penalties Column")
     plt.figure(figsize=(6, 4))
     sns.heatmap(df1[['penalties', 'foot', 'dribbling', 'balance']].isna(), cmap='viridis', cbar=False)
     st.pyplot(plt)
+    st.write('Induced Missingness in the Penalties Column: MCAR (Missing Completely at Random) - Missingness is independent of other columns')
+
+    
+    
     # Correlation analysis
     numeric_columns = df1.select_dtypes(include=[np.number]).columns.tolist()
     correlation_matrix = df1[numeric_columns].corr()
@@ -750,7 +753,7 @@ if st.session_state.page == 'data_collection_preparation':
 
     })
 
-    st.subheader("Comparison of Imputed Penalties Using Different Methods")
+    st.subheader("Comparison of different Imputation methods")
     plt.figure(figsize=(15, 8))
     sns.boxplot(data=imputed_penalties)
     plt.title('Comparison of Imputed Penalties')
@@ -803,7 +806,7 @@ if st.session_state.page == 'data_collection_preparation':
     ]
 
     # Create the combined scatter plot
-    st.subheader("Scatter Plot Comparison of Imputation Methods")
+    #st.subheader("Scatter Plot Comparison of Imputation Methods")
     scatter_plot = create_combined_scatter_plot(dfs, titles)
     st.plotly_chart(scatter_plot)
 
@@ -811,63 +814,18 @@ if st.session_state.page == 'data_collection_preparation':
 
     st.write("I prefer Stochastic Regression, as I believe it best reconstructs the missing data while preserving proper ranges of correlation and variance. This method effectively captures the underlying data structure, making it a more reliable choice for imputation")
 
-    
-    # Create figure
-    fig = go.Figure()
-    
-    # Add bar traces for Mean and Variance
-    fig.add_trace(go.Bar(
-        x=stats_df['Imputation Method'],
-        y=stats_df['Mean '],
-        name='Mean Penalties',
-        marker_color='blue',
-        offsetgroup=0,
-        width=0.25
-    ))
-    
-    fig.add_trace(go.Bar(
-        x=stats_df['Imputation Method'],
-        y=stats_df['Variance'],
-        name='Variance Penalties',
-        marker_color='green',
-        offsetgroup=1,
-        width=0.25
-    ))
-    
-    # Add line trace for Correlation with Finishing
-    fig.add_trace(go.Scatter(
-        x=stats_df['Imputation Method'],
-        y=stats_df['Correlation with Finishing'],
-        name='Correlation with Finishing',
-        mode='lines+markers',
-        marker=dict(color='red'),
-        yaxis='y2'
-    ))
-    
-    # Update layout to add secondary y-axis for correlation
-    fig.update_layout(
-        title='Comparison of Penalties Statistics Across Imputation Methods',
-        xaxis=dict(title='Imputation Method', tickangle=45),
-        yaxis=dict(title='Mean & Variance Penalties'),
-        yaxis2=dict(title='Correlation with Finishing', overlaying='y', side='right'),
-        barmode='group',
-        legend=dict(x=0.8, y=1.1),
-        width=900, height=500
-    )
-    
-    # Display the plot in Streamlit
-    st.plotly_chart(fig)
 
 
+
+
+
+    
     import pandas as pd
     import plotly.express as px
     from plotly.subplots import make_subplots
     import plotly.graph_objects as go
     from imblearn.over_sampling import SMOTE
     import streamlit as st
-
-    # Load your dataset (replace this with your actual dataset path)
-    # df = pd.read_csv('your_dataset.csv')
 
     # Assuming 'df' is your DataFrame and 'foot' is the target variable
     st.subheader("Original Class Distribution")
