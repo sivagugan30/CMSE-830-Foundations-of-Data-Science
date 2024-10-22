@@ -628,16 +628,43 @@ if st.session_state.page == 'data_collection_preparation':
     # Set display options and warnings
     pd.set_option('display.max_columns', None)
 
-    
+    st.write(" ")
     # Read the datasets
     stats_df = pd.read_csv('stats_df.csv')
     personal_df = pd.read_csv('personal_df.csv')
-
+    # Create subplots to display two DataFrames side by side
+    fig = make_subplots(
+        rows=1, cols=2, 
+        subplot_titles=("Stats DataFrame", "Personal DataFrame"),
+        column_widths=[0.5, 0.5]
+    )
+    
+    # Add the stats_df table
+    fig.add_trace(
+        go.Table(
+            header=dict(values=list(stats_df.columns), fill_color='lightgray'),
+            cells=dict(values=[stats_df[col] for col in stats_df.columns])
+        ),
+        row=1, col=1
+    )
+    
+    # Add the personal_df table
+    fig.add_trace(
+        go.Table(
+            header=dict(values=list(personal_df.columns), fill_color='lightgray'),
+            cells=dict(values=[personal_df[col] for col in personal_df.columns])
+        ),
+        row=1, col=2
+    )
+    
+    # Update layout
+    fig.update_layout(height=600, title_text="Stats and Personal DataFrames Side by Side")
+    
+    # Display in Streamlit
+    st.plotly_chart(fig)
+        
     # Merge datasets
     df = pd.merge(personal_df, stats_df, on=['player_name', 'team', 'best_position'])
-
-    # Streamlit layout
-    st.title("Soccer Penalty Imputation Analysis")
 
     # Display the first few rows of the dataset
     st.subheader("Merged Dataset from two different sources")
