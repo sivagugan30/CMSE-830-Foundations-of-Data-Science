@@ -656,7 +656,7 @@ if st.session_state.page == 'data_collection_preparation':
     missing_indices = np.random.choice(df1.index, num_missing, replace=False)
     df1.loc[missing_indices, 'penalties'] = np.nan
 
-    st.title('Induced Missingness in the Penalties Column: MCAR (Missing Completely at Random) - Missingness is independent of other columns')
+    st.write('Induced Missingness in the Penalties Column: MCAR (Missing Completely at Random) - Missingness is independent of other columns')
 
     # Plot induced missingness
     st.subheader("Induced Missingness in the Penalties Column")
