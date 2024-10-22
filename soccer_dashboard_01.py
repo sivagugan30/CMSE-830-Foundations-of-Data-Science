@@ -637,8 +637,9 @@ if st.session_state.page == 'data_collection_preparation':
 
     
     st.write(" ")
+    
     # Create two columns in Streamlit for side-by-side display
-    col1, col2 = st.columns(3)
+    col1, col2 = st.columns(2)
     
     # Display stats_df in the first column
     with col1:
