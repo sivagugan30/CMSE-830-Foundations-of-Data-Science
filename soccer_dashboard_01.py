@@ -656,12 +656,13 @@ if st.session_state.page == 'data_collection_preparation':
     missing_indices = np.random.choice(df1.index, num_missing, replace=False)
     df1.loc[missing_indices, 'penalties'] = np.nan
 
+    st.title('Induced Missingness in the Penalties Column: MCAR (Missing Completely at Random) - Missingness is independent of other columns')
+
     # Plot induced missingness
     st.subheader("Induced Missingness in the Penalties Column")
     plt.figure(figsize=(6, 4))
     sns.heatmap(df1[['penalties', 'foot', 'dribbling', 'balance']].isna(), cmap='viridis', cbar=False)
     st.pyplot(plt)
-
     # Correlation analysis
     numeric_columns = df1.select_dtypes(include=[np.number]).columns.tolist()
     correlation_matrix = df1[numeric_columns].corr()
@@ -681,6 +682,8 @@ if st.session_state.page == 'data_collection_preparation':
                 labels={'Correlation': 'Correlation Coefficient'},
                 orientation='h')
     st.plotly_chart(fig)
+
+    st.write("Based on the correlation analysis, the 'Finishing' and 'Volleys' features show a strong relationship with 'Penalties'. Since 'Finishing' is more intuitive, it will be used as the primary regressor for various types of imputation.")
 
 
     # Calculate the mean and mode for the 'penalties' column
@@ -804,8 +807,56 @@ if st.session_state.page == 'data_collection_preparation':
     scatter_plot = create_combined_scatter_plot(dfs, titles)
     st.plotly_chart(scatter_plot)
 
+    st.write("At first glance, mean and mode imputations significantly distort the data. In contrast, linear and stochastic regression methods maintain the positive correlation essential for modeling, although they lack variance. MICE and KNN, however, strike a balance between variability and correlation")
 
+    st.write("I prefer Stochastic Regression, as I believe it best reconstructs the missing data while preserving proper ranges of correlation and variance. This method effectively captures the underlying data structure, making it a more reliable choice for imputation")
 
+    
+    # Create figure
+    fig = go.Figure()
+    
+    # Add bar traces for Mean and Variance
+    fig.add_trace(go.Bar(
+        x=stats_df['Imputation Method'],
+        y=stats_df['Mean '],
+        name='Mean Penalties',
+        marker_color='blue',
+        offsetgroup=0,
+        width=0.25
+    ))
+    
+    fig.add_trace(go.Bar(
+        x=stats_df['Imputation Method'],
+        y=stats_df['Variance'],
+        name='Variance Penalties',
+        marker_color='green',
+        offsetgroup=1,
+        width=0.25
+    ))
+    
+    # Add line trace for Correlation with Finishing
+    fig.add_trace(go.Scatter(
+        x=stats_df['Imputation Method'],
+        y=stats_df['Correlation with Finishing'],
+        name='Correlation with Finishing',
+        mode='lines+markers',
+        marker=dict(color='red'),
+        yaxis='y2'
+    ))
+    
+    # Update layout to add secondary y-axis for correlation
+    fig.update_layout(
+        title='Comparison of Penalties Statistics Across Imputation Methods',
+        xaxis=dict(title='Imputation Method', tickangle=45),
+        yaxis=dict(title='Mean & Variance Penalties'),
+        yaxis2=dict(title='Correlation with Finishing', overlaying='y', side='right'),
+        barmode='group',
+        legend=dict(x=0.8, y=1.1),
+        width=900, height=500
+    )
+    
+    # Display the plot in Streamlit
+    st.plotly_chart(fig)
 
 
     import pandas as pd
@@ -836,7 +887,7 @@ if st.session_state.page == 'data_collection_preparation':
 
     smote = SMOTE(random_state=42)
     X_resampled, y_resampled = smote.fit_resample(X, y)
-
+    
     # Display new class distribution after SMOTE
     st.subheader("Class Distribution After SMOTE")
     new_count = pd.Series(y_resampled).value_counts().reset_index()
@@ -854,7 +905,7 @@ if st.session_state.page == 'data_collection_preparation':
     resampled_data = pd.DataFrame(X_resampled, columns=numeric_columns)  # Use numeric_columns for the columns
     resampled_data['foot'] = y_resampled
 
-    st.write(resampled_data.head())
+    st.write("SMOTE anslysis")
     
     # Scatter plots for visualizing before and after SMOTE
     fig_scatter = make_subplots(rows=2, cols=2, subplot_titles=('Before SMOTE: Right Foot', 'After SMOTE: Right Foot',
