@@ -643,12 +643,12 @@ if st.session_state.page == 'data_collection_preparation':
     # Display stats_df in the first column
     with col1:
         st.subheader("Stats DataFrame")
-        st.dataframe(stats_df)
+        st.dataframe(stats_df.head(5))
     
     # Display personal_df in the second column
     with col2:
         st.subheader("Personal DataFrame")
-        st.dataframe(personal_df)
+        st.dataframe(personal_df.head(5))
 
 
     
@@ -657,7 +657,7 @@ if st.session_state.page == 'data_collection_preparation':
 
     # Display the first few rows of the dataset
     st.subheader("Merged Dataset from two different sources")
-    st.write(df.head())
+    st.write(df.head(5))
 
   # Create a heatmap using Plotly
     fig = px.imshow(
