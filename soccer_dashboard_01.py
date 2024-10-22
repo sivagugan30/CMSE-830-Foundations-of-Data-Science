@@ -805,7 +805,9 @@ if st.session_state.page == 'data_collection_preparation':
     # Display the boxplot in Streamlit
     st.plotly_chart(fig)
 
-    st.write(" In the above box plot, the box for the mean DataFrame is compressed due to the imputation of all missing values at the mean. As a result, the mean, median, mode, upper fence, and lower fence all converge to the same value, indicating a lack of variability in the imputed data ")    # Scatter plot comparison of imputation methods
+    st.write(" In the above box plot, the box for the mean imputed df is compressed due to the imputation of all missing values at the mean. As a result, the mean, median, mode, upper fence, and lower fence all converge to the same value, indicating a lack of variability in the imputed data ")    # Scatter plot comparison of imputation methods
+    
+    
     def create_combined_scatter_plot(dfs, titles):
         fig = sp.make_subplots(rows=3, cols=2, subplot_titles=titles)
 
