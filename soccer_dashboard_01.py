@@ -951,7 +951,7 @@ if st.session_state.page == 'data_collection_preparation':
     st.plotly_chart(fig_scatter)
     
 # Add a comment for the SMOTE plot
-st.write("In this plot, the majority class on the right is neither over- nor under-sampled, while the minority class on the left has been oversampled using the SMOTE algorithm. This technique generates synthetic samples for the minority class, resulting in a distribution that mirrors the original variable but with an increased number of data points. This helps improve model performance by addressing class imbalance.")
+st.write("In this plot, the majority class on the right is untouched, while the minority class (left) has been oversampled using the SMOTE algorithm. This technique generates synthetic samples for the minority class, resulting in a distribution that mirrors the original variable but with an increased number of data points ")
 
 
 
