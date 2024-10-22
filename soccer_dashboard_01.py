@@ -638,17 +638,17 @@ if st.session_state.page == 'data_collection_preparation':
     
     st.write(" ")
     # Create two columns in Streamlit for side-by-side display
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(3)
     
     # Display stats_df in the first column
     with col1:
         st.subheader("Stats DataFrame")
-        st.dataframe(stats_df.head(5))
+        st.dataframe(stats_df.head(3))
     
     # Display personal_df in the second column
     with col2:
         st.subheader("Personal DataFrame")
-        st.dataframe(personal_df.head(5))
+        st.dataframe(personal_df.head(3))
 
 
     
@@ -656,7 +656,7 @@ if st.session_state.page == 'data_collection_preparation':
     df = pd.merge(personal_df, stats_df, on=['player_name', 'team', 'best_position'])
 
     # Display the first few rows of the dataset
-    st.subheader("Merged Dataset from two different sources")
+    st.subheader("Merged Dataset")
     st.write(df.head(5))
 
   # Create a heatmap using Plotly
@@ -691,7 +691,7 @@ if st.session_state.page == 'data_collection_preparation':
     # Display the Plotly heatmap in Streamlit
     st.plotly_chart(fig)
 
-    st.write('Induced Missingness in the Penalties Column: MCAR (Missing Completely at Random) - Missingness is independent of other columns')
+    st.write('Induced Missingness in the Penalties Column is MCAR (Missing Completely at Random) - Missingness is independent of other columns')
 
     
     
@@ -804,7 +804,7 @@ if st.session_state.page == 'data_collection_preparation':
     # Display the boxplot in Streamlit
     st.plotly_chart(fig)
 
-    # Scatter plot comparison of imputation methods
+    st.write(" In the above box plot, the box for the mean DataFrame is compressed due to the imputation of all missing values at the mean. As a result, the mean, median, mode, upper fence, and lower fence all converge to the same value, indicating a lack of variability in the imputed data ")    # Scatter plot comparison of imputation methods
     def create_combined_scatter_plot(dfs, titles):
         fig = sp.make_subplots(rows=3, cols=2, subplot_titles=titles)
 
