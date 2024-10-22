@@ -628,6 +628,14 @@ if st.session_state.page == 'data_collection_preparation':
     # Set display options and warnings
     pd.set_option('display.max_columns', None)
 
+    #read df 1
+    stats_df = pd.read_csv('stats_df.csv')
+
+
+    #read df2 
+    personal_df = pd.read_csv('personal_df.csv')
+
+    
     st.write(" ")
     # Create two columns in Streamlit for side-by-side display
     col1, col2 = st.columns(2)
