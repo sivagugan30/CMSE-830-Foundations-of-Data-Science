@@ -629,40 +629,21 @@ if st.session_state.page == 'data_collection_preparation':
     pd.set_option('display.max_columns', None)
 
     st.write(" ")
-    # Read the datasets
-    stats_df = pd.read_csv('stats_df.csv')
-    personal_df = pd.read_csv('personal_df.csv')
+    # Create two columns in Streamlit for side-by-side display
+    col1, col2 = st.columns(2)
     
-    # Create a figure with two subplots
-    fig = go.Figure()
+    # Display stats_df in the first column
+    with col1:
+        st.subheader("Stats DataFrame")
+        st.dataframe(stats_df)
     
-    # Add the stats_df table to the first subplot
-    fig.add_trace(
-        go.Table(
-            header=dict(values=list(stats_df.columns), fill_color='lightgray', align='left'),
-            cells=dict(values=[stats_df[col] for col in stats_df.columns], align='left')
-        ),
-        row=1, col=1
-    )
+    # Display personal_df in the second column
+    with col2:
+        st.subheader("Personal DataFrame")
+        st.dataframe(personal_df)
+
+
     
-    # Add the personal_df table to the second subplot
-    fig.add_trace(
-        go.Table(
-            header=dict(values=list(personal_df.columns), fill_color='lightgray', align='left'),
-            cells=dict(values=[personal_df[col] for col in personal_df.columns], align='left')
-        ),
-        row=1, col=2
-    )
-    
-    # Update layout to include two columns
-    fig.update_layout(
-        height=600,
-        title_text="Stats and Personal DataFrames Side by Side",
-        showlegend=False
-    )
-    
-    # Display in Streamlit
-    st.plotly_chart(fig)    
     # Merge datasets
     df = pd.merge(personal_df, stats_df, on=['player_name', 'team', 'best_position'])
 
