@@ -574,9 +574,45 @@ if st.session_state.page == 'hypothesis_testing':
         st.write("Weight significantly impacts athletic performance. Finding the right balance can be key to maximizing speed and agility while maintaining stamina.")
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # data_collection_preparation
 if st.session_state.page == 'data_collection_preparation':
-    st.title('data_collection_preparation')
+    st.title('Initial Data Analysis')
     import numpy as np
     import pandas as pd
     import matplotlib.pyplot as plt
@@ -592,12 +628,10 @@ if st.session_state.page == 'data_collection_preparation':
     # Set display options and warnings
     pd.set_option('display.max_columns', None)
 
-    # Specify the path where the CSV files are saved
-    path = '/Users/sivaguganjayachandran/Documents/python programming/soccer/dfs/'
-
+    
     # Read the datasets
-    stats_df = pd.read_csv(f'{path}stats_df.csv')
-    personal_df = pd.read_csv(f'{path}personal_df.csv')
+    stats_df = pd.read_csv('stats_df.csv')
+    personal_df = pd.read_csv('personal_df.csv')
 
     # Merge datasets
     df = pd.merge(personal_df, stats_df, on=['player_name', 'team', 'best_position'])
@@ -606,7 +640,7 @@ if st.session_state.page == 'data_collection_preparation':
     st.title("Soccer Penalty Imputation Analysis")
 
     # Display the first few rows of the dataset
-    st.subheader("Merged Dataset")
+    st.subheader("Merged Dataset from two different sources")
     st.write(df.head())
 
     # Check for missingness
