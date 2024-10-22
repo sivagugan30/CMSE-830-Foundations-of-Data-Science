@@ -689,18 +689,7 @@ if st.session_state.page == 'data_collection_preparation':
     st.write("Based on the correlation analysis, the 'Finishing' and 'Volleys' features show a strong relationship with 'Penalties'. Since 'Finishing' is more intuitive, it will be used as the primary regressor for various types of imputation.")
 
 
-    # Calculate the mean and mode for the 'penalties' column
-    mean_value = df1['penalties'].mean()
-    mode_value = df1['penalties'].mode()[0]  # Get the first mode if there are multiple
-
-    # Mean Imputation
-    df1_mean = df1.copy()
-    df1_mean['penalties'] = df1_mean['penalties'].fillna(mean_value)
-
-    # Mode Imputation
-    df1_mode = df1.copy()
-    df1_mode['penalties'] = df1_mode['penalties'].fillna(mode_value)
-
+    
 
     # Imputation using Linear Regression
     numeric_columns = ['penalties', 'finishing']
@@ -741,6 +730,19 @@ if st.session_state.page == 'data_collection_preparation':
     df1_knn = df1.copy()
     knn_imputer = KNNImputer(n_neighbors=5)
     df1_knn[numeric_columns] = knn_imputer.fit_transform(df1_knn[numeric_columns])
+
+
+    # Calculate the mean and mode for the 'penalties' column
+    mean_value = df1['penalties'].mean()
+    mode_value = df1['penalties'].mode()  # Get the first mode if there are multiple
+
+    # Mean Imputation
+    df1_mean = df1.copy()
+    df1_mean['penalties'] = df1_mean['penalties'].fillna(mean_value)
+
+    # Mode Imputation
+    df1_mode = df1.copy()
+    df1_mode['penalties'] = df1_mode['penalties'].fillna(mode_value)
 
     # Comparison of different Imputation techniques
     imputed_penalties = pd.DataFrame({
