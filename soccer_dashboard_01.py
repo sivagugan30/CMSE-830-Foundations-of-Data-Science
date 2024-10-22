@@ -665,7 +665,7 @@ if st.session_state.page == 'data_collection_preparation':
     
     # Create a heatmap using Plotly
     fig = px.imshow(
-        missing_df.T,  # Transpose to align columns on the y-axis
+        df1.isna().T,  # Transpose to align columns on the y-axis
         color_continuous_scale='viridis',
         aspect="auto",
         labels={'color': 'Missingness'},  # Change the color bar label
