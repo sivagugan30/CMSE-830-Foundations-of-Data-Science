@@ -643,11 +643,17 @@ if st.session_state.page == 'data_collection_preparation':
     st.subheader("Merged Dataset from two different sources")
     st.write(df.head())
 
-    # Check for missingness
-    st.subheader("Missing Data Heatmap")
-    plt.figure(figsize=(10, 5))
-    sns.heatmap(df.isna(), cbar=False)
-    st.pyplot(plt)
+  # Create a heatmap using Plotly
+    fig = px.imshow(
+        missing_df.T,  # Transpose to align columns on the y-axis
+        color_continuous_scale='viridis',
+        aspect="auto",
+        labels={'color': 'Missingness'},  # Change the color bar label
+        title="Missing Data Heatmap"
+    )
+    
+    # Display the Plotly heatmap in Streamlit
+    st.plotly_chart(fig)
 
     # Induce MCAR missingness
     df1 = df.copy()
@@ -657,11 +663,18 @@ if st.session_state.page == 'data_collection_preparation':
     df1.loc[missing_indices, 'penalties'] = np.nan
 
     
-    # Plot induced missingness
-    st.subheader("Induced Missingness in the Penalties Column")
-    plt.figure(figsize=(6, 4))
-    sns.heatmap(df1[['penalties', 'foot', 'dribbling', 'balance']].isna(), cmap='viridis', cbar=False)
-    st.pyplot(plt)
+    # Create a heatmap using Plotly
+    fig = px.imshow(
+        missing_df.T,  # Transpose to align columns on the y-axis
+        color_continuous_scale='viridis',
+        aspect="auto",
+        labels={'color': 'Missingness'},  # Change the color bar label
+        title="Induced Missingness in the Penalties Column"
+    )
+    
+    # Display the Plotly heatmap in Streamlit
+    st.plotly_chart(fig)
+
     st.write('Induced Missingness in the Penalties Column: MCAR (Missing Completely at Random) - Missingness is independent of other columns')
 
     
@@ -755,14 +768,25 @@ if st.session_state.page == 'data_collection_preparation':
 
     })
 
-    st.subheader("Comparison of different Imputation methods")
-    plt.figure(figsize=(15, 8))
-    sns.boxplot(data=imputed_penalties)
-    plt.title('Comparison of Imputed Penalties')
-    plt.ylabel('Penalties')
-    plt.xticks(rotation=45)
-    plt.grid(True)
-    st.pyplot(plt)
+    # Create a boxplot using Plotly
+    fig = px.box(
+        imputed_penalties,  # Your DataFrame with imputed penalties
+        title='Comparison of Imputed Penalties',
+        labels={'value': 'Penalties', 'variable': 'Imputation Method'}
+    )
+    
+    # Update layout for better readability
+    fig.update_layout(
+        yaxis_title="Penalties",
+        xaxis_title="Imputation Method",
+        xaxis_tickangle=45,  # Rotate x-axis labels
+        showlegend=False,
+        width=900,  # Adjust plot width
+        height=600  # Adjust plot height
+    )
+    
+    # Display the boxplot in Streamlit
+    st.plotly_chart(fig)
 
     # Scatter plot comparison of imputation methods
     def create_combined_scatter_plot(dfs, titles):
