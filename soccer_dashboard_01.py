@@ -26,11 +26,15 @@ def set_background(image_path):
         .main-title ,h1, h2, h3, h4, h5, h6, p {{
             color: white !important;
         }}
+        
+        
+        /* Sidebar styling: dark background and white text */
         .css-1d391kg {{" /* Main sidebar container class */
             background-color: #333333 !important; /* Dark background */
+            color: white !important;
         }}
         .css-1d391kg .css-1v3fvcr {{
-            color: white !important; /* Text color for sidebar */
+            color: white !important; /* Text color inside sidebar */
         }}
         </style>
         """,
