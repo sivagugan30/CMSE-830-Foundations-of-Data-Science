@@ -18,14 +18,14 @@ def set_background(image_path):
          f"""
         <style>
         .stApp {{
-            background-image: url("data:image/webp;base64,{base64_image}");
+            background-image: url("data:image/webp;base64,{image_data}");
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            color: white;  /* Sets the default text color to white */
+            color: white;
         }}
-        .stMarkdown p {{
-            color: white;  /* Ensures all st.write and st.markdown text is white */
+        .css-10trblm, .css-1rs6os, .stText, .css-145kmo2 {{
+            color: white !important;
         }}
         </style>
         """,
