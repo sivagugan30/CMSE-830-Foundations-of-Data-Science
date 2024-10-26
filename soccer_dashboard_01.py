@@ -23,6 +23,9 @@ def set_background(image_path):
             background-repeat: no-repeat;
             background-attachment: fixed;
         }}
+        .main-title ,h1, h2, h3, h4, h5, h6, p {{
+            color: white !important;
+        }}
         </style>
         """,
         unsafe_allow_html=True
