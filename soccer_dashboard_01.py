@@ -15,13 +15,17 @@ def set_background(image_path):
         image_data = image_file.read()
         base64_image = base64.b64encode(image_data).decode()
     st.markdown(
-        f"""
+         f"""
         <style>
         .stApp {{
             background-image: url("data:image/webp;base64,{base64_image}");
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
+            color: white;  /* Sets the default text color to white */
+        }}
+        .stMarkdown p {{
+            color: white;  /* Ensures all st.write and st.markdown text is white */
         }}
         </style>
         """,
