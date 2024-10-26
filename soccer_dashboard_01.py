@@ -18,14 +18,10 @@ def set_background(image_path):
          f"""
         <style>
         .stApp {{
-            background-image: url("data:image/webp;base64,{image_data}");
+            background-image: url("data:image/webp;base64,{base64_image}");
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            color: white;
-        }}
-        .css-10trblm, .css-1rs6os, .stText, .css-145kmo2 {{
-            color: white !important;
         }}
         </style>
         """,
