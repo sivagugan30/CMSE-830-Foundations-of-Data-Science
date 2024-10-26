@@ -70,7 +70,7 @@ if options == "Home":
     st.session_state.page = 'home'
 elif options == 'Data Collection & Preparation':
     st.session_state.page =  'data_collection_preparation'
-elif options == "Hypothesis Testing":
+elif options == "Hypothesis Testing 11111":
     st.session_state.page = 'hypothesis_testing'
 elif options == "Types of Players":
     st.session_state.page = 'types_of_players'
