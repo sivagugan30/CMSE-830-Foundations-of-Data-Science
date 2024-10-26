@@ -147,7 +147,7 @@ elif st.session_state.page == 'types_of_players':
             color=score_name,  # Use creativity score for color
             hover_name='player_name',
             title=f"Joint Plot : {selected_columns[0].replace('_', ' ').title()} vs {selected_columns[1].replace('_', ' ').title()}",
-            template='plotly_white',
+            template='plotly_dark',
             marginal_x = 'histogram',
             marginal_y = 'histogram'
         )
@@ -167,7 +167,7 @@ elif st.session_state.page == 'types_of_players':
             color=score_name,  # Use creativity score for color
             hover_name='player_name',
             title=f"Joint Plot : {selected_columns[2].replace('_', ' ').title()} vs {selected_columns[3].replace('_', ' ').title()}",
-            template='plotly_white',
+            template='plotly_dark',
             marginal_x = 'histogram',
             marginal_y = 'histogram'
         )
@@ -329,7 +329,7 @@ elif st.session_state.page == 'individual_player_analysis':
                 x='Skill',
                 y='Value',
                 title=f'Top Skills of {player_selected}',
-                template='plotly_white'
+                template='plotly_dark'
             )
             st.plotly_chart(fig_top, use_container_width=True)
 
@@ -340,7 +340,7 @@ elif st.session_state.page == 'individual_player_analysis':
                 x='Skill',
                 y='Value',
                 title=f'Bottom Skills of {player_selected}',
-                template='plotly_white'
+                template='plotly_dark'
             )
             st.plotly_chart(fig_bottom, use_container_width=True)
        
@@ -357,7 +357,7 @@ elif st.session_state.page == 'individual_player_analysis':
             y=skill_y,
             hover_name='player_name',
             title=f"Scatter Plot: {skill_x.replace('_', ' ').title()} vs {skill_y.replace('_', ' ').title()}",
-            template='plotly_white'
+            template='plotly_dark'
         )
 
         # Highlight the selected player in red
@@ -419,7 +419,7 @@ elif st.session_state.page == 'what_player_to_buy':
                 skill1: skill1.replace('_', ' ').title(),
                 skill2: skill2.replace('_', ' ').title()
             },
-            template='plotly_white',
+            template='plotly_dark',
             marginal_x = 'histogram',
             marginal_y = 'histogram'
         )
@@ -962,4 +962,3 @@ if st.session_state.page == 'data_collection_preparation':
 # Footer
 st.sidebar.markdown("---")
 st.sidebar.write("Created by Sivagugan Jayachandran")
-
