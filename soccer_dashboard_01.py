@@ -640,7 +640,7 @@ if st.session_state.page == 'data_collection_preparation':
     personal_df = pd.read_csv('personal_df.csv')
 
     
-    st.write(" ")
+    st.write(" Data Source : https://www.kaggle.com/datasets/yorkyong/football-player-statistics ")
     
     # Create two columns in Streamlit for side-by-side display
     col1, col2 = st.columns(2)
@@ -652,7 +652,7 @@ if st.session_state.page == 'data_collection_preparation':
     
     # Display personal_df in the second column
     with col2:
-        st.subheader("Personal DataFrame")
+        st.subheader("Info DataFrame")
         st.dataframe(personal_df.head(3))
 
 
