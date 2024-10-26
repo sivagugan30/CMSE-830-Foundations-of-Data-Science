@@ -62,7 +62,7 @@ if 'page' not in st.session_state:
 
 # Sidebar for navigation
 st.sidebar.title("Navigation")
-options = st.sidebar.radio("Select a Section", ["Home", "Hypothesis Testing 111", "Types of Players", "Individual Player Analysis", "What Player to Buy?","Data Collection & Preparation"])
+options = st.sidebar.radio("Select a Section", ["Home", "Hypothesis Testing", "Types of Players", "Individual Player Analysis", "What Player to Buy?","Data Collection & Preparation"])
 
 
 # Function to go home
@@ -70,7 +70,7 @@ if options == "Home":
     st.session_state.page = 'home'
 elif options == 'Data Collection & Preparation':
     st.session_state.page =  'data_collection_preparation'
-elif options == "Hypothesis Testing 11111":
+elif options == "Hypothesis Testing":
     st.session_state.page = 'hypothesis_testing'
 elif options == "Types of Players":
     st.session_state.page = 'types_of_players'
