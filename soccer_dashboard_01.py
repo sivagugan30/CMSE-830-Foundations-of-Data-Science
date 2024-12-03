@@ -50,8 +50,7 @@ def set_background(image_path=None, background_color=None):
         )
 
 
-pic = 'pic3.jpg'
-set_background(pic)
+
 
 # Load data
 df = pd.read_csv('cleaned_df.csv')
