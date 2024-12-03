@@ -102,7 +102,7 @@ elif options == "What Player to Buy?":
 
 # Homepage
 if st.session_state.page == 'home':
-    set_background(image_path='messi.jpeg')
+    set_background(image_path='pic3.jpg')
     st.title("Soccer Analytics Dashboard 2024")
     st.header("")
 
