@@ -103,8 +103,8 @@ elif options == "What Player to Buy?":
 # Homepage
 if st.session_state.page == 'home':
     set_background(image_path='garnacho.jpeg')
-    st.title("Soccer Analytics Dashboard 2024")
-    st.header("")
+    #st.title("Soccer Analytics Dashboard 2024")
+    st.header("Soccer Analytics Dashboard 2024")
 
 # Types of Players Section
 elif st.session_state.page == 'types_of_players':
