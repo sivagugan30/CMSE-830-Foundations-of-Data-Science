@@ -9,28 +9,46 @@ import matplotlib.pyplot as plt
 # Set Streamlit app config for a wider layout and light theme
 st.set_page_config(layout="wide", page_title="", initial_sidebar_state="expanded")
 
-# Set background image using HTML and CSS
-def set_background(image_path):
-    with open(image_path, "rb") as image_file:
-        image_data = image_file.read()
-        base64_image = base64.b64encode(image_data).decode()
-    st.markdown(
-         f"""
-        <style>
-        .stApp {{
-            background-image: url("data:image/webp;base64,{base64_image}");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }}
-        .main-title, h1, h2, h3, h4, h5, h6, p {{
-            color: white ;
-        }}
-        
+# Set background image or color dynamically based on the page
+def set_background(image_path=None, background_color=None):
+    if image_path:
+        with open(image_path, "rb") as image_file:
+            image_data = image_file.read()
+            base64_image = base64.b64encode(image_data).decode()
+        st.markdown(
+             f"""
+            <style>
+            .stApp {{
+                background-image: url("data:image/webp;base64,{base64_image}");
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }}
+            .main-title, h1, h2, h3, h4, h5, h6, p {{
+                color: white ;
+            }}
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+    elif background_color:
+        st.markdown(
+            f"""
+            <style>
+            .stApp {{
+                background-color: {background_color};
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }}
+            .main-title, h1, h2, h3, h4, h5, h6, p {{
+                color: white ;
+            }}
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
 
-        """,
-        unsafe_allow_html=True
-    )
 
 pic = 'pic3.jpg'
 set_background(pic)
@@ -85,11 +103,13 @@ elif options == "What Player to Buy?":
 
 # Homepage
 if st.session_state.page == 'home':
+    set_background(image_path='pic3.jpg')
     st.title("Soccer Analytics Dashboard 2024")
     st.header("")
 
 # Types of Players Section
 elif st.session_state.page == 'types_of_players':
+    set_background(background_color='black')
     st.title("Explore Soccer Section")
     
     # Creating the layout within the section to avoid scrolling
