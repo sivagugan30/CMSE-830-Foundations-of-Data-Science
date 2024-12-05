@@ -131,9 +131,9 @@ elif st.session_state.page == 'Instructions':
     st.subheader("Features")
     st.write("- **Data Collection & Preparation:** Gathering, Cleaning, and Preprocessing Data..")
     st.write("- **Hypothesis Testing:** Statistical analysis of player performance.")
-    st.write("- **Player Categories:** Displays top players across categories like Creative, Athletic, Defensive, and Goalkeeping with visualizations.")
-    st.write("- **Player Analysis:** Detailed insights and comparisons for selected players.")
-    st.write("- **Recommendations:** Personalized player recommendations based on selected attributes.")
+    st.write("- **Types of Players:** Displays top players across categories like Creative, Athletic, Defensive, and Goalkeeping with visualizations.")
+    st.write("- **Individual Player Analysis:** Detailed insights and comparisons for selected players.")
+    st.write("- **What Player to Buy?:** Personalized player recommendations based on selected attributes.")
     
     # Closing Note
     st.write("Use the navigation bar to explore different sections of the dashboard.")
