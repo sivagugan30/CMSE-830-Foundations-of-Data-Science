@@ -988,9 +988,9 @@ elif st.session_state.page == 'what_player_to_buy':
             filtered_players['predicted_value'] = filtered_players['predicted_value'].astype(int)  # Convert predicted values to int
             filtered_players = filtered_players.sort_values(by='predicted_value', ascending=False)
     
-            # Display predicted market value
+            # Display predicted market value with the selected skills
             st.subheader("Top 20 Players to Buy Based on Your Criteria")
-            st.write(filtered_players[['player_name', 'predicted_value', 'skill1', 'skill2']].head(20))
+            st.write(filtered_players[['player_name', 'predicted_value', skill1, skill2]].head(20))  # Use skill1 and skill2 directly
         else:
             st.write("No players found based on your criteria.")
     
@@ -1021,7 +1021,7 @@ elif st.session_state.page == 'what_player_to_buy':
         
         # Display the plot
         st.plotly_chart(fig_skill_comparison, use_container_width=True)
-    
+
     
 
 
