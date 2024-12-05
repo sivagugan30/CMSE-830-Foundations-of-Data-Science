@@ -944,9 +944,6 @@ elif st.session_state.page == 'what_player_to_buy':
     df_results = pd.DataFrame.from_dict(model_results, orient='index', columns=['MAPE', 'R²']).reset_index()
     df_results.rename(columns={'index': 'Model'}, inplace=True)
     
-    # Display the results
-    st.write(df_results)
-
     df1 = df.copy()
 
     # Input filters for player recommendations
@@ -974,10 +971,11 @@ elif st.session_state.page == 'what_player_to_buy':
     # Model selection for market value prediction
     st.subheader("Model Selection")
     selected_model_name = st.selectbox("Choose Model for Market Value Prediction", list(models.keys()), key="model_selection")
-    selected_model = models[selected_model_name]
+    
     
     # Predict player values only after button click
     if st.button("Predict"):
+        selected_model = models[selected_model_name]
         if not filtered_players.empty:
             filtered_players['predicted_value'] = selected_model.predict(
                 scaler.transform(filtered_players[numerical_features].drop(columns=['market_value'], errors='ignore'))
