@@ -989,11 +989,7 @@ elif st.session_state.page == 'what_player_to_buy':
     
     # If no model is selected, ask the user to select one
     if selected_model_name is None:
-    st.write("Please select a model to proceed.")
-
-
-
-    
+        st.write("Please select a model to proceed.")
     
     # Predict player values only after button click
     if st.button("Predict"):
