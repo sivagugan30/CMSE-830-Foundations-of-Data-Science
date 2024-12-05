@@ -136,7 +136,8 @@ elif st.session_state.page == 'Instructions':
     st.write("- **What Player to Buy?:** Personalized player recommendations based on selected attributes.")
     st.write("")
     # Closing Note
-    st.write("Use the navigation bar to explore different sections of the dashboard.")
+    st.write("Navigate through the dashboard using the Navigation bar to explore, and enjoy the world of soccer analytics!")
+
 
 
 # Types of Players Section
