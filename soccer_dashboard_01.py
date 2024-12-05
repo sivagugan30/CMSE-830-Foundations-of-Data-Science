@@ -972,37 +972,24 @@ elif st.session_state.page == 'what_player_to_buy':
     selected_model_name = st.selectbox("Choose Model for Market Value Prediction", list(models.keys()), key="model_selection")
     selected_model = models[selected_model_name]
 
-    # Predict player values if filtered players exist
-    if not filtered_players.empty:
-        filtered_players['predicted_value'] = selected_model.predict(
-            scaler.transform(filtered_players[numerical_features].drop(columns=['market_value'], errors='ignore'))
-        )
-        filtered_players = filtered_players.sort_values(by='predicted_value', ascending=False)
-
-        # Display filtered players
-        st.subheader("Top 20 Players to Buy Based on Your Criteria")
-        st.write(filtered_players[['player_name', 'market_value', 'predicted_value', 'age', skill1, skill2]].head(20))
-
-        # Scatter plot for skill comparison
-        fig_skill_comparison = px.scatter(
-            filtered_players.head(20),
-            x=skill1,
-            y=skill2,
-            color='predicted_value',
-            hover_name='player_name',
-            title=f"Joint Plot: {skill1.title()} vs {skill2.title()}",
-            labels={skill1: skill1.title(), skill2: skill2.title()},
-            template='plotly_dark',
-            marginal_x='histogram',
-            marginal_y='histogram'
-        )
-        st.plotly_chart(fig_skill_comparison, use_container_width=True)
-    else:
-        st.write("No players found based on your criteria.")
-
-    # Display model performance metrics
+    # Display model evaluation metrics and allow selection based on metrics
     st.subheader("Model Evaluation Metrics")
     st.write(df_results)
+
+    # Predict player values only after button click
+    if st.button("Predict"):
+        if not filtered_players.empty:
+            filtered_players['predicted_value'] = selected_model.predict(
+                scaler.transform(filtered_players[numerical_features].drop(columns=['market_value'], errors='ignore'))
+            )
+            filtered_players = filtered_players.sort_values(by='predicted_value', ascending=False)
+
+            # Display predicted market value
+            st.subheader("Top 20 Players to Buy Based on Your Criteria")
+            st.write(filtered_players[['player_name', 'predicted_value']].head(20))
+        else:
+            st.write("No players found based on your criteria.")
+
 
 
 
