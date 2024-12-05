@@ -394,99 +394,6 @@ elif st.session_state.page == 'individual_player_analysis':
         st.plotly_chart(fig_scatter, use_container_width=True)
 
 
-elif st.session_state.page == 'what_player_to_buy':
-    st.title("What Player to Buy?")
-
-    # Cleaned DataFrame setup
-    df1 = df.drop('value', axis=1, inplace=False)
-    df1['market_value'] = df1['market_value']
-
-    # Input filters for player recommendations
-    st.subheader("Player Criteria Filters")
-
-    position = st.selectbox("Position", df1['core_position'].unique(), key="position")
-    
-    # Age slider
-    age = st.slider("Age", 18, 40, (22, 30), step=1, key="age")
-
-    # Budget slider
-    budget = st.slider("Budget (Market Value)", 0, 200000000, (10000000, 100000000), step=500000, key="budget")
-
-    skill_columns = ['finishing', 'dribbling', 'defending', 'passing']
-    skill1 = st.selectbox("Important Skill 1", skill_columns, index=skill_columns.index('finishing'), key="skill1")
-    skill2 = st.selectbox("Important Skill 2", skill_columns, index=skill_columns.index('dribbling'), key="skill2")
-
-    # Filter players based on criteria
-    filtered_players = df1[
-        (df1['core_position'] == position) &
-        (df1['age'] >= age[0]) & (df1['age'] <= age[1]) &
-        (df1['market_value'] >= budget[0]) & (df1['market_value'] <= budget[1])
-    ]
-
-    # Model selection for market value prediction
-    st.subheader("Model Selection")
-    selected_model_name = st.selectbox(
-        "Choose Model for Market Value Prediction", 
-        ['Linear Regression', 'Random Forest Regressor', 'Gradient Boosting'],
-        key="model_selection"
-    )
-
-    selected_model = {
-        'Linear Regression': lin_reg, 
-        'Random Forest Regressor': rf_reg, 
-        'Gradient Boosting': gb_reg
-    }[selected_model_name]
-
-    # Predict player values if filtered players exist
-    if not filtered_players.empty:
-        filtered_players['predicted_value'] = selected_model.predict(
-            scaler.transform(filtered_players[numerical_features])
-        )
-        filtered_players = filtered_players.sort_values(by='predicted_value', ascending=False)
-
-        # Display filtered players
-        st.subheader("Top 20 Players to Buy Based on Your Criteria")
-        st.write(filtered_players[['player_name', 'market_value', 'predicted_value', 'age', skill1, skill2]].head(20))
-
-        # Scatter plot for skill comparison
-        fig_skill_comparison = px.scatter(
-            filtered_players.head(20),
-            x=skill1,
-            y=skill2,
-            color='predicted_value',
-            hover_name='player_name',
-            title=f"Joint Plot: {skill1.replace('_', ' ').title()} vs {skill2.replace('_', ' ').title()}",
-            labels={skill1: skill1.title(), skill2: skill2.title()},
-            template='plotly_dark',
-            marginal_x='histogram',
-            marginal_y='histogram'
-        )
-        st.plotly_chart(fig_skill_comparison, use_container_width=True)
-    else:
-        st.write("No players found based on your criteria.")
-
-    # Display model performance metrics
-    st.subheader("Model Evaluation Metrics")
-    st.write(df_results)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Hypothesis Testing Page
 if st.session_state.page == 'hypothesis_testing':
     st.title("Hypothesis Testing")
@@ -990,6 +897,80 @@ if st.session_state.page == 'data_collection_preparation':
     # Add a comment for the SMOTE plot
     st.write("In this plot, the majority class on the right is untouched, while the minority class (left) has been oversampled using the SMOTE algorithm. This technique generates synthetic samples for the minority class, resulting in a distribution that mirrors the original variable but with an increased number of data points ")
 
+elif st.session_state.page == 'what_player_to_buy':
+    st.title("What Player to Buy?")
+
+    # Cleaned DataFrame setup
+    df1 = df.drop('value', axis=1, inplace=False)
+    df1['market_value'] = df1['market_value']
+
+    # Input filters for player recommendations
+    st.subheader("Player Criteria Filters")
+
+    position = st.selectbox("Position", df1['core_position'].unique(), key="position")
+    
+    # Age slider
+    age = st.slider("Age", 18, 40, (22, 30), step=1, key="age")
+
+    # Budget slider
+    budget = st.slider("Budget (Market Value)", 0, 200000000, (10000000, 100000000), step=500000, key="budget")
+
+    skill_columns = ['finishing', 'dribbling', 'defending', 'passing']
+    skill1 = st.selectbox("Important Skill 1", skill_columns, index=skill_columns.index('finishing'), key="skill1")
+    skill2 = st.selectbox("Important Skill 2", skill_columns, index=skill_columns.index('dribbling'), key="skill2")
+
+    # Filter players based on criteria
+    filtered_players = df1[
+        (df1['core_position'] == position) &
+        (df1['age'] >= age[0]) & (df1['age'] <= age[1]) &
+        (df1['market_value'] >= budget[0]) & (df1['market_value'] <= budget[1])
+    ]
+
+    # Model selection for market value prediction
+    st.subheader("Model Selection")
+    selected_model_name = st.selectbox(
+        "Choose Model for Market Value Prediction", 
+        ['Linear Regression', 'Random Forest Regressor', 'Gradient Boosting'],
+        key="model_selection"
+    )
+
+    selected_model = {
+        'Linear Regression': lin_reg, 
+        'Random Forest Regressor': rf_reg, 
+        'Gradient Boosting': gb_reg
+    }[selected_model_name]
+
+    # Predict player values if filtered players exist
+    if not filtered_players.empty:
+        filtered_players['predicted_value'] = selected_model.predict(
+            scaler.transform(filtered_players[numerical_features])
+        )
+        filtered_players = filtered_players.sort_values(by='predicted_value', ascending=False)
+
+        # Display filtered players
+        st.subheader("Top 20 Players to Buy Based on Your Criteria")
+        st.write(filtered_players[['player_name', 'market_value', 'predicted_value', 'age', skill1, skill2]].head(20))
+
+        # Scatter plot for skill comparison
+        fig_skill_comparison = px.scatter(
+            filtered_players.head(20),
+            x=skill1,
+            y=skill2,
+            color='predicted_value',
+            hover_name='player_name',
+            title=f"Joint Plot: {skill1.replace('_', ' ').title()} vs {skill2.replace('_', ' ').title()}",
+            labels={skill1: skill1.title(), skill2: skill2.title()},
+            template='plotly_dark',
+            marginal_x='histogram',
+            marginal_y='histogram'
+        )
+        st.plotly_chart(fig_skill_comparison, use_container_width=True)
+    else:
+        st.write("No players found based on your criteria.")
+
+    # Display model performance metrics
+    st.subheader("Model Evaluation Metrics")
+    st.write(df_results)
 
 
 
