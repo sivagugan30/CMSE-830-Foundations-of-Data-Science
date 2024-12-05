@@ -967,15 +967,15 @@ elif st.session_state.page == 'what_player_to_buy':
         (df1['market_value'] >= budget[0]) & (df1['market_value'] <= budget[1])
     ]
 
-    # Model selection for market value prediction
-    st.subheader("Model Selection")
-    selected_model_name = st.selectbox("Choose Model for Market Value Prediction", list(models.keys()), key="model_selection")
-    selected_model = models[selected_model_name]
-
     # Display model evaluation metrics and allow selection based on metrics
     st.subheader("Model Evaluation Metrics")
     st.write(df_results)
 
+    # Model selection for market value prediction
+    st.subheader("Model Selection")
+    selected_model_name = st.selectbox("Choose Model for Market Value Prediction", list(models.keys()), key="model_selection")
+    selected_model = models[selected_model_name]
+    
     # Predict player values only after button click
     if st.button("Predict"):
         if not filtered_players.empty:
