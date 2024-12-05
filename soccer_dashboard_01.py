@@ -134,7 +134,7 @@ elif st.session_state.page == 'Instructions':
     st.write("- **Types of Players:** Displays top players across categories like Creative, Athletic, Defensive, and Goalkeeping with visualizations.")
     st.write("- **Individual Player Analysis:** Detailed insights and comparisons for selected players.")
     st.write("- **What Player to Buy?:** Personalized player recommendations based on selected attributes.")
-    
+     st.write("")
     # Closing Note
     st.write("Use the navigation bar to explore different sections of the dashboard.")
 
