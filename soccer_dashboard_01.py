@@ -54,8 +54,7 @@ def set_background(image_path=None, background_color=None):
 
 # Load data
 df = pd.read_csv('cleaned_df.csv')
-df = df.drop('Unnamed: 0', axis=1)
-
+df.drop('value', axis=1, inplace=True)
 # Check for duplicate columns and log them
 duplicates = df.columns[df.columns.duplicated()].unique()
 if len(duplicates) > 0:
