@@ -975,13 +975,17 @@ elif st.session_state.page == 'what_player_to_buy':
     selected_model_name = st.selectbox("Choose Model for Market Value Prediction", list(models.keys()), key="model_selection")
     
     
-    # Predict player values only after button click
+   # Predict player values only after button click
     if st.button("Predict"):
         selected_model = models[selected_model_name]
+        
+        # Fit the model and predict on filtered players
         if not filtered_players.empty:
-            filtered_players['predicted_value'] = selected_model.predict(
-                scaler.transform(filtered_players[numerical_features].drop(columns=['market_value'], errors='ignore'))
-            )
+            X_filtered = filtered_players[numerical_features].drop(columns=['market_value'], errors='ignore')
+            X_filtered_scaled = scaler.transform(X_filtered)
+
+            selected_model.fit(X_scaled, y)  # Fit model on all data
+            filtered_players['predicted_value'] = selected_model.predict(X_filtered_scaled)  # Predict for filtered players
             filtered_players = filtered_players.sort_values(by='predicted_value', ascending=False)
 
             # Display predicted market value
