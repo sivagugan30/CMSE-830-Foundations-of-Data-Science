@@ -558,6 +558,8 @@ if st.session_state.page == 'hypothesis_testing':
 
 # data_collection_preparation
 if st.session_state.page == 'data_collection_preparation':
+    st.write('Github : https://github.com/sivagugan30/CMSE-830-Foundations-of-Data-Science')
+    
     st.title('Initial Data Analysis')
     import numpy as np
     import pandas as pd
