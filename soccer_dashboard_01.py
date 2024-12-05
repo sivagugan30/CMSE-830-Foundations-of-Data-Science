@@ -973,9 +973,6 @@ elif st.session_state.page == 'what_player_to_buy':
 
     import streamlit as st
 
-    # Display model evaluation metrics and allow selection based on metrics
-    st.subheader("Basis the Model Evaluation metrics, please choose your desired model")
-      # Assuming df_results is your DataFrame with evaluation metrics and models is a dictionary of available models
     st.subheader("Model Selection")
     
     # Display model evaluation metrics
