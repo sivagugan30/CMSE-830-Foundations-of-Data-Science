@@ -966,18 +966,29 @@ elif st.session_state.page == 'what_player_to_buy':
         (df1['market_value'] >= budget[0]) & (df1['market_value'] <= budget[1])
     ]
 
-      # Assuming df_results is your DataFrame with evaluation metrics and models is a dictionary of available models
-    st.subheader("Model Selection")
+     import streamlit as st
+
+    # Assuming df_results is your DataFrame with evaluation metrics and models is a dictionary of available models
+    st.subheader("Model Evaluation and Selection")
     
     # Display model evaluation metrics
     st.write("Based on the Model Evaluation metrics, please choose your desired model:")
     st.write(df_results)
     
-    # Model selection for market value prediction
-    selected_model_name = st.selectbox("Choose Model for Market Value Prediction", list(models.keys()), key="model_selection")
+    # Variable to store the selected model
+    selected_model_name = None
+    
+    # Create a button for each model in the evaluation results
+    for model_name in df_results['Model']:  # Assuming 'Model' column contains model names
+        if st.button(f"Select {model_name}", key=model_name):
+            selected_model_name = model_name
+            st.write(f"You selected the model: {selected_model_name}")
+            break  # Exit the loop once a model is selected
+    
+    # If no model is selected, ask the user to select one
+    if selected_model_name is None:
+        st.write("Please select a model to proceed.")
 
-    # You can display the selected model name as confirmation
-    st.write(f"You selected the model: {selected_model_name}")
 
     
     
