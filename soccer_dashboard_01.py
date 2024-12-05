@@ -982,18 +982,47 @@ elif st.session_state.page == 'what_player_to_buy':
         if not filtered_players.empty:
             X_filtered = filtered_players[numerical_features].drop(columns=['market_value'], errors='ignore')
             X_filtered_scaled = scaler.transform(X_filtered)
-
+    
             selected_model.fit(X_train_scaled, y_train)  # Fit model on training data
             filtered_players['predicted_value'] = selected_model.predict(X_filtered_scaled)  # Predict for filtered players
+            filtered_players['predicted_value'] = filtered_players['predicted_value'].astype(int)  # Convert predicted values to int
             filtered_players = filtered_players.sort_values(by='predicted_value', ascending=False)
-
+    
             # Display predicted market value
             st.subheader("Top 20 Players to Buy Based on Your Criteria")
-            st.write(filtered_players[['player_name', 'predicted_value']].head(20))
+            st.write(filtered_players[['player_name', 'predicted_value', 'skill1', 'skill2']].head(20))
         else:
             st.write("No players found based on your criteria.")
-
-
+    
+        # Plot skill comparison
+        fig_skill_comparison = px.scatter(
+            filtered_players.head(20),
+            x=skill1,
+            y=skill2,
+            color='market_value',
+            hover_name='player_name',
+            title=f"Joint Plot: {skill1.replace('_', ' ').title()} vs {skill2.replace('_', ' ').title()}",
+            labels={
+                skill1: skill1.replace('_', ' ').title(),
+                skill2: skill2.replace('_', ' ').title()
+            },
+            template='plotly_dark',
+            marginal_x='histogram',
+            marginal_y='histogram'
+        )
+        
+        # Update the histogram colors and bin size
+        fig_skill_comparison.update_traces(
+            selector=dict(type='histogram'),
+            marker_color='rgba(255, 0, 0, 0.8)',  # Set the histogram color to a semi-transparent red
+            nbinsx=10,
+            nbinsy=10
+        )
+        
+        # Display the plot
+        st.plotly_chart(fig_skill_comparison, use_container_width=True)
+    
+    
 
 
 
