@@ -129,8 +129,7 @@ elif st.session_state.page == 'Instructions':
     
     # Features
     st.subheader("Features")
-    st.write("- **Home:** Introduction to the dashboard.")
-    st.write("- **Data Collection & Preparation:** Data Prepation and Data Handling.")
+    st.write("- **Data Collection & Preparation:** Gathering, Cleaning, and Preprocessing Data..")
     st.write("- **Hypothesis Testing:** Statistical analysis of player performance.")
     st.write("- **Player Categories:** Displays top players across categories like Creative, Athletic, Defensive, and Goalkeeping with visualizations.")
     st.write("- **Player Analysis:** Detailed insights and comparisons for selected players.")
