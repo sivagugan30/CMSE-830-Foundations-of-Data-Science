@@ -120,7 +120,7 @@ elif st.session_state.page == 'Instructions':
     st.markdown("Explore soccer player data interactively using the **Soccer Analytics Dashboard**.")
     
     # Description
-    st.subheader("About the Dashboard")
+    st.subheader("About the Dashboard :")
     st.write(
         "This dashboard is designed to provide insights into player performance, categories, "
         "and recommendations using tools like **Streamlit**, **Plotly**, and **Pandas**. "
