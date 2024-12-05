@@ -902,16 +902,58 @@ if st.session_state.page == 'data_collection_preparation':
     # Add a comment for the SMOTE plot
     st.write("In this plot, the majority class on the right is untouched, while the minority class (left) has been oversampled using the SMOTE algorithm. This technique generates synthetic samples for the minority class, resulting in a distribution that mirrors the original variable but with an increased number of data points ")
 
-# Footer
-st.sidebar.markdown("---")
-st.sidebar.write("Created by Sivagugan Jayachandran")
-
-
 
 elif st.session_state.page == 'what_player_to_buy':
     st.title("What Player to Buy?")
 
-    df1 = df.copy()
+    # Get only numerical features
+    numerical_features = df.describe().columns.to_list()[1:-1]
+    
+    # Prepare data for model
+    X = df[numerical_features]
+    y = df['market_value']
+    
+    # Split the data into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    # Standardize numerical features
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+    
+    # Model Evaluation Function
+    def evaluate_model(model, X_train, X_test, y_train, y_test):
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        mape = mean_absolute_percentage_error(y_test, y_pred)
+        r2 = r2_score(y_test, y_pred)
+        return mape, r2
+    
+    # 1. Linear Regression
+    lin_reg = LinearRegression()
+    mape_lr, r2_lr = evaluate_model(lin_reg, X_train_scaled, X_test_scaled, y_train, y_test)
+    
+    # 2. Random Forest Regressor
+    rf_reg = RandomForestRegressor(random_state=42)
+    mape_rf, r2_rf = evaluate_model(rf_reg, X_train_scaled, X_test_scaled, y_train, y_test)
+    
+    # 3. Gradient Boosting Regressor
+    gb_reg = GradientBoostingRegressor(random_state=42)
+    mape_gb, r2_gb = evaluate_model(gb_reg, X_train_scaled, X_test_scaled, y_train, y_test)
+    
+    # Combine results into a DataFrame
+    df_results = pd.DataFrame({
+        'Model': ['Linear Regression', 'Random Forest Regressor', 'Gradient Boosting'],
+        'MAPE': [mape_lr, mape_rf, mape_gb],
+        'R²': [r2_lr, r2_rf, r2_gb]
+    })
+    
+    # Display the results
+    st.write(df_results)
+
+
+
+
 
     # Input filters for player recommendations
     st.subheader("Player Criteria Filters")
@@ -981,4 +1023,9 @@ elif st.session_state.page == 'what_player_to_buy':
     st.subheader("Model Evaluation Metrics")
     st.write(df_results)
 
+
+
+# Footer
+st.sidebar.markdown("---")
+st.sidebar.write("Created by Sivagugan Jayachandran")
 
