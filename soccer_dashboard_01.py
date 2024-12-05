@@ -979,19 +979,24 @@ elif st.session_state.page == 'what_player_to_buy':
     st.write("Based on the each Model's Performance metrics, please choose one:")
     st.write(df_results)
     
-    # Variable to store the selected model
-    selected_model_name = None
+    # Initialize session state for selected model if not already done
+    if "selected_model_name" not in st.session_state:
+        st.session_state.selected_model_name = None
+    
+    st.subheader("Choose a Model")
     
     # Create a button for each model in the evaluation results
-    for model_name in ['Linear Regression','Random Forest Regressor','Gradient Boosting']:
-        if st.button(f"{model_name}", key=model_name):
-            selected_model_name = model_name
-            st.write(f"You selected the model: {selected_model_name}")
-            break  # Exit the loop once a model is selected
+    for model_name in ['Linear Regression', 'Random Forest Regressor', 'Gradient Boosting']:
+        if st.button(f"Select {model_name}", key=model_name):
+            st.session_state.selected_model_name = model_name  # Update session state
+            st.write(f"You selected the model: {st.session_state.selected_model_name}")
     
-    # If no model is selected, ask the user to select one
-    if selected_model_name is None:
-        st.write("Please select a model to proceed.")
+    # Display the currently selected model
+    if st.session_state.selected_model_name:
+        st.write(f"Currently Selected Model: {st.session_state.selected_model_name}")
+    else:
+        st.write("No model selected. Please choose a model to proceed.")
+
 
     
     # Predict player values only after button click
