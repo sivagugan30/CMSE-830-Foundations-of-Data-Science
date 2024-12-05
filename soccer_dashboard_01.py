@@ -940,7 +940,7 @@ elif st.session_state.page == 'what_player_to_buy':
     # Predefined results
     data = {
         'Model': ['Linear Regression', 'Random Forest Regressor', 'Gradient Boosting'],
-        'MAPE': [0.104595, 0.078991, 0.086911],
+        'MAPE': [0.124, 0.076, 0.082],
         'R²': [0.974906, 0.978413, 0.979113]
     }
     
