@@ -979,13 +979,11 @@ elif st.session_state.page == 'what_player_to_buy':
     
     # Display model evaluation metrics
     st.write("Based on the Model Evaluation metrics, please choose your desired model:")
+    
     st.write(df_results)
     
-    # Model selection for market value prediction
-    st.subheader("Model Selection")
     selected_model_name = st.selectbox("Choose Model for Market Value Prediction", list(models.keys()), key="model_selection")
-    # You can display the selected model name as confirmation
-    st.write(f"You selected the model: {selected_model_name}")
+
     
     
     # Predict player values only after button click
