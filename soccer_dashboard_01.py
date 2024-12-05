@@ -902,6 +902,12 @@ if st.session_state.page == 'data_collection_preparation':
     # Add a comment for the SMOTE plot
     st.write("In this plot, the majority class on the right is untouched, while the minority class (left) has been oversampled using the SMOTE algorithm. This technique generates synthetic samples for the minority class, resulting in a distribution that mirrors the original variable but with an increased number of data points ")
 
+# Footer
+st.sidebar.markdown("---")
+st.sidebar.write("Created by Sivagugan Jayachandran")
+
+
+
 elif st.session_state.page == 'what_player_to_buy':
     st.title("What Player to Buy?")
 
@@ -976,7 +982,3 @@ elif st.session_state.page == 'what_player_to_buy':
     st.write(df_results)
 
 
-
-# Footer
-st.sidebar.markdown("---")
-st.sidebar.write("Created by Sivagugan Jayachandran")
