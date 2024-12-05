@@ -968,6 +968,8 @@ elif st.session_state.page == 'what_player_to_buy':
 
      #import streamlit as st
 
+   #import streamlit as st
+
     # Assuming df_results is your DataFrame with evaluation metrics and models is a dictionary of available models
     st.subheader("Model Evaluation and Selection")
     
@@ -987,7 +989,8 @@ elif st.session_state.page == 'what_player_to_buy':
     
     # If no model is selected, ask the user to select one
     if selected_model_name is None:
-        st.write("Please select a model to proceed.")
+    st.write("Please select a model to proceed.")
+
 
 
     
