@@ -943,7 +943,7 @@ elif st.session_state.page == 'what_player_to_buy':
         'R²': [0.974906, 0.978413, 0.979113]
     }
     
-    # Create DataFrame
+    # Create DataFrame for results
     df_results = pd.DataFrame(data)
     
     df1 = df.copy()
@@ -974,8 +974,7 @@ elif st.session_state.page == 'what_player_to_buy':
     st.subheader("Model Selection")
     selected_model_name = st.selectbox("Choose Model for Market Value Prediction", list(models.keys()), key="model_selection")
     
-    
-   # Predict player values only after button click
+    # Predict player values only after button click
     if st.button("Predict"):
         selected_model = models[selected_model_name]
         
@@ -984,7 +983,7 @@ elif st.session_state.page == 'what_player_to_buy':
             X_filtered = filtered_players[numerical_features].drop(columns=['market_value'], errors='ignore')
             X_filtered_scaled = scaler.transform(X_filtered)
 
-            selected_model.fit(X_scaled, y)  # Fit model on all data
+            selected_model.fit(X_train_scaled, y_train)  # Fit model on training data
             filtered_players['predicted_value'] = selected_model.predict(X_filtered_scaled)  # Predict for filtered players
             filtered_players = filtered_players.sort_values(by='predicted_value', ascending=False)
 
