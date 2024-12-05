@@ -966,13 +966,20 @@ elif st.session_state.page == 'what_player_to_buy':
         (df1['market_value'] >= budget[0]) & (df1['market_value'] <= budget[1])
     ]
 
-    # Display model evaluation metrics and allow selection based on metrics
-    st.subheader("Basis the Model Evaluation metrics, please choose your desired model")
-    st.write(df_results)
-
-    # Model selection for market value prediction
+      # Assuming df_results is your DataFrame with evaluation metrics and models is a dictionary of available models
     st.subheader("Model Selection")
+    
+    # Display model evaluation metrics
+    st.write("Based on the Model Evaluation metrics, please choose your desired model:")
+    st.write(df_results)
+    
+    # Model selection for market value prediction
     selected_model_name = st.selectbox("Choose Model for Market Value Prediction", list(models.keys()), key="model_selection")
+
+    # You can display the selected model name as confirmation
+    st.write(f"You selected the model: {selected_model_name}")
+
+    
     
     # Predict player values only after button click
     if st.button("Predict"):
@@ -1065,7 +1072,7 @@ elif st.session_state.page == 'what_player_to_buy':
     top_anova = top_anova_15[common_features]
 
     st.subheader("Feature Selection")  # Larger title for emphasis
-    st.write("ANOVA and Mutual Information techniques were applied to identify and prioritize key features.")  # Normal text
+    st.write("ANOVA and Mutual Information techniques were applied to identify and prioritize key regressors.")  # Normal text
 
     # Create scatter plot comparing Mutual Information and ANOVA F-Value
     fig = go.Figure()
