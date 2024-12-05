@@ -983,7 +983,7 @@ elif st.session_state.page == 'what_player_to_buy':
     selected_model_name = None
     
     # Create a button for each model in the evaluation results
-    for model_name in df_results['Model']:  # Assuming 'Model' column contains model names
+    for model_name in ['Linear Regression','Random Forest Regressor','Gradient Boosting']:
         if st.button(f"{model_name}", key=model_name):
             selected_model_name = model_name
             st.write(f"You selected the model: {selected_model_name}")
