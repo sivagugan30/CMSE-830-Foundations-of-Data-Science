@@ -128,7 +128,7 @@ elif st.session_state.page == 'Instructions':
     )
     
     # Features
-    st.subheader("Features")
+    st.subheader("Sections : ")
     st.write("- **Data Collection & Preparation:** Gathering, Cleaning, and Preprocessing Data..")
     st.write("- **Hypothesis Testing:** Statistical analysis of player performance.")
     st.write("- **Types of Players:** Displays top players across categories like Creative, Athletic, Defensive, and Goalkeeping with visualizations.")
