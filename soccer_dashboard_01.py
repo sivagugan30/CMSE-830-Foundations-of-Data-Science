@@ -970,11 +970,13 @@ elif st.session_state.page == 'what_player_to_buy':
 
    #import streamlit as st
 
+    import streamlit as st
+
     # Assuming df_results is your DataFrame with evaluation metrics and models is a dictionary of available models
-    st.subheader("Model Evaluation and Selection")
+    st.subheader("Model Selection")
     
     # Display model evaluation metrics
-    st.write("Based on the Model Evaluation metrics, please choose your desired model:")
+    st.write("Based on the each Model's Performance metrics, please choose one:")
     st.write(df_results)
     
     # Variable to store the selected model
@@ -982,7 +984,7 @@ elif st.session_state.page == 'what_player_to_buy':
     
     # Create a button for each model in the evaluation results
     for model_name in df_results['Model']:  # Assuming 'Model' column contains model names
-        if st.button(f"Select {model_name}", key=model_name):
+        if st.button(f"{model_name}", key=model_name):
             selected_model_name = model_name
             st.write(f"You selected the model: {selected_model_name}")
             break  # Exit the loop once a model is selected
@@ -990,6 +992,7 @@ elif st.session_state.page == 'what_player_to_buy':
     # If no model is selected, ask the user to select one
     if selected_model_name is None:
         st.write("Please select a model to proceed.")
+
     
     # Predict player values only after button click
     if st.button("Predict"):
