@@ -951,7 +951,7 @@ elif st.session_state.page == 'what_player_to_buy':
     # Display the results
     st.write(df_results)
 
-
+    df1 = df.copy()
 
 
 
