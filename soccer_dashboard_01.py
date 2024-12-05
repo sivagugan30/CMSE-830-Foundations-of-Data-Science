@@ -900,8 +900,7 @@ if st.session_state.page == 'data_collection_preparation':
 elif st.session_state.page == 'what_player_to_buy':
     st.title("What Player to Buy?")
 
-    # Cleaned DataFrame setup
-    df1['market_value'] = df1['market_value']
+    df1 = df.copy()
 
     # Input filters for player recommendations
     st.subheader("Player Criteria Filters")
