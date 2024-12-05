@@ -1063,7 +1063,10 @@ elif st.session_state.page == 'what_player_to_buy':
     # Filter the top 10 common features from both metrics
     top_mi = top_mi_15[common_features]
     top_anova = top_anova_15[common_features]
-    
+
+    st.subheader("Feature Selection")  # Larger title for emphasis
+    st.write("ANOVA and Mutual Information techniques were applied to identify and prioritize key features.")  # Normal text
+
     # Create scatter plot comparing Mutual Information and ANOVA F-Value
     fig = go.Figure()
     
@@ -1107,13 +1110,9 @@ elif st.session_state.page == 'what_player_to_buy':
         font=dict(color="royalblue", size=12),
         xanchor='right'
     )
-    
+
     # Configure layout with increased height and the title
     fig.update_layout(
-        title="Feature Selection",  # Set the title of the plot
-        title_x=0.5,  # Center the title horizontally
-        title_y=0.98,  # Position the title closer to the top (adjust as needed)
-        title_font=dict(size=25),
         xaxis=dict(title='Features'),
         yaxis=dict(
             title='Mutual Information(MI)',
