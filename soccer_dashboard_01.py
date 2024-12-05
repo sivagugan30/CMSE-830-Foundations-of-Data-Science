@@ -966,7 +966,7 @@ elif st.session_state.page == 'what_player_to_buy':
         (df1['market_value'] >= budget[0]) & (df1['market_value'] <= budget[1])
     ]
 
-     import streamlit as st
+     #import streamlit as st
 
     # Assuming df_results is your DataFrame with evaluation metrics and models is a dictionary of available models
     st.subheader("Model Evaluation and Selection")
