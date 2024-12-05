@@ -582,19 +582,20 @@ if st.session_state.page == 'data_collection_preparation':
     personal_df = pd.read_csv('personal_df.csv')
 
     
-    st.write(" Data Source : https://www.kaggle.com/datasets/yorkyong/football-player-statistics ")
+    st.write(" Data Source 1 : https://www.kaggle.com/datasets/yorkyong/football-player-statistics ")
+    st.write(" Data Source 2 : https://www.kaggle.com/datasets/davidcariboo/player-scores ")
     
     # Create two columns in Streamlit for side-by-side display
     col1, col2 = st.columns(2)
     
     # Display stats_df in the first column
     with col1:
-        st.subheader("Stats DataFrame")
+        st.subheader("Data Source 1")
         st.dataframe(stats_df.head(3))
     
     # Display personal_df in the second column
     with col2:
-        st.subheader("Info DataFrame")
+        st.subheader("Data Source 2")
         st.dataframe(personal_df.head(3))
 
 
