@@ -907,10 +907,10 @@ elif st.session_state.page == 'what_player_to_buy':
     st.title("What Player to Buy?")
 
     # Get only numerical features
-    numerical_features = df.describe().columns.to_list()[1:-1]
-    
+    numerical_features = df.select_dtypes(include=['number']).columns.to_list()
+
     # Prepare data for model
-    X = df[numerical_features]
+    X = df[numerical_features].drop(columns=['market_value'], errors='ignore')
     y = df['market_value']
     
     # Split the data into train and test sets
@@ -929,46 +929,36 @@ elif st.session_state.page == 'what_player_to_buy':
         r2 = r2_score(y_test, y_pred)
         return mape, r2
     
-    # 1. Linear Regression
-    lin_reg = LinearRegression()
-    mape_lr, r2_lr = evaluate_model(lin_reg, X_train_scaled, X_test_scaled, y_train, y_test)
-    
-    # 2. Random Forest Regressor
-    rf_reg = RandomForestRegressor(random_state=42)
-    mape_rf, r2_rf = evaluate_model(rf_reg, X_train_scaled, X_test_scaled, y_train, y_test)
-    
-    # 3. Gradient Boosting Regressor
-    gb_reg = GradientBoostingRegressor(random_state=42)
-    mape_gb, r2_gb = evaluate_model(gb_reg, X_train_scaled, X_test_scaled, y_train, y_test)
+    # Train and evaluate models
+    models = {
+        'Linear Regression': LinearRegression(),
+        'Random Forest Regressor': RandomForestRegressor(random_state=42),
+        'Gradient Boosting': GradientBoostingRegressor(random_state=42)
+    }
+    model_results = {
+        name: evaluate_model(model, X_train_scaled, X_test_scaled, y_train, y_test)
+        for name, model in models.items()
+    }
     
     # Combine results into a DataFrame
-    df_results = pd.DataFrame({
-        'Model': ['Linear Regression', 'Random Forest Regressor', 'Gradient Boosting'],
-        'MAPE': [mape_lr, mape_rf, mape_gb],
-        'R²': [r2_lr, r2_rf, r2_gb]
-    })
+    df_results = pd.DataFrame.from_dict(model_results, orient='index', columns=['MAPE', 'R²']).reset_index()
+    df_results.rename(columns={'index': 'Model'}, inplace=True)
     
     # Display the results
     st.write(df_results)
 
     df1 = df.copy()
 
-
-
     # Input filters for player recommendations
     st.subheader("Player Criteria Filters")
 
     position = st.selectbox("Position", df1['core_position'].unique(), key="position")
-    
-    # Age slider
     age = st.slider("Age", 18, 40, (22, 30), step=1, key="age")
-
-    # Budget slider
     budget = st.slider("Budget (Market Value)", 0, 200000000, (10000000, 100000000), step=500000, key="budget")
 
     skill_columns = ['finishing', 'dribbling', 'defending', 'passing']
-    skill1 = st.selectbox("Important Skill 1", skill_columns, index=skill_columns.index('finishing'), key="skill1")
-    skill2 = st.selectbox("Important Skill 2", skill_columns, index=skill_columns.index('dribbling'), key="skill2")
+    skill1 = st.selectbox("Important Skill 1", skill_columns, index=0, key="skill1")
+    skill2 = st.selectbox("Important Skill 2", skill_columns, index=1, key="skill2")
 
     # Filter players based on criteria
     filtered_players = df1[
@@ -979,22 +969,13 @@ elif st.session_state.page == 'what_player_to_buy':
 
     # Model selection for market value prediction
     st.subheader("Model Selection")
-    selected_model_name = st.selectbox(
-        "Choose Model for Market Value Prediction", 
-        ['Linear Regression', 'Random Forest Regressor', 'Gradient Boosting'],
-        key="model_selection"
-    )
-
-    selected_model = {
-        'Linear Regression': lin_reg, 
-        'Random Forest Regressor': rf_reg, 
-        'Gradient Boosting': gb_reg
-    }[selected_model_name]
+    selected_model_name = st.selectbox("Choose Model for Market Value Prediction", list(models.keys()), key="model_selection")
+    selected_model = models[selected_model_name]
 
     # Predict player values if filtered players exist
     if not filtered_players.empty:
         filtered_players['predicted_value'] = selected_model.predict(
-            scaler.transform(filtered_players[numerical_features])
+            scaler.transform(filtered_players[numerical_features].drop(columns=['market_value'], errors='ignore'))
         )
         filtered_players = filtered_players.sort_values(by='predicted_value', ascending=False)
 
@@ -1009,7 +990,7 @@ elif st.session_state.page == 'what_player_to_buy':
             y=skill2,
             color='predicted_value',
             hover_name='player_name',
-            title=f"Joint Plot: {skill1.replace('_', ' ').title()} vs {skill2.replace('_', ' ').title()}",
+            title=f"Joint Plot: {skill1.title()} vs {skill2.title()}",
             labels={skill1: skill1.title(), skill2: skill2.title()},
             template='plotly_dark',
             marginal_x='histogram',
@@ -1022,6 +1003,7 @@ elif st.session_state.page == 'what_player_to_buy':
     # Display model performance metrics
     st.subheader("Model Evaluation Metrics")
     st.write(df_results)
+
 
 
 
