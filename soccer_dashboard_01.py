@@ -901,7 +901,6 @@ elif st.session_state.page == 'what_player_to_buy':
     st.title("What Player to Buy?")
 
     # Cleaned DataFrame setup
-    df1 = df.drop('value', axis=1, inplace=False)
     df1['market_value'] = df1['market_value']
 
     # Input filters for player recommendations
