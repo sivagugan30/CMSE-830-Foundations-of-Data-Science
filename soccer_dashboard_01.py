@@ -83,7 +83,7 @@ if 'page' not in st.session_state:
 
 # Sidebar for navigation
 st.sidebar.title("Navigation")
-options = st.sidebar.radio("Select a Section", ["Home","Data Collection & Preparation", "Hypothesis Testing", "Types of Players", "Individual Player Analysis", "What Player to Buy?"])
+options = st.sidebar.radio("Select a Section", ["Home","Instructions","Data Collection & Preparation", "Hypothesis Testing", "Types of Players", "Individual Player Analysis", "What Player to Buy?"])
 
 
 # Function to go home
@@ -101,7 +101,8 @@ elif options == "What Player to Buy?":
     st.session_state.page = 'what_player_to_buy'
 elif options == "What Player to Buy?":
     st.session_state.page = 'what_player_to_buy'
-
+elif options == "Instructions":
+    st.session_state.page = 'Instructions'
 
 
 # Homepage
@@ -109,7 +110,36 @@ if st.session_state.page == 'home':
     set_background(image_path='garnacho.jpeg')
     st.header("")
     st.title("Soccer Analytics Dashboard 2024")
+
+elif st.session_state.page == 'Instructions':
+    # Set background color
+    set_background(background_color='black')
     
+    # Title
+    st.title("Soccer Analytics Dashboard")
+    st.markdown("Explore soccer player data interactively using the **Soccer Analytics Dashboard**.")
+    
+    # Description
+    st.subheader("About the Dashboard")
+    st.write(
+        "This dashboard is designed to provide insights into player performance, categories, "
+        "and recommendations using tools like **Streamlit**, **Plotly**, and **Pandas**. "
+        "Analyze and interact with soccer player data seamlessly."
+    )
+    
+    # Features
+    st.subheader("Features")
+    st.write("- **Home:** Introduction to the dashboard.")
+    st.write("- **Data Collection & Preparation:** Data Prepation and Data Handling.")
+    st.write("- **Hypothesis Testing:** Statistical analysis of player performance.")
+    st.write("- **Player Categories:** Displays top players across categories like Creative, Athletic, Defensive, and Goalkeeping with visualizations.")
+    st.write("- **Player Analysis:** Detailed insights and comparisons for selected players.")
+    st.write("- **Recommendations:** Personalized player recommendations based on selected attributes.")
+    
+    # Closing Note
+    st.write("Use the navigation bar to explore different sections of the dashboard.")
+
+
 # Types of Players Section
 elif st.session_state.page == 'types_of_players':
     set_background(background_color='black')
