@@ -116,7 +116,7 @@ elif st.session_state.page == 'Instructions':
     set_background(background_color='black')
     
     # Title
-    st.title("Soccer Analytics Dashboard")
+    st.title("Soccer Analytics Dashboard 2024")
     st.markdown("Explore soccer player data interactively using the **Soccer Analytics Dashboard**.")
     
     # Description
