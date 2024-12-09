@@ -88,6 +88,7 @@ if st.session_state.page == 'home':
     set_background(image_path='garnacho.jpeg')
     st.header("")
     st.title("Soccer Analytics Dashboard 2024")
+    st.markdown('<h1 style="color: white;">Soccer Analytics Dashboard 2024</h1>', unsafe_allow_html=True)
 
 elif st.session_state.page == 'Instructions':
 
