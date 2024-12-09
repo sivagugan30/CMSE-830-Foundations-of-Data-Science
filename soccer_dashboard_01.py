@@ -15,44 +15,22 @@ import matplotlib.pyplot as plt
 st.set_page_config(layout="wide", page_title="", initial_sidebar_state="expanded")
 
 # Set background image or color dynamically based on the page
-def set_background(image_path=None, background_color=None):
-    if image_path:
-        with open(image_path, "rb") as image_file:
-            image_data = image_file.read()
-            base64_image = base64.b64encode(image_data).decode()
-        st.markdown(
-             f"""
-            <style>
-            .stApp {{
-                background-image: url("data:image/webp;base64,{base64_image}");
-                background-size: cover;
-                background-repeat: no-repeat;
-                background-attachment: fixed;
-            }}
-            .main-title, h1, h2, h3, h4, h5, h6, p {{
-                color: white ;
-            }}
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
-    elif background_color:
-        st.markdown(
-            f"""
-            <style>
-            .stApp {{
-                background-color: {background_color};
-                background-size: cover;
-                background-repeat: no-repeat;
-                background-attachment: fixed;
-            }}
-            .main-title, h1, h2, h3, h4, h5, h6, p {{
-                color: white ;
-            }}
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
+def set_background(image_path):
+    with open(image_path, "rb") as image_file:
+        base64_image = base64.b64encode(image_file.read()).decode()
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/png;base64,{base64_image}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 
