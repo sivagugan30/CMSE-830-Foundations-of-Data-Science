@@ -112,8 +112,7 @@ if st.session_state.page == 'home':
     st.title("Soccer Analytics Dashboard 2024")
 
 elif st.session_state.page == 'Instructions':
-    # Set background color
-    set_background(background_color='black')
+
     
     # Title
     st.title("Soccer Analytics Dashboard 2024")
@@ -142,7 +141,6 @@ elif st.session_state.page == 'Instructions':
 
 # Types of Players Section
 elif st.session_state.page == 'types_of_players':
-    set_background(background_color='black')
     st.title("Explore Soccer Section")
     
     # Creating the layout within the section to avoid scrolling
