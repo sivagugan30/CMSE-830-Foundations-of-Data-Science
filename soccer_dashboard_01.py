@@ -1436,7 +1436,7 @@ if st.session_state.page == 'data_handling':
     st.plotly_chart(fig, use_container_width=True)
 
     st.write(
-    "ANOVA and Mutual Information methods were employed to rank numerical factors and assess their relationship with 'market_value'."
+    "ANOVA and Mutual Information methods were employed to rank numerical features and assess their relationship with 'market_value'."
 )
 
 
