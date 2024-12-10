@@ -1175,7 +1175,7 @@ if st.session_state.page == 'data_handling':
     from sklearn.preprocessing import StandardScaler
 
 
-    st.subtitle("1. Categorical Feature Selection")
+    st.subheader("1. Categorical Feature Selection")
 
     # Make a copy of the DataFrame
     df1 = df.copy()
