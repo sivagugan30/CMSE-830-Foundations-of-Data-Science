@@ -767,7 +767,7 @@ if st.session_state.page == 'data_handling':
         # Create a heatmap using Plotly
 
         # Select first 10 columns and 'penalties' column
-        columns_to_display = df.columns[:10].tolist() + ['penalties']
+        columns_to_display = df.columns[:10].tolist() + ['penalties'] 
         
         # Subset the DataFrame with the selected columns
         df_subset = df[columns_to_display]
@@ -790,10 +790,10 @@ if st.session_state.page == 'data_handling':
         missing_indices = np.random.choice(df1.index, num_missing, replace=False)
         df1.loc[missing_indices, 'penalties'] = np.nan
     
-        
+        df_subset2 = df1[columns_to_display]
         # Create a heatmap using Plotly
         fig = px.imshow(
-            df1.isna().T,  # Transpose to align columns on the y-axis
+            df_subset2.isna().T,  # Transpose to align columns on the y-axis
             color_continuous_scale='viridis',
             aspect="auto",
             labels={'color': 'Missingness'},  # Change the color bar label
