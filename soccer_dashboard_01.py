@@ -81,24 +81,23 @@ if st.session_state.page == 'home':
 elif st.session_state.page == 'Instructions':
 
     # Description
-    st.subheader("About the Dashboard :")
+    st.subheader("About the Dashboard:")
     st.write(
-        "This dashboard is designed to provide insights into player performance, categories, "
-        "and recommendations using tools like **Streamlit**, **Plotly**, and **Pandas**. "
-        "Analyze and interact with soccer player data seamlessly."
+        "This dashboard is your ultimate companion for soccer analytics, offering insights into player performance, "
+        "categorization, and recommendations through visualizations, statistical analysis, and predictive modeling. "
     )
     
     # Features
-    st.subheader("Sections : ")
-    st.write("- **Data Collection & Preparation:** Gathering, Cleaning, and Preprocessing Data..")
-    st.write("- **Hypothesis Testing:** Statistical analysis of player performance.")
-    st.write("- **Types of Players:** Displays top players across categories like Creative, Athletic, Defensive, and Goalkeeping with visualizations.")
-    st.write("- **Individual Player Analysis:** Detailed insights and comparisons for selected players.")
-    st.write("- **What Player to Buy?:** Personalized player recommendations based on selected attributes.")
+    st.subheader("Sections:")
+    st.write("- **Hypothesis Testing:** Explore data to confirm or discard inherent biases in soccer, revealing hidden patterns and disparities.")
+    st.write("- **Types of Players:** View top players across categories like Creative, Athletic, Defensive, and Goalkeeping with detailed visualizations.")
+    st.write("- **Individual Player Analysis:** Gain in-depth insights and make comparisons for selected players.")
+    st.write("- **What Player to Buy?:** Get personalized player recommendations tailored to specific attributes.")
+    st.write("- **Data Handling:** Comprehensive gathering, cleaning, and processing of soccer data.")
     st.write("")
+    
     # Closing Note
-    st.write("Explore through the dashboard using the Navigation bar to explore, and enjoy the world of soccer analytics!")
-
+    st.write("Navigate the dashboard using the sidebar, and immerse yourself in the exciting world of soccer analytics!")
 
 
 # Types of Players Section
