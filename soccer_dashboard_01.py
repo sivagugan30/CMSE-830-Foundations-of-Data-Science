@@ -1241,7 +1241,9 @@ if st.session_state.page == 'data_handling':
     
     # Section 2: T-Test
     st.subheader("2. Numerical Feature Selection")
-
+    
+    st.write("** 2.1 T-Test:** Test numerical feature differences.")
+    
     numeric_features = df1.describe().columns.to_list()
     
     # Remove features starting with 'gk_'
@@ -1333,12 +1335,7 @@ if st.session_state.page == 'data_handling':
     st.plotly_chart(fig, use_container_width=True)
 
 
-    # Section 3: ANOVA and Mutual Information
-    st.subheader("3. Feature Selection using ANOVA and Mutual Information")
     
-    import streamlit as st
-    import pandas as pd
-    import plotly.graph_objects as go
     from sklearn.preprocessing import StandardScaler
     from sklearn.feature_selection import mutual_info_regression, SelectKBest, f_classif
     
@@ -1370,9 +1367,8 @@ if st.session_state.page == 'data_handling':
     top_mi = top_mi_15[common_features]
     top_anova = top_anova_15[common_features]
 
-    st.subheader("Feature Selection")  # Larger title for emphasis
-    st.write("ANOVA and Mutual Information techniques were applied to identify and prioritize key regressors.")  # Normal text
-
+    st.write("** 2.2 ANOVA & MI:** Rank key regressors.")
+    
     # Create scatter plot comparing Mutual Information and ANOVA F-Value
     fig = go.Figure()
     
@@ -1437,6 +1433,8 @@ if st.session_state.page == 'data_handling':
     
     # Display the plot in Streamlit
     st.plotly_chart(fig, use_container_width=True)
+
+    st.write("ANOVA and Mutual Information techniques were applied to identify and prioritize key regressors.")  # Normal text
 
 # Footer
 st.sidebar.markdown("---")
