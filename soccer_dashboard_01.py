@@ -1437,8 +1437,7 @@ if st.session_state.page == 'data_handling':
     st.write("ANOVA and Mutual Information techniques were applied to rank numerical predictors and measure their dependency on 'market_value' ")
 
 
-    st.subheader("3. Dimentionality Reduction")
-    st.subheader("Dimensionality Reduction - PCA")
+    st.subheader("3. Dimensionality Reduction")
     
     from sklearn.decomposition import PCA
     
@@ -1458,11 +1457,7 @@ if st.session_state.page == 'data_handling':
     
     # Cumulative explained variance
     cumulative_explained_variance = np.cumsum(explained_variance)
-    
-    # Streamlit visualization and insight
-    st.subheader("Dimensionality Reduction - PCA")
-    st.write("Principal Component Analysis (PCA) was applied to reduce dimensionality while preserving key variance in features, aiding in efficient modeling.")
-    
+     
     # Create the Plotly figure
     fig = go.Figure()
     
@@ -1478,9 +1473,9 @@ if st.session_state.page == 'data_handling':
     
     # Add titles and labels
     fig.update_layout(
-        title='Scree Plot (Cumulative Explained Variance)',
+        title='PCA - Scree Plot',
         xaxis_title='Principal Components',
-        yaxis_title='Cumulative Explained Variance',
+        yaxis_title='Variance % Explained',
         template='plotly_dark',
         height=600
     )
@@ -1488,13 +1483,11 @@ if st.session_state.page == 'data_handling':
     # Display the plot in Streamlit
     st.plotly_chart(fig)
     
-    # Display explained variance ratio
-    st.write(f"Cumulative Explained Variance: {cumulative_explained_variance[-1]:.2f}")
-    st.write(f"Explained variance by PCA components: {explained_variance}")
-    
+    st.write(
+    "Principal Component Analysis (PCA) was applied to reduce dimensionality, capturing 95% of the variance with the just 25 components. This selection was made to balance accuracy and computational cost"
+    )
 
-
-
+ 
 
 
 
