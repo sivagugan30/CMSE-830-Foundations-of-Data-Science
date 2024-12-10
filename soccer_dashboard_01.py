@@ -1434,7 +1434,11 @@ if st.session_state.page == 'data_handling':
     st.plotly_chart(fig, use_container_width=True)
 
     st.write("ANOVA and Mutual Information techniques were applied to rank numerical predictors and measure their dependency on 'market_value' ")
-    
+
+
+    st.subheader("3. Dimentionality Reduction")
+
+
 # Footer
 st.sidebar.markdown("---")
 st.sidebar.write("Created by Sivagugan Jayachandran")
