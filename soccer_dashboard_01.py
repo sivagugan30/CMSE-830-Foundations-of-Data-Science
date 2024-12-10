@@ -1236,8 +1236,7 @@ if st.session_state.page == 'data_handling':
     )
     
     st.plotly_chart(fig, use_container_width=True)
-    st.write("Chi-square tests were applied to identify key categorical variables influencing the target variable - 'market_value' ")
-
+    st.write("T-test were used to compare group means and identify significant numerical features for 'market_value', marked in green")
     
     # Section 2: T-Test
     st.subheader("2. Numerical Feature Selection ")
@@ -1333,7 +1332,7 @@ if st.session_state.page == 'data_handling':
     )
 
     st.plotly_chart(fig, use_container_width=True)
-    st.write("T-tests were used to compare group means and pinpoint significant numerical features")
+    st.write("T-test, ANOVA, and Mutual Information assessed numerical features for 'market_value', with significant ones marked in green.")
 
 
     st.subheader("2.2 ANOVA & Mutual Information")
