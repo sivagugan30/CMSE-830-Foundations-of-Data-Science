@@ -1103,9 +1103,10 @@ if st.session_state.page == 'data_handling':
     
     
         st.subheader("1. Categorical Feature Selection")
-    
+        st.write(df)
         # Make a copy of the DataFrame
         df1 = df.copy()
+        st.write(df1)
         
         # Define categorical features
         categorical_features = ['foot', 'best_position', 'core_position', 'age_brackets', 'team']
