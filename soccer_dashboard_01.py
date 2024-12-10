@@ -1166,12 +1166,17 @@ elif st.session_state.page == 'what_player_to_buy':
 
 
 if st.session_state.page == 'data_handling':
-    st.title("Data Handling and Statistical Analysis")
+    
+    st.title("Feature Selection")
     from scipy.stats import chi2_contingency
     from scipy.stats import ttest_ind
     from sklearn.feature_selection import mutual_info_regression
     from sklearn.feature_selection import SelectKBest, f_classif
     from sklearn.preprocessing import StandardScaler
+
+
+    st.subtitle("1. Categorical Feature Selection")
+
     # Make a copy of the DataFrame
     df1 = df.copy()
     
@@ -1235,7 +1240,7 @@ if st.session_state.page == 'data_handling':
 
     
     # Section 2: T-Test
-    st.subheader("2. T-Test for Numerical Features")
+    st.subheader("2. Numerical Feature Selection")
 
     numeric_features = df1.describe().columns.to_list()
     
