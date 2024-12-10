@@ -1233,6 +1233,9 @@ if st.session_state.page == 'data_handling':
 
     # Section 2: T-Test
     st.subheader("2. T-Test for Numerical Features")
+
+    numeric_columns = df1.describe().columns.to_list()
+    
     # Remove features starting with 'gk_'
     numeric_features_filtered = [col for col in numeric_features if not col.startswith('gk_')]
     numeric_features_filtered = numeric_features_filtered[:-1]
