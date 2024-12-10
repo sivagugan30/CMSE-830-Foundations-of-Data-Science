@@ -1494,7 +1494,7 @@ if st.session_state.page == 'data_handling':
     st.plotly_chart(fig)
     
     st.write(
-    "Principal Component Analysis (PCA) was applied to reduce dimensionality, capturing 95% of the variance with the just 25 components. This selection was made to balance accuracy and computational cost"
+    "Principal Component Analysis (PCA) was applied to reduce dimensionality, capturing 95% of the variance with the just 25 components. This selection was made to balance accuracy and computational cost."
     )
 
  
