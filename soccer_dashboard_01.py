@@ -1441,7 +1441,9 @@ if st.session_state.page == 'data_handling':
     
     from sklearn.decomposition import PCA
     
+    # Select numerical columns from df1
     numerical_df = df1[numeric_features_filtered]
+    
     # Standardizing the data before applying PCA
     scaler = StandardScaler()
     scaled_data = scaler.fit_transform(numerical_df)
@@ -1460,21 +1462,33 @@ if st.session_state.page == 'data_handling':
     st.subheader("Dimensionality Reduction - PCA")
     st.write("Principal Component Analysis (PCA) was applied to reduce dimensionality while preserving key variance in features, aiding in efficient modeling.")
     
-    # Scree plot (explained variance vs components)
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.plot(range(1, len(explained_variance) + 1), cumulative_explained_variance, marker='o', linestyle='--')
-    ax.set_title('Scree Plot (Cumulative Explained Variance)')
-    ax.set_xlabel('Principal Components')
-    ax.set_ylabel('Cumulative Explained Variance')
-    ax.grid(True)
+    # Create the Plotly figure
+    fig = go.Figure()
+    
+    # Add trace for the cumulative explained variance
+    fig.add_trace(go.Scatter(
+        x=list(range(1, len(explained_variance) + 1)),
+        y=cumulative_explained_variance,
+        mode='lines+markers',
+        name='Cumulative Explained Variance',
+        line=dict(color='blue', width=3),
+        marker=dict(symbol='circle', size=8)
+    ))
+    
+    # Add titles and labels
+    fig.update_layout(
+        title='Scree Plot (Cumulative Explained Variance)',
+        xaxis_title='Principal Components',
+        yaxis_title='Cumulative Explained Variance',
+        template='plotly_dark',
+        height=600
+    )
     
     # Display the plot in Streamlit
-    st.pyplot(fig)
+    st.plotly_chart(fig)
     
     # Display explained variance ratio
     st.write(f"Cumulative Explained Variance: {cumulative_explained_variance[-1]:.2f}")
-    
-    st.write("Principal Component Analysis (PCA) was applied to reduce dimensionality while preserving key variance in features, aiding in efficient modeling.")
     st.write(f"Explained variance by PCA components: {explained_variance}")
     
 
