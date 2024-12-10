@@ -80,11 +80,6 @@ if st.session_state.page == 'home':
 
 elif st.session_state.page == 'Instructions':
 
-    
-    # Title
-    st.title("Soccer Analytics Dashboard 2024")
-    st.markdown("Explore soccer player data interactively using the **Soccer Analytics Dashboard**.")
-    
     # Description
     st.subheader("About the Dashboard :")
     st.write(
