@@ -711,7 +711,7 @@ if st.session_state.page == 'data_handling':
     st.write("")
     
     with tab1:
-        
+        st.write('')
         st.write('Github Repository : https://github.com/sivagugan30/CMSE-830-Foundations-of-Data-Science')
     
         st.title('Initial Data Analysis')
@@ -967,12 +967,10 @@ if st.session_state.page == 'data_handling':
     
     
         
-        import pandas as pd
-        import plotly.express as px
         from plotly.subplots import make_subplots
         import plotly.graph_objects as go
         from imblearn.over_sampling import SMOTE
-        import streamlit as st
+
     
         # Assuming 'df' is your DataFrame and 'foot' is the target variable
         st.subheader("Original Class Distribution")
