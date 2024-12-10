@@ -1236,7 +1236,7 @@ if st.session_state.page == 'data_handling':
     )
     
     st.plotly_chart(fig, use_container_width=True)
-    st.write("Chi-square tests were applied to identify key categorical variables influencing the target variable, 'market_value'. Significant variables were highlighted in green.")
+    st.write("Chi-square tests were applied to identify key categorical variables influencing the target variable, 'market_value'. Significant variables are highlighted in green.")
 
     # Section 2: T-Test
     st.subheader("2. Numerical Feature Selection ")
