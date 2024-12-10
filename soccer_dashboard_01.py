@@ -52,26 +52,22 @@ if 'page' not in st.session_state:
 
 # Sidebar for navigation
 st.sidebar.title("Navigation")
-options = st.sidebar.radio("Select a Section", ["Home","Instructions","Data Collection & Preparation", "Hypothesis Testing", "Types of Players", "Individual Player Analysis", "What Player to Buy?","Data Handling"])
+options = st.sidebar.radio("Select a Section", ["Home","Instructions", "Hypothesis Testing", "Types of Players", "Analyse a Player", "What Player to Buy?","Data Handling"])
 
 
 # Function to go home
 if options == "Home":
-    st.session_state.page = 'home'
-elif options == 'Data Collection & Preparation':
-    st.session_state.page =  'data_collection_preparation'
+    st.session_state.page = 'home
+elif options == "Instructions":
+    st.session_state.page = 'Instructions'
 elif options == "Hypothesis Testing":
     st.session_state.page = 'hypothesis_testing'
 elif options == "Types of Players":
     st.session_state.page = 'types_of_players'
-elif options == "Individual Player Analysis":
+elif options == "Analyse a Player":
     st.session_state.page = 'individual_player_analysis'
 elif options == "What Player to Buy?":
     st.session_state.page = 'what_player_to_buy'
-elif options == "What Player to Buy?":
-    st.session_state.page = 'what_player_to_buy'
-elif options == "Instructions":
-    st.session_state.page = 'Instructions'
 elif options == "Data Handling":
     st.session_state.page = 'data_handling'
 
@@ -355,10 +351,14 @@ elif st.session_state.page == 'individual_player_analysis':
                 x='Skill',
                 y='Value',
                 title=f'Top Skills of {player_selected}',
-                template='plotly_dark'
+                template='plotly_dark',
+                color_discrete_sequence=['#1f77b4']  # Color for top skills (blue)
+            )
+            fig_top.update_layout(
+                yaxis=dict(range=[0, 100])  # Set y-axis range from 0 to 100
             )
             st.plotly_chart(fig_top, use_container_width=True)
-
+        
         # Bottom Skills Bar Plot
         with col2:
             fig_bottom = px.bar(
@@ -366,7 +366,11 @@ elif st.session_state.page == 'individual_player_analysis':
                 x='Skill',
                 y='Value',
                 title=f'Bottom Skills of {player_selected}',
-                template='plotly_dark'
+                template='plotly_dark',
+                color_discrete_sequence=['#ff7f0e']  # Color for bottom skills (orange)
+            )
+            fig_bottom.update_layout(
+                yaxis=dict(range=[0, 100])  # Set y-axis range from 0 to 100
             )
             st.plotly_chart(fig_bottom, use_container_width=True)
        
@@ -1093,11 +1097,9 @@ if st.session_state.page == 'data_handling':
     
     
         st.subheader("1. Categorical Feature Selection")
-        st.write(df)
-        # Make a copy of the DataFrame
+                # Make a copy of the DataFrame
         df = pd.read_csv('cleaned_df.csv')
         df1 = df.copy()
-        st.write(df1)
         
         # Define categorical features
         categorical_features = ['foot', 'best_position', 'core_position', 'age_brackets', 'team']
