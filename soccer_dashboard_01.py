@@ -989,11 +989,20 @@ elif st.session_state.page == 'what_player_to_buy':
     st.write(df_results)
     
     selected_model_name = st.selectbox("Choose Model for Market Value Prediction", list(models.keys()), key="model_selection")
-
+    # Make the button larger using custom CSS
+    st.markdown("""
+        <style>
+        .big-button {
+            font-size: 20px;
+            padding: 15px 40px;
+            width: 250px;
+            height: 60px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
     
-    
-    # Predict player values only after button click
-    if st.button("Predict"):
+    # Display the button with the custom class
+    if st.button("Predict", key="predict_button", help="Click to predict player values", use_container_width=True):
         selected_model = models[selected_model_name]
         
         # Fit the model and predict on filtered players
@@ -1007,7 +1016,7 @@ elif st.session_state.page == 'what_player_to_buy':
             filtered_players = filtered_players.sort_values(by='predicted_value', ascending=False)
     
             # Display predicted market value with the selected skills
-            st.subheader("Top 20 Players to Buy Based on Your Criteria")
+            st.subheader("Top players to buy based on your criteria")
             st.write(filtered_players[['player_name', 'predicted_value', skill1, skill2]].head(20))  # Use skill1 and skill2 directly
         else:
             st.write("No players found based on your criteria.")
