@@ -1227,10 +1227,11 @@ if st.session_state.page == 'data_handling':
         showlegend=True,
         height=600
     )
-
     
     st.plotly_chart(fig, use_container_width=True)
 
+
+    
     # Section 2: T-Test
     st.subheader("2. T-Test for Numerical Features")
 
@@ -1328,7 +1329,7 @@ if st.session_state.page == 'data_handling':
     # Section 3: ANOVA and Mutual Information
     st.subheader("3. Feature Selection using ANOVA and Mutual Information")
     if 'market_value' in df1.columns:
-        X = df1.select_dtypes(include=np.number).drop(columns=['market_value_bins', 'market_value'])
+        X = df1.select_dtypes(include=np.number).drop(columns=['market_value'])
         y = df1['market_value']
 
         scaler = StandardScaler()
