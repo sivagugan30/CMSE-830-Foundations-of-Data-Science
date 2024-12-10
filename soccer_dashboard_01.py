@@ -993,10 +993,10 @@ elif st.session_state.page == 'what_player_to_buy':
     st.markdown("""
         <style>
         .big-button {
-            font-size: 20px;
+            font-size: 40px;
             padding: 15px 40px;
             width: 250px;
-            height: 60px;
+            height: 100px;
         }
         </style>
     """, unsafe_allow_html=True)
