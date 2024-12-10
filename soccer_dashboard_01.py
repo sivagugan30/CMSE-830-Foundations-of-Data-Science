@@ -714,7 +714,7 @@ if st.session_state.page == 'data_handling':
         st.write('')
         st.write('Github Repository : https://github.com/sivagugan30/CMSE-830-Foundations-of-Data-Science')
     
-        st.title('Initial Data Analysis')
+        st.title('1. Data Collection')
         import numpy as np
         import pandas as pd
         import matplotlib.pyplot as plt
@@ -762,8 +762,9 @@ if st.session_state.page == 'data_handling':
         # Display the first few rows of the dataset
         st.subheader("Merged Dataset")
         st.write(df.head(5))
-    
-      # Create a heatmap using Plotly
+        
+        st.subheader("2. Imputation")
+        # Create a heatmap using Plotly
         fig = px.imshow(
             df.isna().T,  # Transpose to align columns on the y-axis
             color_continuous_scale='viridis',
@@ -973,7 +974,8 @@ if st.session_state.page == 'data_handling':
 
     
         # Assuming 'df' is your DataFrame and 'foot' is the target variable
-        st.subheader("Original Class Distribution")
+        st.subheader("Class Imbalance")
+        st.write("Original Class Distribution")
         y = df['foot']
         st.write(y.value_counts())
     
@@ -992,7 +994,7 @@ if st.session_state.page == 'data_handling':
         X_resampled, y_resampled = smote.fit_resample(X, y)
         
         # Display new class distribution after SMOTE
-        st.subheader("Class Distribution After SMOTE")
+        st.write("Class Distribution After SMOTE")
         new_count = pd.Series(y_resampled).value_counts().reset_index()
         new_count.columns = ['Foot', 'Count']
         st.write(new_count)
