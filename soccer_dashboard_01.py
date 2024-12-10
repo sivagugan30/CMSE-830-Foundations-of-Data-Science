@@ -942,7 +942,7 @@ if st.session_state.page == 'data_handling':
                     row=(i // 2) + 1, col=(i % 2) + 1
                 )
     
-            fig.update_layout(title_text="Imputation Method Comparison: Penalties vs Finishing", 
+            fig.update_layout(title_text="Comparison of Imputation Methods", 
                             height=700, width=900, showlegend=False)
             return fig
     
