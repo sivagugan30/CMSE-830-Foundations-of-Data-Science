@@ -1438,6 +1438,45 @@ if st.session_state.page == 'data_handling':
 
     st.subheader("3. Dimentionality Reduction")
 
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+    
+    # Assuming df1 has numerical features for PCA
+    # Drop non-numeric columns (like 'market_value_bins' and 'market_value')
+    numerical_df = df[numeric_features_filtered]
+    
+    # Standardizing the data before applying PCA
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(numerical_df)
+    
+    # Apply PCA
+    pca = PCA(n_components=2)  # For 2 components, adjust as needed
+    pca_result = pca.fit_transform(scaled_data)
+    
+    # Create a DataFrame for the PCA components
+    pca_df = pd.DataFrame(data=pca_result, columns=['PCA1', 'PCA2'])
+    
+    # Explained Variance Ratio (how much variance is captured by each principal component)
+    explained_variance = pca.explained_variance_ratio_
+    
+    # Streamlit visualization and insight
+    st.subheader("Dimensionality Reduction - PCA")
+    st.write("Principal Component Analysis (PCA) was applied to reduce dimensionality while preserving key variance in features, aiding in efficient modeling.")
+    st.write(f"Explained variance by PCA components: {explained_variance}")
+    
+    # Display PCA result
+    st.write("PCA Result (First 5 rows):")
+    st.dataframe(pca_df.head())
+    
+    
+    fig = px.scatter(pca_df, x='PCA1', y='PCA2', title="PCA: 2D Projection of Data")
+    st.plotly_chart(fig)
+
+
+
+
+
+
 
 # Footer
 st.sidebar.markdown("---")
