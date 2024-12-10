@@ -765,8 +765,15 @@ if st.session_state.page == 'data_handling':
         
         st.subheader("2. Imputation")
         # Create a heatmap using Plotly
+
+        # Select first 10 columns and 'penalties' column
+        columns_to_display = df.columns[:10].tolist() + ['penalties']
+        
+        # Subset the DataFrame with the selected columns
+        df_subset = df[columns_to_display]
+
         fig = px.imshow(
-            df.isna().T,  # Transpose to align columns on the y-axis
+            df_subset.isna().T,  # Transpose to align columns on the y-axis
             color_continuous_scale='viridis',
             aspect="auto",
             labels={'color': 'Missingness'},  # Change the color bar label
@@ -809,7 +816,12 @@ if st.session_state.page == 'data_handling':
         # Create a DataFrame for plotting highly correlated features
         highly_correlated_df = highly_correlated_columns.reset_index()
         highly_correlated_df.columns = ['Feature', 'Correlation']
-    
+        # Remove rows where the 'Feature' starts with 'gk_'
+        highly_correlated_df = highly_correlated_df[~highly_correlated_df['Feature'].str.startswith('gk_')]
+        
+        # Reset the index after filtering (optional, if you want a clean index)
+        highly_correlated_df.reset_index(drop=True, inplace=True)
+
         # Create bar chart for highly correlated features
         st.subheader("Highly Correlated Features with Penalties")
         fig = px.bar(highly_correlated_df, 
