@@ -1268,7 +1268,7 @@ if st.session_state.page == 'data_handling':
     t_test_df['Score Category'] = t_test_df['1-p'].apply(categorize_score)
     
     # Filter 5 features from each category
-    high_features = t_test_df[t_test_df['Score Category'] == 'High'].iloc[np.r_[8:10,28:33]]
+    high_features = t_test_df[t_test_df['Score Category'] == 'High'].iloc[np.r_[1:8]]
     medium_features = t_test_df[t_test_df['Score Category'] == 'Medium'].head(5)
     low_features = t_test_df[t_test_df['Score Category'] == 'Low'].head(5)
     
