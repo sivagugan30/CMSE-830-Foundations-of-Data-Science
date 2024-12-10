@@ -561,10 +561,6 @@ if st.session_state.page == 'hypothesis_testing':
 
 
 
-# data_collection_preparation
-if st.session_state.page == 'data_collection_preparation':
-    
-    
 
 elif st.session_state.page == 'what_player_to_buy':
     st.title("What Player to Buy?")
