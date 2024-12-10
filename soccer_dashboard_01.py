@@ -1169,7 +1169,9 @@ if st.session_state.page == 'data_handling':
     st.title("Data Handling and Statistical Analysis")
     from scipy.stats import chi2_contingency
     from scipy.stats import ttest_ind
-
+    from sklearn.feature_selection import mutual_info_regression
+    from sklearn.feature_selection import SelectKBest, f_classif
+    from sklearn.preprocessing import StandardScaler
     # Make a copy of the DataFrame
     df1 = df.copy()
     
