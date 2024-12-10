@@ -1250,7 +1250,7 @@ if st.session_state.page == 'data_handling':
     
     # Remove features starting with 'gk_'
     numeric_features_filtered = [col for col in numeric_features if not col.startswith('gk_')]
-    numeric_features_filtered = numeric_features_filtered[:-1]
+    numeric_features_filtered.remove('market_value')
     
     # Prepare results for T-Test
     t_test_results = {}
@@ -1341,8 +1341,9 @@ if st.session_state.page == 'data_handling':
     
     from sklearn.preprocessing import StandardScaler
     from sklearn.feature_selection import mutual_info_regression, SelectKBest, f_classif
-    
+
     # Assuming df is your DataFrame containing the features and target
+    
     X = df[numeric_features_filtered]
     y = df['market_value']
     
