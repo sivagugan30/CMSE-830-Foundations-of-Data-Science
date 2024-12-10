@@ -482,10 +482,6 @@ if st.session_state.page == 'hypothesis_testing':
         st.header("Branded Players and Market Value")
         st.write("Are players with higher international reputation more valuable in the market, reflecting their brand power? Let's find out!")
 
-        # Scatter plot for International Reputation vs Market Value
-        fig1 = px.scatter(df, x='international_reputation', y='market_value', hover_name='player_name', title="International Reputation vs Market Value", range_x=[1, 5])
-        st.plotly_chart(fig1)
-
         # Bar plot for average market value by international reputation
         fig2 = px.bar(df.groupby('international_reputation')['market_value'].mean().reset_index(), 
                       x='international_reputation', y='market_value', 
