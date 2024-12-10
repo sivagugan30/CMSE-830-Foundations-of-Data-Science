@@ -1242,7 +1242,7 @@ if st.session_state.page == 'data_handling':
     # Section 2: T-Test
     st.subheader("2. Numerical Feature Selection ")
     
-    st.subheader("2.1 T-Test ")
+    st.markdown('<h5 style="font-size: 18px;">2.1 T-Test</h5>', unsafe_allow_html=True)
     
     numeric_features = df1.describe().columns.to_list()
     
@@ -1335,8 +1335,7 @@ if st.session_state.page == 'data_handling':
     st.plotly_chart(fig, use_container_width=True)
     st.write("T-test were used to compare group means and identify significant numerical features for 'market_value', marked in green")
     
-
-    st.subheader("2.2 ANOVA & Mutual Information")
+    st.markdown('<h5 style="font-size: 18px;">2.2 ANOVA & Mutual Information</h5>', unsafe_allow_html=True)
     
     from sklearn.preprocessing import StandardScaler
     from sklearn.feature_selection import mutual_info_regression, SelectKBest, f_classif
