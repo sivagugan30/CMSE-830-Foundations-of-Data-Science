@@ -1070,335 +1070,337 @@ if st.session_state.page == 'data_handling':
     tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Data Processing & Feature Engineering", "Feature Selection", "Modelling"])
 
     st.write("")
-    
-    st.title("Feature Selection")
-    from scipy.stats import chi2_contingency
-    from scipy.stats import ttest_ind
-    from sklearn.feature_selection import mutual_info_regression
-    from sklearn.feature_selection import SelectKBest, f_classif
-    from sklearn.preprocessing import StandardScaler
 
 
-    st.subheader("1. Categorical Feature Selection")
-
-    # Make a copy of the DataFrame
-    df1 = df.copy()
+    with tab3:
+        st.title("Feature Selection")
+        from scipy.stats import chi2_contingency
+        from scipy.stats import ttest_ind
+        from sklearn.feature_selection import mutual_info_regression
+        from sklearn.feature_selection import SelectKBest, f_classif
+        from sklearn.preprocessing import StandardScaler
     
-    # Define categorical features
-    categorical_features = ['foot', 'best_position', 'core_position', 'age_brackets', 'team']
     
-    # Bin 'market_value' into 5 buckets labeled 1 to 5
-    df1['market_value_bins'] = pd.qcut(df1['market_value'], q=5, labels=[1, 2, 3, 4, 5])
+        st.subheader("1. Categorical Feature Selection")
     
-    # Initialize results
-    chi_square_results = {}
-    
-    # Perform Chi-Square test for each feature
-    for feature in categorical_features:
-        contingency_table = pd.crosstab(df1[feature], df1['market_value_bins'])
-        _, p, _, _ = chi2_contingency(contingency_table)
-        chi_square_results[feature] = 1 - p  # Store 1 - p-value
-    
-    # Convert results to a DataFrame
-    chi_square_df = pd.DataFrame.from_dict(chi_square_results, orient='index', columns=['1-p'])
-    chi_square_df.sort_values(by='1-p', ascending=False, inplace=True)
-    
-    # Create a new column to categorize the color based on 1-p value
-    chi_square_df['Color'] = chi_square_df['1-p'].apply(lambda x: '#228b22' if x > 0.95 else '#d35400')
-    
-    # Plot results using Plotly
-    fig = go.Figure()
-    
-    # Add bar chart for 1-p values with conditional colors
-    for feature, row in chi_square_df.iterrows():
-        fig.add_trace(go.Bar(
-            x=[feature],
-            y=[row['1-p']],
-            marker=dict(color=row['Color']),
-            name=feature,
-            showlegend=False  # Hide legend for each bar
-        ))
-    
-    # Add a horizontal line at 0.95
-    fig.add_trace(go.Scatter(
-        x=chi_square_df.index,
-        y=[0.95] * len(chi_square_df),
-        mode='lines',
-        line=dict(color='red', width=4),  # Thick red dashed line
-        name='Threshold (0.95)',
-        showlegend=True  # Hide legend for the threshold line
-    ))
-    
-    # Update layout
-    fig.update_layout(
-        title='Chi-Square Test for Categorical Features',
-        xaxis=dict(title='Features'),
-        yaxis=dict(title='1 - p-value'),
-        template='plotly_dark',
-        showlegend=True,
-        height=600
-    )
-    
-    st.plotly_chart(fig, use_container_width=True)
-    st.write(
-    "Chi-square tests were applied to find important categorical features that influence the target variable, 'market_value'. The significant features are highlighted in green."
-)
-
-    # Section 2: T-Test
-    st.subheader("2. Numerical Feature Selection ")
-    
-    st.markdown('<h5 style="font-size: 18px;">2.1 T-Test</h5>', unsafe_allow_html=True)
-    
-    numeric_features = df1.describe().columns.to_list()
-    
-    # Remove features starting with 'gk_'
-    numeric_features_filtered = [col for col in numeric_features if not col.startswith('gk_')]
-    numeric_features_filtered.remove('market_value')
-    
-    # Prepare results for T-Test
-    t_test_results = {}
-    
-    # Perform T-Test for each numerical feature (after removing 'gk_' features)
-    for feature in numeric_features_filtered:
-        unique_bins = df1['market_value_bins'].unique()
-        bin_groups = [df1[df1['market_value_bins'] == bin][feature] for bin in unique_bins]
+        # Make a copy of the DataFrame
+        df1 = df.copy()
         
-        # Perform pairwise t-test between the first two bins as an example
-        t_stat, p_value = ttest_ind(bin_groups[0], bin_groups[1], equal_var=False, nan_policy='omit')
-        t_test_results[feature] = 1 - p_value  # Store 1 - p-value
-    
-    # Convert results to a DataFrame
-    t_test_df = pd.DataFrame.from_dict(t_test_results, orient='index', columns=['1-p'])
-    t_test_df.sort_values(by='1-p', ascending=False, inplace=True)
-    
-    # Categorize scores
-    def categorize_score(val):
-        if val > 0.95:
-            return 'High'
-        elif 0.5 <= val <= 0.95:
-            return 'Medium'
-        else:
-            return 'Low'
-    
-    t_test_df['Score Category'] = t_test_df['1-p'].apply(categorize_score)
-    
-    # Filter 5 features from each category
-    high_features = t_test_df[t_test_df['Score Category'] == 'High'].iloc[-10:-1]
-    medium_features = t_test_df[t_test_df['Score Category'] == 'Medium'].head(5)
-    low_features = t_test_df[t_test_df['Score Category'] == 'Low'].head(5)
-    
-    # Combine the top features into a single DataFrame
-    top_features_df = pd.concat([high_features, medium_features, low_features])
-    
-    # Plot results using Plotly
-    fig = go.Figure()
-    
-    # Add bar chart for 1-p values with different shades of blue
-    fig.add_trace(go.Bar(
-        x=high_features.index,
-        y=high_features['1-p'],
-        #name='High Significance',
-        marker=dict(color='#228b22')  # Different shade of blue
-        ,showlegend=False
-    ))
-    
-    fig.add_trace(go.Bar(
-        x=medium_features.index,
-        y=medium_features['1-p'],
-        #name='Medium Significance',
-        marker=dict(color='#d35400')  # Lighter shade of blue
-        ,showlegend=False
-    ))
-    
-    fig.add_trace(go.Bar(
-        x=low_features.index,
-        y=low_features['1-p'],
-        #name='Low Significance',
-        marker=dict(color='#d35400')  # Even lighter shade of blue
-        ,showlegend=False
-    ))
-    
-    # Add a horizontal red thick dashed line at 0.95
-    fig.add_trace(go.Scatter(
-        x=top_features_df.index,
-        y=[0.95] * len(top_features_df),
-        mode='lines',
-        line=dict(color='red', width=4),  # Thick red dashed line
-        name='Threshold (0.95)'
-    ))
-    
-    # Update layout
-    fig.update_layout(
-        title='T-Test for Numerical Features',
-        xaxis=dict(title='Features'),
-        yaxis=dict(title='1 - p-value'),
-        template='plotly_dark',
-        showlegend=True,
-        height=600
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
-    st.write("T-tests were used to compare the average values between different groups and identify which numerical features are most important for predicting 'market_value'. The significant features are highlighted in green.")
-    
-    st.markdown('<h5 style="font-size: 18px;">2.2 ANOVA & Mutual Information</h5>', unsafe_allow_html=True)
-    
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.feature_selection import mutual_info_regression, SelectKBest, f_classif
-
-    # Assuming df is your DataFrame containing the features and target
-    
-    X = df[numeric_features_filtered]
-    y = df['market_value']
-    
-    # Standardize features
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-    
-    # Mutual Information calculation
-    mi = mutual_info_regression(X_scaled, y)
-    mi_series = pd.Series(mi, index=X.columns)
-    
-    # Perform ANOVA F-test using SelectKBest with f_classif
-    anova_selector = SelectKBest(f_classif, k='all')
-    anova_selector.fit(X_scaled, y)
-    anova_scores = pd.Series(anova_selector.scores_, index=X.columns)
-    
-    # Sort and select the top 15 features for both metrics
-    top_mi_15 = mi_series.sort_values(ascending=False).head(15)
-    top_anova_15 = anova_scores.sort_values(ascending=False).head(15)
-    
-    # Find the common top 10 features between both metrics
-    common_features = top_mi_15.index.intersection(top_anova_15.index).tolist()[:10]
-    
-    # Filter the top 10 common features from both metrics
-    top_mi = top_mi_15[common_features]
-    top_anova = top_anova_15[common_features]
-
-    # Create scatter plot comparing Mutual Information and ANOVA F-Value
-    fig = go.Figure()
-    
-    # Add Mutual Information (x-axis)
-    fig.add_trace(go.Scatter(
-        x=top_mi.index,
-        y=top_mi.values,
-        mode='markers+lines',  # Connect adjacent points only
-        name='Mutual Information (MI)',
-        marker=dict(color='limegreen', size=10),
-        yaxis='y1',
-        line=dict(shape='spline'),  # Connect adjacent points only
-        hovertemplate='<b>Feature:</b> %{x}<br><b>Mutual Information:</b> %{y:.4f}<extra></extra>'  # Hover for Mutual Information
-    ))
-    
-    # Add ANOVA F-Value (y-axis)
-    fig.add_trace(go.Scatter(
-        x=top_anova.index,
-        y=top_anova.values,
-        mode='markers+lines',  # Connect adjacent points only
-        name='ANOVA F-Value',
-        marker=dict(color='royalblue', size=10),
-        yaxis='y2',
-        line=dict(shape='hv'),  # Connect adjacent points only
-        hovertemplate='<b>Feature:</b> %{x}<br><b>ANOVA F-Value:</b> %{y:.4f}<extra></extra>'  # Hover for ANOVA F-Value
-    ))
-    
-    # Add annotations indicating better values
-    fig.add_annotation(
-        text="Higher MI = more shared information btw feature and target",
-        xref="paper", yref="paper",
-        x=0.05, y=1.15, showarrow=False,
-        font=dict(color="limegreen", size=12),
-        xanchor='left'
+        # Define categorical features
+        categorical_features = ['foot', 'best_position', 'core_position', 'age_brackets', 'team']
+        
+        # Bin 'market_value' into 5 buckets labeled 1 to 5
+        df1['market_value_bins'] = pd.qcut(df1['market_value'], q=5, labels=[1, 2, 3, 4, 5])
+        
+        # Initialize results
+        chi_square_results = {}
+        
+        # Perform Chi-Square test for each feature
+        for feature in categorical_features:
+            contingency_table = pd.crosstab(df1[feature], df1['market_value_bins'])
+            _, p, _, _ = chi2_contingency(contingency_table)
+            chi_square_results[feature] = 1 - p  # Store 1 - p-value
+        
+        # Convert results to a DataFrame
+        chi_square_df = pd.DataFrame.from_dict(chi_square_results, orient='index', columns=['1-p'])
+        chi_square_df.sort_values(by='1-p', ascending=False, inplace=True)
+        
+        # Create a new column to categorize the color based on 1-p value
+        chi_square_df['Color'] = chi_square_df['1-p'].apply(lambda x: '#228b22' if x > 0.95 else '#d35400')
+        
+        # Plot results using Plotly
+        fig = go.Figure()
+        
+        # Add bar chart for 1-p values with conditional colors
+        for feature, row in chi_square_df.iterrows():
+            fig.add_trace(go.Bar(
+                x=[feature],
+                y=[row['1-p']],
+                marker=dict(color=row['Color']),
+                name=feature,
+                showlegend=False  # Hide legend for each bar
+            ))
+        
+        # Add a horizontal line at 0.95
+        fig.add_trace(go.Scatter(
+            x=chi_square_df.index,
+            y=[0.95] * len(chi_square_df),
+            mode='lines',
+            line=dict(color='red', width=4),  # Thick red dashed line
+            name='Threshold (0.95)',
+            showlegend=True  # Hide legend for the threshold line
+        ))
+        
+        # Update layout
+        fig.update_layout(
+            title='Chi-Square Test for Categorical Features',
+            xaxis=dict(title='Features'),
+            yaxis=dict(title='1 - p-value'),
+            template='plotly_dark',
+            showlegend=True,
+            height=600
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+        st.write(
+        "Chi-square tests were applied to find important categorical features that influence the target variable, 'market_value'. The significant features are highlighted in green."
     )
     
-    fig.add_annotation(
-        text="Higher ANOVA F-Value = greater feature separation",
-        xref="paper", yref="paper",
-        x=0.95, y=1.15, showarrow=False,
-        font=dict(color="royalblue", size=12),
-        xanchor='right'
+        # Section 2: T-Test
+        st.subheader("2. Numerical Feature Selection ")
+        
+        st.markdown('<h5 style="font-size: 18px;">2.1 T-Test</h5>', unsafe_allow_html=True)
+        
+        numeric_features = df1.describe().columns.to_list()
+        
+        # Remove features starting with 'gk_'
+        numeric_features_filtered = [col for col in numeric_features if not col.startswith('gk_')]
+        numeric_features_filtered.remove('market_value')
+        
+        # Prepare results for T-Test
+        t_test_results = {}
+        
+        # Perform T-Test for each numerical feature (after removing 'gk_' features)
+        for feature in numeric_features_filtered:
+            unique_bins = df1['market_value_bins'].unique()
+            bin_groups = [df1[df1['market_value_bins'] == bin][feature] for bin in unique_bins]
+            
+            # Perform pairwise t-test between the first two bins as an example
+            t_stat, p_value = ttest_ind(bin_groups[0], bin_groups[1], equal_var=False, nan_policy='omit')
+            t_test_results[feature] = 1 - p_value  # Store 1 - p-value
+        
+        # Convert results to a DataFrame
+        t_test_df = pd.DataFrame.from_dict(t_test_results, orient='index', columns=['1-p'])
+        t_test_df.sort_values(by='1-p', ascending=False, inplace=True)
+        
+        # Categorize scores
+        def categorize_score(val):
+            if val > 0.95:
+                return 'High'
+            elif 0.5 <= val <= 0.95:
+                return 'Medium'
+            else:
+                return 'Low'
+        
+        t_test_df['Score Category'] = t_test_df['1-p'].apply(categorize_score)
+        
+        # Filter 5 features from each category
+        high_features = t_test_df[t_test_df['Score Category'] == 'High'].iloc[-10:-1]
+        medium_features = t_test_df[t_test_df['Score Category'] == 'Medium'].head(5)
+        low_features = t_test_df[t_test_df['Score Category'] == 'Low'].head(5)
+        
+        # Combine the top features into a single DataFrame
+        top_features_df = pd.concat([high_features, medium_features, low_features])
+        
+        # Plot results using Plotly
+        fig = go.Figure()
+        
+        # Add bar chart for 1-p values with different shades of blue
+        fig.add_trace(go.Bar(
+            x=high_features.index,
+            y=high_features['1-p'],
+            #name='High Significance',
+            marker=dict(color='#228b22')  # Different shade of blue
+            ,showlegend=False
+        ))
+        
+        fig.add_trace(go.Bar(
+            x=medium_features.index,
+            y=medium_features['1-p'],
+            #name='Medium Significance',
+            marker=dict(color='#d35400')  # Lighter shade of blue
+            ,showlegend=False
+        ))
+        
+        fig.add_trace(go.Bar(
+            x=low_features.index,
+            y=low_features['1-p'],
+            #name='Low Significance',
+            marker=dict(color='#d35400')  # Even lighter shade of blue
+            ,showlegend=False
+        ))
+        
+        # Add a horizontal red thick dashed line at 0.95
+        fig.add_trace(go.Scatter(
+            x=top_features_df.index,
+            y=[0.95] * len(top_features_df),
+            mode='lines',
+            line=dict(color='red', width=4),  # Thick red dashed line
+            name='Threshold (0.95)'
+        ))
+        
+        # Update layout
+        fig.update_layout(
+            title='T-Test for Numerical Features',
+            xaxis=dict(title='Features'),
+            yaxis=dict(title='1 - p-value'),
+            template='plotly_dark',
+            showlegend=True,
+            height=600
+        )
+    
+        st.plotly_chart(fig, use_container_width=True)
+        st.write("T-tests were used to compare the average values between different groups and identify which numerical features are most important for predicting 'market_value'. The significant features are highlighted in green.")
+        
+        st.markdown('<h5 style="font-size: 18px;">2.2 ANOVA & Mutual Information</h5>', unsafe_allow_html=True)
+        
+        from sklearn.preprocessing import StandardScaler
+        from sklearn.feature_selection import mutual_info_regression, SelectKBest, f_classif
+    
+        # Assuming df is your DataFrame containing the features and target
+        
+        X = df[numeric_features_filtered]
+        y = df['market_value']
+        
+        # Standardize features
+        scaler = StandardScaler()
+        X_scaled = scaler.fit_transform(X)
+        
+        # Mutual Information calculation
+        mi = mutual_info_regression(X_scaled, y)
+        mi_series = pd.Series(mi, index=X.columns)
+        
+        # Perform ANOVA F-test using SelectKBest with f_classif
+        anova_selector = SelectKBest(f_classif, k='all')
+        anova_selector.fit(X_scaled, y)
+        anova_scores = pd.Series(anova_selector.scores_, index=X.columns)
+        
+        # Sort and select the top 15 features for both metrics
+        top_mi_15 = mi_series.sort_values(ascending=False).head(15)
+        top_anova_15 = anova_scores.sort_values(ascending=False).head(15)
+        
+        # Find the common top 10 features between both metrics
+        common_features = top_mi_15.index.intersection(top_anova_15.index).tolist()[:10]
+        
+        # Filter the top 10 common features from both metrics
+        top_mi = top_mi_15[common_features]
+        top_anova = top_anova_15[common_features]
+    
+        # Create scatter plot comparing Mutual Information and ANOVA F-Value
+        fig = go.Figure()
+        
+        # Add Mutual Information (x-axis)
+        fig.add_trace(go.Scatter(
+            x=top_mi.index,
+            y=top_mi.values,
+            mode='markers+lines',  # Connect adjacent points only
+            name='Mutual Information (MI)',
+            marker=dict(color='limegreen', size=10),
+            yaxis='y1',
+            line=dict(shape='spline'),  # Connect adjacent points only
+            hovertemplate='<b>Feature:</b> %{x}<br><b>Mutual Information:</b> %{y:.4f}<extra></extra>'  # Hover for Mutual Information
+        ))
+        
+        # Add ANOVA F-Value (y-axis)
+        fig.add_trace(go.Scatter(
+            x=top_anova.index,
+            y=top_anova.values,
+            mode='markers+lines',  # Connect adjacent points only
+            name='ANOVA F-Value',
+            marker=dict(color='royalblue', size=10),
+            yaxis='y2',
+            line=dict(shape='hv'),  # Connect adjacent points only
+            hovertemplate='<b>Feature:</b> %{x}<br><b>ANOVA F-Value:</b> %{y:.4f}<extra></extra>'  # Hover for ANOVA F-Value
+        ))
+        
+        # Add annotations indicating better values
+        fig.add_annotation(
+            text="Higher MI = more shared information btw feature and target",
+            xref="paper", yref="paper",
+            x=0.05, y=1.15, showarrow=False,
+            font=dict(color="limegreen", size=12),
+            xanchor='left'
+        )
+        
+        fig.add_annotation(
+            text="Higher ANOVA F-Value = greater feature separation",
+            xref="paper", yref="paper",
+            x=0.95, y=1.15, showarrow=False,
+            font=dict(color="royalblue", size=12),
+            xanchor='right'
+        )
+    
+        # Configure layout with increased height and the title
+        fig.update_layout(
+            xaxis=dict(title='Features'),
+            yaxis=dict(
+                title='Mutual Information(MI)',
+                side='left'
+            ),
+            yaxis2=dict(
+                title='ANOVA F-Value',
+                side='right',
+                overlaying='y',
+                showgrid=False
+            ),
+            template='plotly_dark',
+            legend=dict(x=0.5, y=1.1, orientation='h'),
+            height=600,  # Adjusted plot height
+        )
+        
+        # Display the plot in Streamlit
+        st.plotly_chart(fig, use_container_width=True)
+    
+        st.write(
+        "ANOVA and Mutual Information methods were employed to rank numerical features and assess their relationship with 'market_value'."
     )
-
-    # Configure layout with increased height and the title
-    fig.update_layout(
-        xaxis=dict(title='Features'),
-        yaxis=dict(
-            title='Mutual Information(MI)',
-            side='left'
-        ),
-        yaxis2=dict(
-            title='ANOVA F-Value',
-            side='right',
-            overlaying='y',
-            showgrid=False
-        ),
-        template='plotly_dark',
-        legend=dict(x=0.5, y=1.1, orientation='h'),
-        height=600,  # Adjusted plot height
-    )
     
-    # Display the plot in Streamlit
-    st.plotly_chart(fig, use_container_width=True)
-
-    st.write(
-    "ANOVA and Mutual Information methods were employed to rank numerical features and assess their relationship with 'market_value'."
-)
-
-
-    st.subheader("3. Dimensionality Reduction")
     
-    from sklearn.decomposition import PCA
+        st.subheader("3. Dimensionality Reduction")
+        
+        from sklearn.decomposition import PCA
+        
+        # Select numerical columns from df1
+        numerical_df = df1[numeric_features_filtered]
+        
+        # Standardizing the data before applying PCA
+        scaler = StandardScaler()
+        scaled_data = scaler.fit_transform(numerical_df)
+        
+        # Apply PCA
+        pca = PCA()
+        pca.fit(scaled_data)
+        
+        # Explained Variance Ratio (how much variance is captured by each principal component)
+        explained_variance = pca.explained_variance_ratio_
+        
+        # Cumulative explained variance
+        cumulative_explained_variance = np.cumsum(explained_variance)
+         
+        # Create the Plotly figure
+        fig = go.Figure()
+        
+        # Add trace for the cumulative explained variance
+        fig.add_trace(go.Scatter(
+            x=list(range(1, len(explained_variance) + 1)),
+            y=cumulative_explained_variance,
+            mode='lines+markers',
+            name='Cumulative Explained Variance',
+            line=dict(color='blue', width=3),
+            marker=dict(symbol='circle', size=8)
+        ))
+        fig.add_vline(
+            x=25, 
+            line=dict(color='red', width=4),
+            annotation_text="Trade-off point: 95% variance", 
+            annotation_position="top right"
+        )
     
-    # Select numerical columns from df1
-    numerical_df = df1[numeric_features_filtered]
-    
-    # Standardizing the data before applying PCA
-    scaler = StandardScaler()
-    scaled_data = scaler.fit_transform(numerical_df)
-    
-    # Apply PCA
-    pca = PCA()
-    pca.fit(scaled_data)
-    
-    # Explained Variance Ratio (how much variance is captured by each principal component)
-    explained_variance = pca.explained_variance_ratio_
-    
-    # Cumulative explained variance
-    cumulative_explained_variance = np.cumsum(explained_variance)
-     
-    # Create the Plotly figure
-    fig = go.Figure()
-    
-    # Add trace for the cumulative explained variance
-    fig.add_trace(go.Scatter(
-        x=list(range(1, len(explained_variance) + 1)),
-        y=cumulative_explained_variance,
-        mode='lines+markers',
-        name='Cumulative Explained Variance',
-        line=dict(color='blue', width=3),
-        marker=dict(symbol='circle', size=8)
-    ))
-    fig.add_vline(
-        x=25, 
-        line=dict(color='red', width=4),
-        annotation_text="Trade-off point: 95% variance", 
-        annotation_position="top right"
-    )
-
-    # Add titles and labels
-    fig.update_layout(
-        title='Scree Plot - Principal Component Analysis (PCA)',
-        xaxis_title='Principal Components',
-        yaxis_title='Variance % Explained',
-        template='plotly_dark',
-        height=600
-    )
-    
-    # Display the plot in Streamlit
-    st.plotly_chart(fig)
-    
-    st.write(
-    "Principal Component Analysis (PCA) was applied to reduce dimensionality, capturing 95% of the variance with the just 25 components. This selection was made to balance accuracy and computational cost."
-    )
+        # Add titles and labels
+        fig.update_layout(
+            title='Scree Plot - Principal Component Analysis (PCA)',
+            xaxis_title='Principal Components',
+            yaxis_title='Variance % Explained',
+            template='plotly_dark',
+            height=600
+        )
+        
+        # Display the plot in Streamlit
+        st.plotly_chart(fig)
+        
+        st.write(
+        "Principal Component Analysis (PCA) was applied to reduce dimensionality, capturing 95% of the variance with the just 25 components. This selection was made to balance accuracy and computational cost."
+        )
 
  
 
