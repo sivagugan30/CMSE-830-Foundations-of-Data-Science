@@ -39,16 +39,6 @@ def set_background(image_path):
 # Load data
 df = pd.read_csv('cleaned_df.csv')
 
-# Check for duplicate columns and log them
-duplicates = df.columns[df.columns.duplicated()].unique()
-if len(duplicates) > 0:
-    st.warning(f"Duplicate columns found: {duplicates.tolist()}")
-    # Remove duplicate columns
-    df = df.loc[:, ~df.columns.duplicated()]
-
-# Rename the value column to market_value
-df.rename(columns={'value': 'market_value'}, inplace=True)  # Ensure 'value' exists in the DataFrame
-
 skill_columns = [
                                 'finishing', 'dribbling', 'curve', 'crossing', 'heading_accuracy',
                                 'long_shots', 'shot_power', 'short_passing', 'vision', 'ball_control',
@@ -1105,6 +1095,7 @@ if st.session_state.page == 'data_handling':
         st.subheader("1. Categorical Feature Selection")
         st.write(df)
         # Make a copy of the DataFrame
+        df = pd.read_csv('cleaned_df.csv')
         df1 = df.copy()
         st.write(df1)
         
