@@ -1168,6 +1168,7 @@ elif st.session_state.page == 'what_player_to_buy':
 if st.session_state.page == 'data_handling':
     st.title("Data Handling and Statistical Analysis")
 
+    # Make a copy of the DataFrame
     df1 = df.copy()
     
     # Define categorical features
@@ -1224,6 +1225,7 @@ if st.session_state.page == 'data_handling':
         showlegend=True,
         height=600
     )
+
     
     st.plotly_chart(fig, use_container_width=True)
 
