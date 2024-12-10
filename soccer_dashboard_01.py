@@ -1168,6 +1168,8 @@ elif st.session_state.page == 'what_player_to_buy':
 if st.session_state.page == 'data_handling':
     st.title("Data Handling and Statistical Analysis")
     from scipy.stats import chi2_contingency
+    from scipy.stats import ttest_ind
+
     # Make a copy of the DataFrame
     df1 = df.copy()
     
