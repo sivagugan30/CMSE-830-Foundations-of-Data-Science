@@ -97,7 +97,7 @@ elif st.session_state.page == 'Instructions':
     st.write("- **What Player to Buy?:** Personalized player recommendations based on selected attributes.")
     st.write("")
     # Closing Note
-    st.write("Navigate through the dashboard using the Navigation bar to explore, and enjoy the world of soccer analytics!")
+    st.write("Explore through the dashboard using the Navigation bar to explore, and enjoy the world of soccer analytics!")
 
 
 
