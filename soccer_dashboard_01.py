@@ -91,7 +91,7 @@ elif st.session_state.page == 'Instructions':
     st.subheader("Sections:")
     st.write("- **Hypothesis Testing:** Explore data to confirm or discard inherent biases in soccer, revealing hidden patterns and disparities.")
     st.write("- **Types of Players:** View top players across categories like Creative, Athletic, Defensive, and Goalkeeping with detailed visualizations.")
-    st.write("- **Individual Player Analysis:** Gain in-depth insights and make comparisons for selected players.")
+    st.write("- **Analyse a Player:** Gain in-depth insights and make comparisons for selected players.")
     st.write("- **What Player to Buy?:** Get personalized player recommendations tailored to specific attributes.")
     st.write("- **Data Handling:** Comprehensive gathering, cleaning, and processing of soccer data.")
     st.write("")
