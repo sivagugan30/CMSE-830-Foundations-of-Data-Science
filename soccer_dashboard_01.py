@@ -1473,7 +1473,7 @@ if st.session_state.page == 'data_handling':
     
     # Add titles and labels
     fig.update_layout(
-        title='PCA - Scree Plot',
+        title='Scree Plot - Principal Component Analysis (PCA)',
         xaxis_title='Principal Components',
         yaxis_title='Variance % Explained',
         template='plotly_dark',
