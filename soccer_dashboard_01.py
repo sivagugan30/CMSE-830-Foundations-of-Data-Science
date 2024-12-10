@@ -1168,6 +1168,8 @@ elif st.session_state.page == 'what_player_to_buy':
 if st.session_state.page == 'data_handling':
     st.title("Data Handling and Statistical Analysis")
 
+    df1 = df.copy()
+    
     # Define categorical features
     categorical_features = ['foot', 'best_position', 'core_position', 'age_brackets', 'team']
     
