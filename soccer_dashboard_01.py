@@ -1329,7 +1329,8 @@ if st.session_state.page == 'data_handling':
     # Section 3: ANOVA and Mutual Information
     st.subheader("3. Feature Selection using ANOVA and Mutual Information")
     if 'market_value' in df1.columns:
-        X = df1.select_dtypes(include=np.number).drop(columns=['market_value'])
+        
+        X = df1[numeric_features_filtered]
         y = df1['market_value']
 
         scaler = StandardScaler()
