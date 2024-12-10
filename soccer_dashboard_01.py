@@ -61,7 +61,7 @@ if 'page' not in st.session_state:
 
 # Sidebar for navigation
 st.sidebar.title("Navigation")
-options = st.sidebar.radio("Select a Section", ["Home","Instructions","Data Collection & Preparation", "Hypothesis Testing", "Types of Players", "Individual Player Analysis", "What Player to Buy?"])
+options = st.sidebar.radio("Select a Section", ["Home","Instructions","Data Collection & Preparation", "Hypothesis Testing", "Types of Players", "Individual Player Analysis", "What Player to Buy?","Data Handling"])
 
 
 # Function to go home
@@ -81,6 +81,8 @@ elif options == "What Player to Buy?":
     st.session_state.page = 'what_player_to_buy'
 elif options == "Instructions":
     st.session_state.page = 'Instructions'
+elif options == "Data Handling":
+    st.session_state.page = 'data_handling'
 
 
 # Homepage
@@ -976,10 +978,6 @@ elif st.session_state.page == 'what_player_to_buy':
         (df1['market_value'] >= budget[0]) & (df1['market_value'] <= budget[1])
     ]
 
-     #import streamlit as st
-
-   #import streamlit as st
-
     import streamlit as st
 
     st.subheader("Model Selection")
@@ -1151,6 +1149,156 @@ elif st.session_state.page == 'what_player_to_buy':
     # Display the plot in Streamlit
     st.plotly_chart(fig, use_container_width=True)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if st.session_state.page == 'data_handling':
+    from scipy.stats import chi2_contingency
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.feature_selection import mutual_info_regression, SelectKBest, f_classif
+
+    # Assuming 'df' is preloaded in the Streamlit session
+    df1 = df.copy()
+
+    # Chi-Square Analysis
+    categorical_features = ['foot', 'best_position', 'core_position', 'age_brackets', 'team']
+    df1['market_value_bins'] = pd.qcut(df1['market_value'], q=5, labels=[1, 2, 3, 4, 5])
+
+    chi_square_results = {}
+    for feature in categorical_features:
+        contingency_table = pd.crosstab(df1[feature], df1['market_value_bins'])
+        _, p, _, _ = chi2_contingency(contingency_table)
+        chi_square_results[feature] = 1 - p
+
+    chi_square_df = pd.DataFrame.from_dict(chi_square_results, orient='index', columns=['1-p'])
+    chi_square_df.sort_values(by='1-p', ascending=False, inplace=True)
+    chi_square_df['Color'] = chi_square_df['1-p'].apply(lambda x: '#228b22' if x > 0.95 else '#d35400')
+
+    # Plot Chi-Square Results
+    fig1 = go.Figure()
+    for feature, row in chi_square_df.iterrows():
+        fig1.add_trace(go.Bar(
+            x=[feature],
+            y=[row['1-p']],
+            marker=dict(color=row['Color']),
+            name=feature,
+            showlegend=False
+        ))
+
+    fig1.add_trace(go.Scatter(
+        x=chi_square_df.index,
+        y=[0.95] * len(chi_square_df),
+        mode='lines',
+        line=dict(color='red', width=4),
+        name='Threshold (0.95)'
+    ))
+
+    fig1.update_layout(
+        title='Chi-Square Test for Categorical Features',
+        xaxis=dict(title='Features'),
+        yaxis=dict(title='1 - p-value'),
+        template='plotly_dark',
+        showlegend=True,
+        height=600
+    )
+
+    # Display Chi-Square Analysis in Streamlit
+    st.subheader("Chi-Square Test Results")
+    st.plotly_chart(fig1, use_container_width=True)
+
+    # Feature Selection
+    X = df[df.describe().columns.to_list()[1:-1]]
+    y = df['market_value']
+
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+
+    mi = mutual_info_regression(X_scaled, y)
+    mi_series = pd.Series(mi, index=X.columns)
+
+    anova_selector = SelectKBest(f_classif, k='all')
+    anova_selector.fit(X_scaled, y)
+    anova_scores = pd.Series(anova_selector.scores_, index=X.columns)
+
+    top_mi_15 = mi_series.sort_values(ascending=False).head(15)
+    top_anova_15 = anova_scores.sort_values(ascending=False).head(15)
+    common_features = top_mi_15.index.intersection(top_anova_15.index).tolist()[:10]
+
+    top_mi = top_mi_15[common_features]
+    top_anova = top_anova_15[common_features]
+
+    # Plot Feature Selection
+    fig2 = go.Figure()
+    fig2.add_trace(go.Scatter(
+        x=top_mi.index,
+        y=top_mi.values,
+        mode='markers+lines',
+        name='Mutual Information (MI)',
+        marker=dict(color='limegreen', size=10),
+        yaxis='y1',
+        line=dict(shape='spline'),
+        hovertemplate='<b>Feature:</b> %{x}<br><b>Mutual Information:</b> %{y:.4f}<extra></extra>'
+    ))
+
+    fig2.add_trace(go.Scatter(
+        x=top_anova.index,
+        y=top_anova.values,
+        mode='markers+lines',
+        name='ANOVA F-Value',
+        marker=dict(color='royalblue', size=10),
+        yaxis='y2',
+        line=dict(shape='hv'),
+        hovertemplate='<b>Feature:</b> %{x}<br><b>ANOVA F-Value:</b> %{y:.4f}<extra></extra>'
+    ))
+
+    fig2.add_annotation(
+        text="Higher MI = more shared information between feature and target",
+        xref="paper", yref="paper",
+        x=0.05, y=1.15, showarrow=False,
+        font=dict(color="limegreen", size=12),
+        xanchor='left'
+    )
+
+    fig2.add_annotation(
+        text="Higher ANOVA F-Value = greater feature separation",
+        xref="paper", yref="paper",
+        x=0.95, y=1.15, showarrow=False,
+        font=dict(color="royalblue", size=12),
+        xanchor='right'
+    )
+
+    fig2.update_layout(
+        xaxis=dict(title='Features'),
+        yaxis=dict(
+            title='Mutual Information (MI)',
+            side='left'
+        ),
+        yaxis2=dict(
+            title='ANOVA F-Value',
+            side='right',
+            overlaying='y',
+            showgrid=False
+        ),
+        template='plotly_dark',
+        legend=dict(x=0.5, y=1.1, orientation='h'),
+        height=600
+    )
+
+    # Display Feature Selection in Streamlit
+    st.subheader("Feature Selection")
+    st.write("ANOVA and Mutual Information techniques were applied to identify and prioritize key regressors.")
+    st.plotly_chart(fig2, use_container_width=True)
 
 
 # Footer
