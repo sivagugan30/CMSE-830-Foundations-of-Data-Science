@@ -1237,7 +1237,9 @@ if st.session_state.page == 'data_handling':
     )
     
     st.plotly_chart(fig, use_container_width=True)
-    st.write("Chi-square tests were applied to identify key categorical variables influencing the target variable, 'market_value'. Significant variables are highlighted in green.")
+    st.write(
+    "Chi-square tests were applied to find important categorical features that influence the target variable, 'market_value'. The significant factors are highlighted in green."
+)
 
     # Section 2: T-Test
     st.subheader("2. Numerical Feature Selection ")
@@ -1333,7 +1335,7 @@ if st.session_state.page == 'data_handling':
     )
 
     st.plotly_chart(fig, use_container_width=True)
-    st.write("T-test were used to compare group means and identify significant numerical features for 'market_value', marked in green")
+    st.write("T-tests were used to compare the average values between different groups and identify which numerical features are most important for predicting 'market_value'. The significant features are highlighted in green.")
     
     st.markdown('<h5 style="font-size: 18px;">2.2 ANOVA & Mutual Information</h5>', unsafe_allow_html=True)
     
@@ -1433,7 +1435,9 @@ if st.session_state.page == 'data_handling':
     # Display the plot in Streamlit
     st.plotly_chart(fig, use_container_width=True)
 
-    st.write("ANOVA and Mutual Information techniques were applied to rank numerical predictors and measure their dependency on 'market_value' ")
+    st.write(
+    "ANOVA and Mutual Information methods were employed to rank numerical factors and assess their relationship with 'market_value'."
+)
 
 
     st.subheader("3. Dimensionality Reduction")
