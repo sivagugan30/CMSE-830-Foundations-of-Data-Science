@@ -1094,7 +1094,7 @@ if st.session_state.page == 'data_handling':
         
 
     with tab3:
-        st.title("Feature Selection")
+        #st.title("Feature Selection")
         from scipy.stats import chi2_contingency
         from scipy.stats import ttest_ind
         from sklearn.feature_selection import mutual_info_regression
