@@ -564,353 +564,7 @@ if st.session_state.page == 'hypothesis_testing':
 # data_collection_preparation
 if st.session_state.page == 'data_collection_preparation':
     
-    st.write('Github Repository : https://github.com/sivagugan30/CMSE-830-Foundations-of-Data-Science')
     
-    st.title('Initial Data Analysis')
-    import numpy as np
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    import plotly.express as px
-    import plotly.subplots as sp
-    import plotly.graph_objects as go
-    from sklearn.linear_model import LinearRegression
-    from sklearn.experimental import enable_iterative_imputer  # noqa
-    from sklearn.impute import IterativeImputer, KNNImputer
-    from plotly.subplots import make_subplots
-
-    # Set display options and warnings
-    pd.set_option('display.max_columns', None)
-
-    #read df 1
-    stats_df = pd.read_csv('stats_df.csv')
-
-
-    #read df2 
-    personal_df = pd.read_csv('personal_df.csv')
-
-    
-    st.write(" Data Source 1 : https://www.kaggle.com/datasets/yorkyong/football-player-statistics ")
-    st.write(" Data Source 2 : https://www.kaggle.com/datasets/davidcariboo/player-scores ")
-    
-    # Create two columns in Streamlit for side-by-side display
-    col1, col2 = st.columns(2)
-    
-    # Display stats_df in the first column
-    with col1:
-        st.subheader("Data Source 1")
-        st.dataframe(stats_df.head(3))
-    
-    # Display personal_df in the second column
-    with col2:
-        st.subheader("Data Source 2")
-        st.dataframe(personal_df.head(3))
-
-
-    
-    # Merge datasets
-    df = pd.merge(personal_df, stats_df, on=['player_name', 'team', 'best_position'])
-
-    # Display the first few rows of the dataset
-    st.subheader("Merged Dataset")
-    st.write(df.head(5))
-
-  # Create a heatmap using Plotly
-    fig = px.imshow(
-        df.isna().T,  # Transpose to align columns on the y-axis
-        color_continuous_scale='viridis',
-        aspect="auto",
-        labels={'color': 'Missingness'},  # Change the color bar label
-        title="Missing Data Heatmap"
-    )
-    
-    # Display the Plotly heatmap in Streamlit
-    st.plotly_chart(fig)
-
-    # Induce MCAR missingness
-    df1 = df.copy()
-    missing_percentage = 0.7  # 70% missingness
-    num_missing = int(missing_percentage * len(df1))
-    missing_indices = np.random.choice(df1.index, num_missing, replace=False)
-    df1.loc[missing_indices, 'penalties'] = np.nan
-
-    
-    # Create a heatmap using Plotly
-    fig = px.imshow(
-        df1.isna().T,  # Transpose to align columns on the y-axis
-        color_continuous_scale='viridis',
-        aspect="auto",
-        labels={'color': 'Missingness'},  # Change the color bar label
-        title="Induced Missingness in the Penalties Column"
-    )
-    
-    # Display the Plotly heatmap in Streamlit
-    st.plotly_chart(fig)
-
-    st.write('Induced Missingness in the Penalties Column is MCAR (Missing Completely at Random) - Missingness is independent of other columns')
-
-    
-    
-    # Correlation analysis
-    numeric_columns = df1.select_dtypes(include=[np.number]).columns.tolist()
-    correlation_matrix = df1[numeric_columns].corr()
-    penalties_correlation = correlation_matrix['penalties']
-    highly_correlated_columns = penalties_correlation[penalties_correlation.abs() > 0.5].drop('penalties')
-
-    # Create a DataFrame for plotting highly correlated features
-    highly_correlated_df = highly_correlated_columns.reset_index()
-    highly_correlated_df.columns = ['Feature', 'Correlation']
-
-    # Create bar chart for highly correlated features
-    st.subheader("Highly Correlated Features with Penalties")
-    fig = px.bar(highly_correlated_df, 
-                x='Correlation', 
-                y='Feature', 
-                title='Highly Correlated Features with Penalties',
-                labels={'Correlation': 'Correlation Coefficient'},
-                orientation='h')
-    st.plotly_chart(fig)
-
-    st.write("Based on the correlation analysis, the 'Finishing' and 'Volleys' features show a strong relationship with 'Penalties'. Since 'Finishing' is more intuitive, it will be used as the primary regressor for various types of imputation.")
-
-
-    
-
-    # Imputation using Linear Regression
-    numeric_columns = ['penalties', 'finishing']
-    numeric_columns.remove('penalties')
-
-    df_train = df1[df1['penalties'].notna()]
-    df_missing = df1[df1['penalties'].isna()]
-    X_train = df_train[numeric_columns]
-    y_train = df_train['penalties']
-
-    lr_model = LinearRegression()
-    lr_model.fit(X_train, y_train)
-
-    X_missing = df_missing[numeric_columns]
-    penalties_pred = lr_model.predict(X_missing)
-
-    df1_linear = df1.copy()
-    df1_linear.loc[df1_linear['penalties'].isna(), 'penalties'] = penalties_pred
-
-    # Imputation using Stochastic Regression
-    y_train_pred = lr_model.predict(X_train)
-    residuals = y_train - y_train_pred
-    mean_residual = residuals.mean()
-    std_residual = residuals.std()
-
-    random_noise = np.random.normal(mean_residual, std_residual, size=len(penalties_pred))
-    penalties_pred_stochastic = penalties_pred + random_noise
-
-    df1_stochastic = df1.copy()
-    df1_stochastic.loc[df1_stochastic['penalties'].isna(), 'penalties'] = penalties_pred_stochastic
-
-    # Imputation using MICE
-    df1_mice = df1.copy()
-    mice_imputer = IterativeImputer(random_state=42)
-    df1_mice[numeric_columns] = mice_imputer.fit_transform(df1_mice[numeric_columns])
-
-    # Imputation using KNN
-    df1_knn = df1.copy()
-    knn_imputer = KNNImputer(n_neighbors=5)
-    df1_knn[numeric_columns] = knn_imputer.fit_transform(df1_knn[numeric_columns])
-
-
-    # Calculate the mean and mode for the 'penalties' column
-    mean_value = df1['penalties'].mean()
-    mode_value = df1['penalties'].mode()  # Get the first mode if there are multiple
-
-    # Mean Imputation
-    df1_mean = df1.copy()
-    df1_mean['penalties'] = df1_mean['penalties'].fillna(mean_value)
-
-    # Mode Imputation
-    df1_mode = df1.copy()
-    df1_mode['penalties'] = df1_mode['penalties'].fillna(mode_value)
-
-    # Comparison of different Imputation techniques
-    imputed_penalties = pd.DataFrame({
-        'Mean' : df1_mean['penalties'],
-        'Mode' : df1_mode['penalties'],
-        'Linear Regression': df1_linear['penalties'],
-        'Stochastic Regression': df1_stochastic['penalties'],
-        'MICE': df1_mice['penalties'],
-        'KNN': df1_knn['penalties']
-
-    })
-
-    # Create a boxplot using Plotly
-    fig = px.box(
-        imputed_penalties,  # Your DataFrame with imputed penalties
-        title='Comparison of Imputed Penalties',
-        labels={'value': 'Penalties', 'variable': 'Imputation Method'}
-    )
-    
-    # Update layout for better readability
-    fig.update_layout(
-        yaxis_title="Penalties",
-        xaxis_title="Imputation Method",
-        xaxis_tickangle=45,  # Rotate x-axis labels
-        showlegend=False,
-        width=900,  # Adjust plot width
-        height=600  # Adjust plot height
-    )
-    
-    # Display the boxplot in Streamlit
-    st.plotly_chart(fig)
-
-    st.write(" In the above box plot, the box for the mean imputed df is compressed due to the imputation of all missing values at the mean. As a result, the mean, median, mode, upper fence, and lower fence all converge to the same value, indicating a lack of variability in the imputed data ")    # Scatter plot comparison of imputation methods
-    
-    
-    def create_combined_scatter_plot(dfs, titles):
-        fig = sp.make_subplots(rows=3, cols=2, subplot_titles=titles)
-
-        for i, (df, title) in enumerate(zip(dfs, titles)):
-            sample_df = df.sample(n=min(100, len(df)), random_state=42)
-            fig.add_trace(
-                go.Scatter(x=sample_df['finishing'], y=sample_df['penalties'], mode='markers', name=title,
-                        marker=dict(size=10, opacity=0.7)),
-                row=(i // 2) + 1, col=(i % 2) + 1
-            )
-
-            trendline = np.polyfit(sample_df['finishing'], sample_df['penalties'], 1)
-            trendline_func = np.poly1d(trendline)
-            x_range = np.linspace(sample_df['finishing'].min(), sample_df['finishing'].max(), 100)
-            fig.add_trace(
-                go.Scatter(x=x_range, y=trendline_func(x_range), mode='lines', name='Trendline', line=dict(dash='dash')),
-                row=(i // 2) + 1, col=(i % 2) + 1
-            )
-
-        fig.update_layout(title_text="Imputation Method Comparison: Penalties vs Finishing", 
-                        height=700, width=900, showlegend=False)
-        return fig
-
-    # Prepare DataFrames for scatter plots
-    dfs = [
-        df1_mean[['finishing', 'penalties']], 
-        df1_mode[['finishing', 'penalties']],
-        df1_linear[['finishing', 'penalties']],
-        df1_stochastic[['finishing', 'penalties']],
-        df1_mice[['finishing', 'penalties']],
-        df1_knn[['finishing', 'penalties']]
-    ]
-
-    titles = [
-        'Mean Imputation', 
-        'Mode Imputation', 
-        'Linear Regression Imputation', 
-        'Stochastic Regression Imputation', 
-        'MICE Imputation', 
-        'KNN Imputation'
-    ]
-
-    # Create the combined scatter plot
-    #st.subheader("Scatter Plot Comparison of Imputation Methods")
-    scatter_plot = create_combined_scatter_plot(dfs, titles)
-    st.plotly_chart(scatter_plot)
-
-    st.write("At first glance, mean and mode imputations significantly distort the data. In contrast, linear and stochastic regression methods maintain the positive correlation essential for modeling, although they lack variance. MICE and KNN, however, strike a balance between variability and correlation")
-
-    st.write("Based on the plots above, stochastic regression appears to be the best fit for imputing missing data. It effectively reconstructs missing values while preserving variable relationships, ensuring correlation and variance are maintained")
-
-
-
-
-
-    
-    import pandas as pd
-    import plotly.express as px
-    from plotly.subplots import make_subplots
-    import plotly.graph_objects as go
-    from imblearn.over_sampling import SMOTE
-    import streamlit as st
-
-    # Assuming 'df' is your DataFrame and 'foot' is the target variable
-    st.subheader("Original Class Distribution")
-    y = df['foot']
-    st.write(y.value_counts())
-
-    # Visualize the original class distribution
-    original_count = y.value_counts().reset_index()
-    original_count.columns = ['Foot', 'Count']
-    fig_original = px.bar(original_count, x='Foot', y='Count', title='Class Imbalance - Foot Column (Original)')
-    st.plotly_chart(fig_original)
-
-    numeric_columns = df.describe().columns.to_list()
-    # Apply SMOTE for class balancing
-    X = df[numeric_columns]  # Use numeric_columns for features
-    y = df['foot']  # Target
-
-    smote = SMOTE(random_state=42)
-    X_resampled, y_resampled = smote.fit_resample(X, y)
-    
-    # Display new class distribution after SMOTE
-    st.subheader("Class Distribution After SMOTE")
-    new_count = pd.Series(y_resampled).value_counts().reset_index()
-    new_count.columns = ['Foot', 'Count']
-    st.write(new_count)
-
-    
-
-    
-    # Visualize the new class distribution
-    fig_after_smote = px.bar(new_count, x='Foot', y='Count', title='Class Balance - Foot Column (After SMOTE)')
-    st.plotly_chart(fig_after_smote)
-
-    # Convert X_resampled and y_resampled into a DataFrame
-    resampled_data = pd.DataFrame(X_resampled, columns=numeric_columns)  # Use numeric_columns for the columns
-    resampled_data['foot'] = y_resampled
-
-    st.write("SMOTE anslysis")
-    
-    # Scatter plots for visualizing before and after SMOTE
-    fig_scatter = make_subplots(rows=2, cols=2, subplot_titles=('Before SMOTE: Right Foot', 'After SMOTE: Right Foot',
-                                                                'Before SMOTE: Left Foot', 'After SMOTE: Left Foot'))
-
-    # Scatter plot for "Right" foot before SMOTE
-    fig_scatter.add_trace(
-        go.Scatter(x=df[df['foot'] == 'Right']['dribbling'], 
-                y=df[df['foot'] == 'Right']['balance'], 
-                mode='markers', 
-                name='Before SMOTE: Right Foot'),
-        row=1, col=1
-    )
-
-    # Scatter plot for "Right" foot after SMOTE
-    fig_scatter.add_trace(
-        go.Scatter(x=resampled_data[resampled_data['foot'] == 'Right']['dribbling'], 
-                y=resampled_data[resampled_data['foot'] == 'Right']['balance'], 
-                mode='markers', 
-                name='After SMOTE: Right Foot'),
-        row=1, col=2
-    )
-
-    # Scatter plot for "Left" foot before SMOTE
-    fig_scatter.add_trace(
-        go.Scatter(x=df[df['foot'] == 'Left']['dribbling'], 
-                y=df[df['foot'] == 'Left']['balance'], 
-                mode='markers', 
-                name='Before SMOTE: Left Foot'),
-        row=2, col=1
-    )
-
-    # Scatter plot for "Left" foot after SMOTE
-    fig_scatter.add_trace(
-        go.Scatter(x=resampled_data[resampled_data['foot'] == 'Left']['dribbling'], 
-                y=resampled_data[resampled_data['foot'] == 'Left']['balance'], 
-                mode='markers', 
-                name='After SMOTE: Left Foot'),
-        row=2, col=2
-    )
-
-    # Update layout
-    fig_scatter.update_layout(title_text='Scatter Plots for Foot Data', height=700)
-    st.plotly_chart(fig_scatter)
-    
-    # Add a comment for the SMOTE plot
-    st.write("In this plot, the majority class on the right is untouched, while the minority class (left) has been oversampled using the SMOTE algorithm. This technique generates synthetic samples for the minority class, resulting in a distribution that mirrors the original variable but with an increased number of data points ")
-
 
 elif st.session_state.page == 'what_player_to_buy':
     st.title("What Player to Buy?")
@@ -1070,7 +724,378 @@ if st.session_state.page == 'data_handling':
     tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Data Processing & Feature Engineering", "Feature Selection", "Modelling"])
 
     st.write("")
+    
+    with tab1:
+        
+        st.write('Github Repository : https://github.com/sivagugan30/CMSE-830-Foundations-of-Data-Science')
+    
+        st.title('Initial Data Analysis')
+        import numpy as np
+        import pandas as pd
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+        import plotly.express as px
+        import plotly.subplots as sp
+        import plotly.graph_objects as go
+        from sklearn.linear_model import LinearRegression
+        from sklearn.experimental import enable_iterative_imputer  # noqa
+        from sklearn.impute import IterativeImputer, KNNImputer
+        from plotly.subplots import make_subplots
+    
+        # Set display options and warnings
+        pd.set_option('display.max_columns', None)
+    
+        #read df 1
+        stats_df = pd.read_csv('stats_df.csv')
+    
+    
+        #read df2 
+        personal_df = pd.read_csv('personal_df.csv')
+    
+        
+        st.write(" Data Source 1 : https://www.kaggle.com/datasets/yorkyong/football-player-statistics ")
+        st.write(" Data Source 2 : https://www.kaggle.com/datasets/davidcariboo/player-scores ")
+        
+        # Create two columns in Streamlit for side-by-side display
+        col1, col2 = st.columns(2)
+        
+        # Display stats_df in the first column
+        with col1:
+            st.subheader("Data Source 1")
+            st.dataframe(stats_df.head(3))
+        
+        # Display personal_df in the second column
+        with col2:
+            st.subheader("Data Source 2")
+            st.dataframe(personal_df.head(3))
+    
+    
+        
+        # Merge datasets
+        df = pd.merge(personal_df, stats_df, on=['player_name', 'team', 'best_position'])
+    
+        # Display the first few rows of the dataset
+        st.subheader("Merged Dataset")
+        st.write(df.head(5))
+    
+      # Create a heatmap using Plotly
+        fig = px.imshow(
+            df.isna().T,  # Transpose to align columns on the y-axis
+            color_continuous_scale='viridis',
+            aspect="auto",
+            labels={'color': 'Missingness'},  # Change the color bar label
+            title="Missing Data Heatmap"
+        )
+        
+        # Display the Plotly heatmap in Streamlit
+        st.plotly_chart(fig)
+    
+        # Induce MCAR missingness
+        df1 = df.copy()
+        missing_percentage = 0.7  # 70% missingness
+        num_missing = int(missing_percentage * len(df1))
+        missing_indices = np.random.choice(df1.index, num_missing, replace=False)
+        df1.loc[missing_indices, 'penalties'] = np.nan
+    
+        
+        # Create a heatmap using Plotly
+        fig = px.imshow(
+            df1.isna().T,  # Transpose to align columns on the y-axis
+            color_continuous_scale='viridis',
+            aspect="auto",
+            labels={'color': 'Missingness'},  # Change the color bar label
+            title="Induced Missingness in the Penalties Column"
+        )
+        
+        # Display the Plotly heatmap in Streamlit
+        st.plotly_chart(fig)
+    
+        st.write('Induced Missingness in the Penalties Column is MCAR (Missing Completely at Random) - Missingness is independent of other columns')
+    
+        
+        
+        # Correlation analysis
+        numeric_columns = df1.select_dtypes(include=[np.number]).columns.tolist()
+        correlation_matrix = df1[numeric_columns].corr()
+        penalties_correlation = correlation_matrix['penalties']
+        highly_correlated_columns = penalties_correlation[penalties_correlation.abs() > 0.5].drop('penalties')
+    
+        # Create a DataFrame for plotting highly correlated features
+        highly_correlated_df = highly_correlated_columns.reset_index()
+        highly_correlated_df.columns = ['Feature', 'Correlation']
+    
+        # Create bar chart for highly correlated features
+        st.subheader("Highly Correlated Features with Penalties")
+        fig = px.bar(highly_correlated_df, 
+                    x='Correlation', 
+                    y='Feature', 
+                    title='Highly Correlated Features with Penalties',
+                    labels={'Correlation': 'Correlation Coefficient'},
+                    orientation='h')
+        st.plotly_chart(fig)
+    
+        st.write("Based on the correlation analysis, the 'Finishing' and 'Volleys' features show a strong relationship with 'Penalties'. Since 'Finishing' is more intuitive, it will be used as the primary regressor for various types of imputation.")
+    
+    
+        
+    
+        # Imputation using Linear Regression
+        numeric_columns = ['penalties', 'finishing']
+        numeric_columns.remove('penalties')
+    
+        df_train = df1[df1['penalties'].notna()]
+        df_missing = df1[df1['penalties'].isna()]
+        X_train = df_train[numeric_columns]
+        y_train = df_train['penalties']
+    
+        lr_model = LinearRegression()
+        lr_model.fit(X_train, y_train)
+    
+        X_missing = df_missing[numeric_columns]
+        penalties_pred = lr_model.predict(X_missing)
+    
+        df1_linear = df1.copy()
+        df1_linear.loc[df1_linear['penalties'].isna(), 'penalties'] = penalties_pred
+    
+        # Imputation using Stochastic Regression
+        y_train_pred = lr_model.predict(X_train)
+        residuals = y_train - y_train_pred
+        mean_residual = residuals.mean()
+        std_residual = residuals.std()
+    
+        random_noise = np.random.normal(mean_residual, std_residual, size=len(penalties_pred))
+        penalties_pred_stochastic = penalties_pred + random_noise
+    
+        df1_stochastic = df1.copy()
+        df1_stochastic.loc[df1_stochastic['penalties'].isna(), 'penalties'] = penalties_pred_stochastic
+    
+        # Imputation using MICE
+        df1_mice = df1.copy()
+        mice_imputer = IterativeImputer(random_state=42)
+        df1_mice[numeric_columns] = mice_imputer.fit_transform(df1_mice[numeric_columns])
+    
+        # Imputation using KNN
+        df1_knn = df1.copy()
+        knn_imputer = KNNImputer(n_neighbors=5)
+        df1_knn[numeric_columns] = knn_imputer.fit_transform(df1_knn[numeric_columns])
+    
+    
+        # Calculate the mean and mode for the 'penalties' column
+        mean_value = df1['penalties'].mean()
+        mode_value = df1['penalties'].mode()  # Get the first mode if there are multiple
+    
+        # Mean Imputation
+        df1_mean = df1.copy()
+        df1_mean['penalties'] = df1_mean['penalties'].fillna(mean_value)
+    
+        # Mode Imputation
+        df1_mode = df1.copy()
+        df1_mode['penalties'] = df1_mode['penalties'].fillna(mode_value)
+    
+        # Comparison of different Imputation techniques
+        imputed_penalties = pd.DataFrame({
+            'Mean' : df1_mean['penalties'],
+            'Mode' : df1_mode['penalties'],
+            'Linear Regression': df1_linear['penalties'],
+            'Stochastic Regression': df1_stochastic['penalties'],
+            'MICE': df1_mice['penalties'],
+            'KNN': df1_knn['penalties']
+    
+        })
+    
+        # Create a boxplot using Plotly
+        fig = px.box(
+            imputed_penalties,  # Your DataFrame with imputed penalties
+            title='Comparison of Imputed Penalties',
+            labels={'value': 'Penalties', 'variable': 'Imputation Method'}
+        )
+        
+        # Update layout for better readability
+        fig.update_layout(
+            yaxis_title="Penalties",
+            xaxis_title="Imputation Method",
+            xaxis_tickangle=45,  # Rotate x-axis labels
+            showlegend=False,
+            width=900,  # Adjust plot width
+            height=600  # Adjust plot height
+        )
+        
+        # Display the boxplot in Streamlit
+        st.plotly_chart(fig)
+    
+        st.write(" In the above box plot, the box for the mean imputed df is compressed due to the imputation of all missing values at the mean. As a result, the mean, median, mode, upper fence, and lower fence all converge to the same value, indicating a lack of variability in the imputed data ")    # Scatter plot comparison of imputation methods
+        
+        
+        def create_combined_scatter_plot(dfs, titles):
+            fig = sp.make_subplots(rows=3, cols=2, subplot_titles=titles)
+    
+            for i, (df, title) in enumerate(zip(dfs, titles)):
+                sample_df = df.sample(n=min(100, len(df)), random_state=42)
+                fig.add_trace(
+                    go.Scatter(x=sample_df['finishing'], y=sample_df['penalties'], mode='markers', name=title,
+                            marker=dict(size=10, opacity=0.7)),
+                    row=(i // 2) + 1, col=(i % 2) + 1
+                )
+    
+                trendline = np.polyfit(sample_df['finishing'], sample_df['penalties'], 1)
+                trendline_func = np.poly1d(trendline)
+                x_range = np.linspace(sample_df['finishing'].min(), sample_df['finishing'].max(), 100)
+                fig.add_trace(
+                    go.Scatter(x=x_range, y=trendline_func(x_range), mode='lines', name='Trendline', line=dict(dash='dash')),
+                    row=(i // 2) + 1, col=(i % 2) + 1
+                )
+    
+            fig.update_layout(title_text="Imputation Method Comparison: Penalties vs Finishing", 
+                            height=700, width=900, showlegend=False)
+            return fig
+    
+        # Prepare DataFrames for scatter plots
+        dfs = [
+            df1_mean[['finishing', 'penalties']], 
+            df1_mode[['finishing', 'penalties']],
+            df1_linear[['finishing', 'penalties']],
+            df1_stochastic[['finishing', 'penalties']],
+            df1_mice[['finishing', 'penalties']],
+            df1_knn[['finishing', 'penalties']]
+        ]
+    
+        titles = [
+            'Mean Imputation', 
+            'Mode Imputation', 
+            'Linear Regression Imputation', 
+            'Stochastic Regression Imputation', 
+            'MICE Imputation', 
+            'KNN Imputation'
+        ]
+    
+        # Create the combined scatter plot
+        #st.subheader("Scatter Plot Comparison of Imputation Methods")
+        scatter_plot = create_combined_scatter_plot(dfs, titles)
+        st.plotly_chart(scatter_plot)
+    
+        st.write("At first glance, mean and mode imputations significantly distort the data. In contrast, linear and stochastic regression methods maintain the positive correlation essential for modeling, although they lack variance. MICE and KNN, however, strike a balance between variability and correlation")
+    
+        st.write("Based on the plots above, stochastic regression appears to be the best fit for imputing missing data. It effectively reconstructs missing values while preserving variable relationships, ensuring correlation and variance are maintained")
+    
+    
+    
+    
+    
+        
+        import pandas as pd
+        import plotly.express as px
+        from plotly.subplots import make_subplots
+        import plotly.graph_objects as go
+        from imblearn.over_sampling import SMOTE
+        import streamlit as st
+    
+        # Assuming 'df' is your DataFrame and 'foot' is the target variable
+        st.subheader("Original Class Distribution")
+        y = df['foot']
+        st.write(y.value_counts())
+    
+        # Visualize the original class distribution
+        original_count = y.value_counts().reset_index()
+        original_count.columns = ['Foot', 'Count']
+        fig_original = px.bar(original_count, x='Foot', y='Count', title='Class Imbalance - Foot Column (Original)')
+        st.plotly_chart(fig_original)
+    
+        numeric_columns = df.describe().columns.to_list()
+        # Apply SMOTE for class balancing
+        X = df[numeric_columns]  # Use numeric_columns for features
+        y = df['foot']  # Target
+    
+        smote = SMOTE(random_state=42)
+        X_resampled, y_resampled = smote.fit_resample(X, y)
+        
+        # Display new class distribution after SMOTE
+        st.subheader("Class Distribution After SMOTE")
+        new_count = pd.Series(y_resampled).value_counts().reset_index()
+        new_count.columns = ['Foot', 'Count']
+        st.write(new_count)
+    
+        
+    
+        
+        # Visualize the new class distribution
+        fig_after_smote = px.bar(new_count, x='Foot', y='Count', title='Class Balance - Foot Column (After SMOTE)')
+        st.plotly_chart(fig_after_smote)
+    
+        # Convert X_resampled and y_resampled into a DataFrame
+        resampled_data = pd.DataFrame(X_resampled, columns=numeric_columns)  # Use numeric_columns for the columns
+        resampled_data['foot'] = y_resampled
+    
+        st.write("SMOTE anslysis")
+        
+        # Scatter plots for visualizing before and after SMOTE
+        fig_scatter = make_subplots(rows=2, cols=2, subplot_titles=('Before SMOTE: Right Foot', 'After SMOTE: Right Foot',
+                                                                    'Before SMOTE: Left Foot', 'After SMOTE: Left Foot'))
+    
+        # Scatter plot for "Right" foot before SMOTE
+        fig_scatter.add_trace(
+            go.Scatter(x=df[df['foot'] == 'Right']['dribbling'], 
+                    y=df[df['foot'] == 'Right']['balance'], 
+                    mode='markers', 
+                    name='Before SMOTE: Right Foot'),
+            row=1, col=1
+        )
+    
+        # Scatter plot for "Right" foot after SMOTE
+        fig_scatter.add_trace(
+            go.Scatter(x=resampled_data[resampled_data['foot'] == 'Right']['dribbling'], 
+                    y=resampled_data[resampled_data['foot'] == 'Right']['balance'], 
+                    mode='markers', 
+                    name='After SMOTE: Right Foot'),
+            row=1, col=2
+        )
+    
+        # Scatter plot for "Left" foot before SMOTE
+        fig_scatter.add_trace(
+            go.Scatter(x=df[df['foot'] == 'Left']['dribbling'], 
+                    y=df[df['foot'] == 'Left']['balance'], 
+                    mode='markers', 
+                    name='Before SMOTE: Left Foot'),
+            row=2, col=1
+        )
+    
+        # Scatter plot for "Left" foot after SMOTE
+        fig_scatter.add_trace(
+            go.Scatter(x=resampled_data[resampled_data['foot'] == 'Left']['dribbling'], 
+                    y=resampled_data[resampled_data['foot'] == 'Left']['balance'], 
+                    mode='markers', 
+                    name='After SMOTE: Left Foot'),
+            row=2, col=2
+        )
+    
+        # Update layout
+        fig_scatter.update_layout(title_text='Scatter Plots for Foot Data', height=700)
+        st.plotly_chart(fig_scatter)
+        
+        # Add a comment for the SMOTE plot
+        st.write("In this plot, the majority class on the right is untouched, while the minority class (left) has been oversampled using the SMOTE algorithm. This technique generates synthetic samples for the minority class, resulting in a distribution that mirrors the original variable but with an increased number of data points ")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
 
     with tab3:
         st.title("Feature Selection")
