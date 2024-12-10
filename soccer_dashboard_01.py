@@ -1236,13 +1236,13 @@ if st.session_state.page == 'data_handling':
     )
     
     st.plotly_chart(fig, use_container_width=True)
-
+    st.write("Chi-square tests were applied to identify key categorical variables influencing the target variable - 'market_value' ")
 
     
     # Section 2: T-Test
     st.subheader("2. Numerical Feature Selection ")
     
-    st.write("2.1 T-Test ")
+    st.subheader("2.1 T-Test ")
     
     numeric_features = df1.describe().columns.to_list()
     
@@ -1333,8 +1333,10 @@ if st.session_state.page == 'data_handling':
     )
 
     st.plotly_chart(fig, use_container_width=True)
+    st.write("T-tests were used to compare group means and pinpoint significant numerical features")
 
 
+    st.subheader("2.2 ANOVA & Mutual Information")
     
     from sklearn.preprocessing import StandardScaler
     from sklearn.feature_selection import mutual_info_regression, SelectKBest, f_classif
@@ -1367,8 +1369,6 @@ if st.session_state.page == 'data_handling':
     top_mi = top_mi_15[common_features]
     top_anova = top_anova_15[common_features]
 
-    st.write("2.2 ANOVA & Mutual Information")
-    
     # Create scatter plot comparing Mutual Information and ANOVA F-Value
     fig = go.Figure()
     
@@ -1434,8 +1434,8 @@ if st.session_state.page == 'data_handling':
     # Display the plot in Streamlit
     st.plotly_chart(fig, use_container_width=True)
 
-    st.write("ANOVA and Mutual Information techniques were applied to identify and prioritize key regressors.")  # Normal text
-
+    st.write("ANOVA and Mutual Information techniques were applied to rank numerical predictors and measure their dependency on 'market_value' ")
+    
 # Footer
 st.sidebar.markdown("---")
 st.sidebar.write("Created by Sivagugan Jayachandran")
