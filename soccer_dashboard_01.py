@@ -1233,30 +1233,94 @@ if st.session_state.page == 'data_handling':
 
     # Section 2: T-Test
     st.subheader("2. T-Test for Numerical Features")
-    if 'market_value_bins' in df1.columns:
-        numeric_features = [col for col in df1.select_dtypes(include=np.number).columns if col != 'market_value_bins']
-        t_test_results = {}
-
+    # Remove features starting with 'gk_'
+    numeric_features_filtered = [col for col in numeric_features if not col.startswith('gk_')]
+    numeric_features_filtered = numeric_features_filtered[:-1]
+    
+    # Prepare results for T-Test
+    t_test_results = {}
+    
+    # Perform T-Test for each numerical feature (after removing 'gk_' features)
+    for feature in numeric_features_filtered:
         unique_bins = df1['market_value_bins'].unique()
-        for feature in numeric_features:
-            bin_groups = [df1[df1['market_value_bins'] == bin][feature] for bin in unique_bins[:2]]
-            t_stat, p_value = ttest_ind(bin_groups[0], bin_groups[1], equal_var=False, nan_policy='omit')
-            t_test_results[feature] = 1 - p_value
+        bin_groups = [df1[df1['market_value_bins'] == bin][feature] for bin in unique_bins]
+        
+        # Perform pairwise t-test between the first two bins as an example
+        t_stat, p_value = ttest_ind(bin_groups[0], bin_groups[1], equal_var=False, nan_policy='omit')
+        t_test_results[feature] = 1 - p_value  # Store 1 - p-value
+    
+    # Convert results to a DataFrame
+    t_test_df = pd.DataFrame.from_dict(t_test_results, orient='index', columns=['1-p'])
+    t_test_df.sort_values(by='1-p', ascending=False, inplace=True)
+    
+    # Categorize scores
+    def categorize_score(val):
+        if val > 0.95:
+            return 'High'
+        elif 0.5 <= val <= 0.95:
+            return 'Medium'
+        else:
+            return 'Low'
+    
+    t_test_df['Score Category'] = t_test_df['1-p'].apply(categorize_score)
+    
+    # Filter 5 features from each category
+    high_features = t_test_df[t_test_df['Score Category'] == 'High'].iloc[np.r_[8:10,24:29, -3:-1]]
+    medium_features = t_test_df[t_test_df['Score Category'] == 'Medium'].head(5)
+    low_features = t_test_df[t_test_df['Score Category'] == 'Low'].head(5)
+    
+    # Combine the top features into a single DataFrame
+    top_features_df = pd.concat([high_features, medium_features, low_features])
+    
+    # Plot results using Plotly
+    fig = go.Figure()
+    
+    # Add bar chart for 1-p values with different shades of blue
+    fig.add_trace(go.Bar(
+        x=high_features.index,
+        y=high_features['1-p'],
+        #name='High Significance',
+        marker=dict(color='#228b22')  # Different shade of blue
+        ,showlegend=False
+    ))
+    
+    fig.add_trace(go.Bar(
+        x=medium_features.index,
+        y=medium_features['1-p'],
+        #name='Medium Significance',
+        marker=dict(color='#d35400')  # Lighter shade of blue
+        ,showlegend=False
+    ))
+    
+    fig.add_trace(go.Bar(
+        x=low_features.index,
+        y=low_features['1-p'],
+        #name='Low Significance',
+        marker=dict(color='#d35400')  # Even lighter shade of blue
+        ,showlegend=False
+    ))
+    
+    # Add a horizontal red thick dashed line at 0.95
+    fig.add_trace(go.Scatter(
+        x=top_features_df.index,
+        y=[0.95] * len(top_features_df),
+        mode='lines',
+        line=dict(color='red', width=4),  # Thick red dashed line
+        name='Threshold (0.95)'
+    ))
+    
+    # Update layout
+    fig.update_layout(
+        title='T-Test for Numerical Features',
+        xaxis=dict(title='Features'),
+        yaxis=dict(title='1 - p-value'),
+        template='plotly_dark',
+        showlegend=True,
+        height=600
+    )
 
-        t_test_df = pd.DataFrame.from_dict(t_test_results, orient='index', columns=['1-p'])
-        t_test_df.sort_values(by='1-p', ascending=False, inplace=True)
-        t_test_df['Category'] = t_test_df['1-p'].apply(lambda x: 'High' if x > 0.95 else ('Medium' if 0.5 <= x <= 0.95 else 'Low'))
+    st.plotly_chart(fig, use_container_width=True)
 
-        high_features = t_test_df[t_test_df['Category'] == 'High']
-        fig_ttest = go.Figure()
-        fig_ttest.add_trace(go.Bar(x=high_features.index, y=high_features['1-p'], marker=dict(color='#228b22'), showlegend=False))
-
-        fig_ttest.add_trace(go.Scatter(x=t_test_df.index, y=[0.95] * len(t_test_df),
-                                       mode='lines', line=dict(color='red', width=2), name='Threshold (0.95)'))
-
-        fig_ttest.update_layout(title="T-Test Results", xaxis_title="Features", yaxis_title="1 - p-value",
-                                template="plotly_dark", height=600)
-        st.plotly_chart(fig_ttest, use_container_width=True)
 
     # Section 3: ANOVA and Mutual Information
     st.subheader("3. Feature Selection using ANOVA and Mutual Information")
