@@ -1071,6 +1071,10 @@ elif st.session_state.page == 'what_player_to_buy':
 
 if st.session_state.page == 'data_handling':
     
+    tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Data Processing & Feature Engineering", "Feature Selection", "Modelling"])
+
+    st.write("")
+    
     st.title("Feature Selection")
     from scipy.stats import chi2_contingency
     from scipy.stats import ttest_ind
