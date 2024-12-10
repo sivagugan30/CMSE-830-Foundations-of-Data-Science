@@ -9,7 +9,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.metrics import mean_absolute_percentage_error, r2_score
 from sklearn.preprocessing import StandardScaler
-
+from sklearn.feature_selection import mutual_info_regression, SelectKBest, f_classif
 import matplotlib.pyplot as plt 
 
 # Set Streamlit app config for a wider layout and light theme
@@ -1048,113 +1048,7 @@ elif st.session_state.page == 'what_player_to_buy':
     
     
     
-    import streamlit as st
-    import pandas as pd
-    import plotly.graph_objects as go
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.feature_selection import mutual_info_regression, SelectKBest, f_classif
     
-    # Assuming df is your DataFrame containing the features and target
-    X = df[df.describe().columns.to_list()[1:-1]]
-    y = df['market_value']
-    
-    # Standardize features
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-    
-    # Mutual Information calculation
-    mi = mutual_info_regression(X_scaled, y)
-    mi_series = pd.Series(mi, index=X.columns)
-    
-    # Perform ANOVA F-test using SelectKBest with f_classif
-    anova_selector = SelectKBest(f_classif, k='all')
-    anova_selector.fit(X_scaled, y)
-    anova_scores = pd.Series(anova_selector.scores_, index=X.columns)
-    
-    # Sort and select the top 15 features for both metrics
-    top_mi_15 = mi_series.sort_values(ascending=False).head(15)
-    top_anova_15 = anova_scores.sort_values(ascending=False).head(15)
-    
-    # Find the common top 10 features between both metrics
-    common_features = top_mi_15.index.intersection(top_anova_15.index).tolist()[:10]
-    
-    # Filter the top 10 common features from both metrics
-    top_mi = top_mi_15[common_features]
-    top_anova = top_anova_15[common_features]
-
-    st.subheader("Feature Selection")  # Larger title for emphasis
-    st.write("ANOVA and Mutual Information techniques were applied to identify and prioritize key regressors.")  # Normal text
-
-    # Create scatter plot comparing Mutual Information and ANOVA F-Value
-    fig = go.Figure()
-    
-    # Add Mutual Information (x-axis)
-    fig.add_trace(go.Scatter(
-        x=top_mi.index,
-        y=top_mi.values,
-        mode='markers+lines',  # Connect adjacent points only
-        name='Mutual Information (MI)',
-        marker=dict(color='limegreen', size=10),
-        yaxis='y1',
-        line=dict(shape='spline'),  # Connect adjacent points only
-        hovertemplate='<b>Feature:</b> %{x}<br><b>Mutual Information:</b> %{y:.4f}<extra></extra>'  # Hover for Mutual Information
-    ))
-    
-    # Add ANOVA F-Value (y-axis)
-    fig.add_trace(go.Scatter(
-        x=top_anova.index,
-        y=top_anova.values,
-        mode='markers+lines',  # Connect adjacent points only
-        name='ANOVA F-Value',
-        marker=dict(color='royalblue', size=10),
-        yaxis='y2',
-        line=dict(shape='hv'),  # Connect adjacent points only
-        hovertemplate='<b>Feature:</b> %{x}<br><b>ANOVA F-Value:</b> %{y:.4f}<extra></extra>'  # Hover for ANOVA F-Value
-    ))
-    
-    # Add annotations indicating better values
-    fig.add_annotation(
-        text="Higher MI = more shared information btw feature and target",
-        xref="paper", yref="paper",
-        x=0.05, y=1.15, showarrow=False,
-        font=dict(color="limegreen", size=12),
-        xanchor='left'
-    )
-    
-    fig.add_annotation(
-        text="Higher ANOVA F-Value = greater feature separation",
-        xref="paper", yref="paper",
-        x=0.95, y=1.15, showarrow=False,
-        font=dict(color="royalblue", size=12),
-        xanchor='right'
-    )
-
-    # Configure layout with increased height and the title
-    fig.update_layout(
-        xaxis=dict(title='Features'),
-        yaxis=dict(
-            title='Mutual Information(MI)',
-            side='left'
-        ),
-        yaxis2=dict(
-            title='ANOVA F-Value',
-            side='right',
-            overlaying='y',
-            showgrid=False
-        ),
-        template='plotly_dark',
-        legend=dict(x=0.5, y=1.1, orientation='h'),
-        height=600,  # Adjusted plot height
-    )
-    
-    # Display the plot in Streamlit
-    st.plotly_chart(fig, use_container_width=True)
-
-
-
-
-
-
 
 
 
