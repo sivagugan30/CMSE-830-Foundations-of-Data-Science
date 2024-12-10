@@ -823,7 +823,6 @@ if st.session_state.page == 'data_handling':
         highly_correlated_df.reset_index(drop=True, inplace=True)
 
         # Create bar chart for highly correlated features
-        st.subheader("Highly Correlated Features with Penalties")
         fig = px.bar(highly_correlated_df, 
                     x='Correlation', 
                     y='Feature', 
