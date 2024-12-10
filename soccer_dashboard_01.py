@@ -57,7 +57,7 @@ options = st.sidebar.radio("Select a Section", ["Home","Instructions", "Hypothes
 
 # Function to go home
 if options == "Home":
-    st.session_state.page = 'home
+    st.session_state.page = 'home'
 elif options == "Instructions":
     st.session_state.page = 'Instructions'
 elif options == "Hypothesis Testing":
