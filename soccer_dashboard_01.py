@@ -1240,9 +1240,9 @@ if st.session_state.page == 'data_handling':
 
     
     # Section 2: T-Test
-    st.subheader("2. Numerical Feature Selection")
+    st.subheader("2. Numerical Feature Selection ")
     
-    st.write("** 2.1 T-Test:** Test numerical feature differences.")
+    st.write("2.1 T-Test ")
     
     numeric_features = df1.describe().columns.to_list()
     
@@ -1367,7 +1367,7 @@ if st.session_state.page == 'data_handling':
     top_mi = top_mi_15[common_features]
     top_anova = top_anova_15[common_features]
 
-    st.write("** 2.2 ANOVA & MI:** Rank key regressors.")
+    st.write("2.2 ANOVA & Mutual Information")
     
     # Create scatter plot comparing Mutual Information and ANOVA F-Value
     fig = go.Figure()
