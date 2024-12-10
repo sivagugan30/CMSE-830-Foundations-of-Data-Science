@@ -1439,6 +1439,8 @@ if st.session_state.page == 'data_handling':
     st.subheader("3. Dimentionality Reduction")
     st.subheader("Dimensionality Reduction - PCA")
     
+    from sklearn.decomposition import PCA
+    
     numerical_df = df1[numeric_features_filtered]
     # Standardizing the data before applying PCA
     scaler = StandardScaler()
