@@ -1238,7 +1238,7 @@ if st.session_state.page == 'data_handling':
     
     st.plotly_chart(fig, use_container_width=True)
     st.write(
-    "Chi-square tests were applied to find important categorical features that influence the target variable, 'market_value'. The significant factors are highlighted in green."
+    "Chi-square tests were applied to find important categorical features that influence the target variable, 'market_value'. The significant features are highlighted in green."
 )
 
     # Section 2: T-Test
@@ -1473,7 +1473,13 @@ if st.session_state.page == 'data_handling':
         line=dict(color='blue', width=3),
         marker=dict(symbol='circle', size=8)
     ))
-    
+    fig.add_vline(
+        x=25, 
+        line=dict(color='red', width=4),
+        annotation_text="Trade-off point: 95% variance", 
+        annotation_position="top right"
+    )
+
     # Add titles and labels
     fig.update_layout(
         title='Scree Plot - Principal Component Analysis (PCA)',
