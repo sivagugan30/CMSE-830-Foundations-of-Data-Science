@@ -1168,35 +1168,62 @@ elif st.session_state.page == 'what_player_to_buy':
 if st.session_state.page == 'data_handling':
     st.title("Data Handling and Statistical Analysis")
 
-    df1 = df.copy()  # Start with df1 as a copy of df
+    # Define categorical features
+    categorical_features = ['foot', 'best_position', 'core_position', 'age_brackets', 'team']
     
-    # Section 1: Chi-Square Test
-    st.subheader("1. Chi-Square Test for Categorical Features")
-    if 'market_value' in df1.columns:
-        df1['market_value_bins'] = pd.qcut(df1['market_value'], q=5, labels=[1, 2, 3, 4, 5])
-        categorical_features = ['foot', 'best_position', 'core_position', 'age_brackets', 'team']
-        chi_square_results = {}
-
-        for feature in categorical_features:
-            if feature in df1.columns:
-                contingency_table = pd.crosstab(df1[feature], df1['market_value_bins'])
-                _, p, _, _ = chi2_contingency(contingency_table)
-                chi_square_results[feature] = 1 - p
-
-        chi_square_df = pd.DataFrame.from_dict(chi_square_results, orient='index', columns=['1-p'])
-        chi_square_df.sort_values(by='1-p', ascending=False, inplace=True)
-        chi_square_df['Color'] = chi_square_df['1-p'].apply(lambda x: '#228b22' if x > 0.95 else '#d35400')
-
-        fig_chi = go.Figure()
-        for feature, row in chi_square_df.iterrows():
-            fig_chi.add_trace(go.Bar(x=[feature], y=[row['1-p']], marker=dict(color=row['Color']), showlegend=False))
-
-        fig_chi.add_trace(go.Scatter(x=chi_square_df.index, y=[0.95] * len(chi_square_df),
-                                      mode='lines', line=dict(color='red', width=2), name='Threshold (0.95)'))
-
-        fig_chi.update_layout(title="Chi-Square Test Results", xaxis_title="Features", yaxis_title="1 - p-value",
-                              template="plotly_dark", height=600)
-        st.plotly_chart(fig_chi, use_container_width=True)
+    # Bin 'market_value' into 5 buckets labeled 1 to 5
+    df1['market_value_bins'] = pd.qcut(df1['market_value'], q=5, labels=[1, 2, 3, 4, 5])
+    
+    # Initialize results
+    chi_square_results = {}
+    
+    # Perform Chi-Square test for each feature
+    for feature in categorical_features:
+        contingency_table = pd.crosstab(df1[feature], df1['market_value_bins'])
+        _, p, _, _ = chi2_contingency(contingency_table)
+        chi_square_results[feature] = 1 - p  # Store 1 - p-value
+    
+    # Convert results to a DataFrame
+    chi_square_df = pd.DataFrame.from_dict(chi_square_results, orient='index', columns=['1-p'])
+    chi_square_df.sort_values(by='1-p', ascending=False, inplace=True)
+    
+    # Create a new column to categorize the color based on 1-p value
+    chi_square_df['Color'] = chi_square_df['1-p'].apply(lambda x: '#228b22' if x > 0.95 else '#d35400')
+    
+    # Plot results using Plotly
+    fig = go.Figure()
+    
+    # Add bar chart for 1-p values with conditional colors
+    for feature, row in chi_square_df.iterrows():
+        fig.add_trace(go.Bar(
+            x=[feature],
+            y=[row['1-p']],
+            marker=dict(color=row['Color']),
+            name=feature,
+            showlegend=False  # Hide legend for each bar
+        ))
+    
+    # Add a horizontal line at 0.95
+    fig.add_trace(go.Scatter(
+        x=chi_square_df.index,
+        y=[0.95] * len(chi_square_df),
+        mode='lines',
+        line=dict(color='red', width=4),  # Thick red dashed line
+        name='Threshold (0.95)',
+        showlegend=True  # Hide legend for the threshold line
+    ))
+    
+    # Update layout
+    fig.update_layout(
+        title='Chi-Square Test for Categorical Features',
+        xaxis=dict(title='Features'),
+        yaxis=dict(title='1 - p-value'),
+        template='plotly_dark',
+        showlegend=True,
+        height=600
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
 
     # Section 2: T-Test
     st.subheader("2. T-Test for Numerical Features")
