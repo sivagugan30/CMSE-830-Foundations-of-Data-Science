@@ -721,8 +721,7 @@ if st.session_state.page == 'data_handling':
         # Hypothesis scenario introduction
         st.write("""
         High premiumness products are often considered more desirable due to their perceived higher quality and value. 
-        But, do they actually have a higher purchase value than low premiumness products? Our goal is to test if the average purchase value 
-        for high premiumness products is significantly higher than that for low premiumness products. Let's dive into the data to see if we can find a significant difference.
+        But, do they actually have a higher purchase rate % than low premiumness products? 
         """)
 
         # Price distribution
@@ -743,7 +742,7 @@ if st.session_state.page == 'data_handling':
         
         # Splitting the data
         st.write("""
-        We split the data into three buckets: low, medium, and high premiumness, to avoid class imbalance.
+        Let's split the data into three buckets: low, medium, and high premiumness, to avoid class imbalance.
         """)
         
         st.write("")
@@ -766,7 +765,7 @@ if st.session_state.page == 'data_handling':
         st.write("")
         
         st.write("""
-        The p-value is zero, and the confidence intervals for both groups do not overlap. This means the difference in purchase values is significant.
+        The p-value is zero, and the confidence intervals for both groups do not overlap. This means the difference in purchase rates % is significant.
         """)
 
         st.write("""
@@ -777,7 +776,7 @@ if st.session_state.page == 'data_handling':
         # Inference
         st.write("""
         ### Inference:
-        The average purchase value for high-premium products is significantly higher than for low-premium products. 
+        The average purchase rate % for high-premium products is significantly higher than for low-premium products. 
         We reject the null hypothesis and conclude that there is a significant difference in purchase behaviors basis product's premiumness
         """)
 
