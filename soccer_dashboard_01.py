@@ -699,19 +699,14 @@ elif st.session_state.page == 'what_player_to_buy':
 
 
 
+# Function to display images
+def show(image_url):
+    st.image(image_url, use_column_width=True)
 
-
-
-
+# Streamlit page logic
 if st.session_state.page == 'data_handling':
     
-    def show(image_path):
-        st.image(image_path, use_column_width=True)
-    #tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Data Processing & Feature Engineering", "Feature Selection", "Modelling"])
-    tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "Hypothesis Testing 1","Hypothesis Testing 2" ])
-
-    st.write("")
-
+    tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "Hypothesis Testing 1", "Hypothesis Testing 2"])
 
     with tab3:
         # Display hypothesis testing description
@@ -724,16 +719,16 @@ if st.session_state.page == 'data_handling':
         overall average of all brands.
         """)
 
-        # Display brand images
-        show(image_path='brand_1')  # Replace with actual paths
-        show(image_path='brand_2')
-        show(image_path='brand_3')
+        # Display brand images using raw GitHub URLs
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_1.png')  # Raw GitHub URL
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_2.png')
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_3.png')
 
         # Subtitle for t-test
         st.subheader("One-sample t-test")
 
         # Display more brand-related images
-        show(image_path='brand_4')
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_4.png')
 
         # Display inference text
         st.write("""
@@ -744,7 +739,8 @@ if st.session_state.page == 'data_handling':
 
         This suggests that 'runail' does indeed stand out in terms of purchase behavior, and its average purchase value 
         is significantly different from the overall average of all brands on the e-commerce platform.
-        """)        
+        """)
+
 
         
     
