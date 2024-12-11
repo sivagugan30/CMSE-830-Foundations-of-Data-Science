@@ -698,14 +698,15 @@ elif st.session_state.page == 'what_player_to_buy':
 
 
 
-def show(image_path):
-    st.image(image_path, use_column_width=True)
+
 
 
 
 
 if st.session_state.page == 'data_handling':
     
+    def show(image_path):
+        st.image(image_path, use_column_width=True)
     #tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Data Processing & Feature Engineering", "Feature Selection", "Modelling"])
     tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "Hypothesis Testing 1","Hypothesis Testing 2" ])
 
