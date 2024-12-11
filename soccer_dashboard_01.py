@@ -793,8 +793,8 @@ if st.session_state.page == 'data_handling':
         st.write("""
         'Runail' is currently the most popular brand on the platform. 
         
-        But, we have a question: does it truly stand out in terms of purchase behavior,
-        or is its average purchase value quite similar to that of other brands? 
+        But, we have a question: does it truly stand out in terms of purchase rate%,
+        or is its average purchase rate% quite similar to that of other brands? 
         """)
         st.write("")
         # Display brand images using raw GitHub URLs
@@ -802,7 +802,7 @@ if st.session_state.page == 'data_handling':
         st.write("")
         st.write("""
         Our goal here is to test if 'Runail's purchase behavior is significantly 
-        different from the overall average purchase value of all brands. Let's dig into the data and find out.
+        different from the overall average purchase rate% of all brands. Let's dig into the data and find out.
         """)
         st.write("")
         # Show the second image (visualizing data)
@@ -824,7 +824,7 @@ if st.session_state.page == 'data_handling':
         st.write("")
         # Display inference text
         st.write("""
-        The p-value is zero, and the  population mean does not lie in the confidence intervals of 'Runail'. This means the difference in purchase value is significant.
+        The p-value is zero, and the  population mean does not lie in the confidence intervals of 'Runail'. This means the difference in purchase rate % is significant.
         """)
 
         st.write("""
@@ -837,9 +837,9 @@ if st.session_state.page == 'data_handling':
         ### Inference: 
 
         From the t-test results, we observe that the population mean (0.146) is not within the 95% confidence interval of 'Runail’s sample mean 
-        (0.204, 0.233). This leads us to reject the null hypothesis that 'Runail’s average purchase value is similar to the overall average.
+        (0.204, 0.233). This leads us to reject the null hypothesis that 'Runail’s average purchase rate% is similar to the overall average.
         
-        This means that 'Runail' does indeed stand out in terms of purchase behavior, and its average purchase value is significantly higher than 
+        This means that 'Runail' does indeed stand out in terms of purchase behavior, and its average purchase rate % is significantly higher than 
         the overall average of all brands on the e-commerce platform. 
         
         """)
