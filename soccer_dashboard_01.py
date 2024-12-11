@@ -698,7 +698,8 @@ elif st.session_state.page == 'what_player_to_buy':
 
 
 
-
+def show(image_path):
+    st.image(image_path, use_column_width=True)
 
 
 
@@ -706,9 +707,49 @@ elif st.session_state.page == 'what_player_to_buy':
 if st.session_state.page == 'data_handling':
     
     #tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Data Processing & Feature Engineering", "Feature Selection", "Modelling"])
-    tab1, tab2 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection" ])
+    tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "1","2" ])
 
     st.write("")
+
+
+    with tab3:
+        # Display hypothesis testing description
+        st.write("# Hypothesis Testing 1")
+
+        # Hypothesis test description
+        st.write("""
+        'Runail' is the most popular brand on the platform. Does it truly stand out in terms of purchase behavior, 
+        or is its average purchase value similar to other brands? Let’s test if it’s significantly different from the 
+        overall average of all brands.
+        """)
+
+        # Display brand images
+        show(image_path='brand_1')  # Replace with actual paths
+        show(image_path='brand_2')
+        show(image_path='brand_3')
+
+        # Subtitle for t-test
+        st.subheader("One-sample t-test")
+
+        # Display more brand-related images
+        show(image_path='brand_4')
+
+        # Display inference text
+        st.write("""
+        ### Inference: 
+
+        Since the population mean (0.146) is not within the 95% confidence interval for the 'runail' sample's mean 
+        (0.204, 0.233), we reject the null hypothesis.
+
+        This suggests that 'runail' does indeed stand out in terms of purchase behavior, and its average purchase value 
+        is significantly different from the overall average of all brands on the e-commerce platform.
+        """)        
+
+
+
+
+    with tab4:
+        
     
     with tab1:
         st.write('')
