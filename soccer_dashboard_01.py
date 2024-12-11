@@ -714,6 +714,78 @@ if st.session_state.page == 'data_handling':
     
     tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "Hypothesis Testing 1", "Hypothesis Testing 2"])
 
+    with tab4:
+        # Display hypothesis testing description
+        st.write("# Hypothesis Testing 2")
+
+        # Hypothesis scenario introduction
+        st.write("""
+        High premiumness products are often considered more desirable due to their perceived higher quality and value. 
+        But, do they actually have a higher purchase value than low premiumness products? Our goal is to test if the average purchase value 
+        for high premiumness products is significantly higher than that for low premiumness products. Let's dive into the data to see if we can find a significant difference.
+        """)
+
+        # Price distribution
+        st.write("First, let’s check the price distribution.")
+        
+        st.write("")
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/price_3.png')
+        st.write("")
+        
+        st.write("""
+        The price distribution is skewed. After applying a log transformation, the distribution becomes normal.
+        Let's look at that.
+        """)
+        
+        st.write("")
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/price_2.png')
+        st.write("")
+        
+        # Splitting the data
+        st.write("""
+        We split the data into three buckets: low, medium, and high premiumness, to avoid class imbalance.
+        """)
+        
+        st.write("")
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/price_3.png')
+        st.write("")
+        
+        # Product comparison
+        st.write("""
+        Since we have two groups, we’ll use a Two-Sample t-test to check if the purchase values differ.
+        """)
+        st.write("")
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/product_1.png')
+        st.write("")
+    
+        # T-test results
+        st.subheader("After running the Two-Sample t-test")
+
+        st.write("")
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/product_2.png')
+        st.write("")
+        
+        st.write("""
+        The p-value is zero, and the confidence intervals for both groups do not overlap. This means the difference in purchase values is significant.
+        """)
+
+        st.write("""
+        - Confidence Interval for High Premium: [0.0615, 0.0635]
+        - Confidence Interval for Low Premium: [0.1285, 0.1314]
+        """)
+
+        # Inference
+        st.write("""
+        ### Inference:
+        The average purchase value for high-premium products is significantly higher than for low-premium products. 
+        We reject the null hypothesis and conclude that there is a significant difference in purchase behaviors basis product's premiumness
+        """)
+
+    
+    
+
+
+    
     with tab3:
         # Display hypothesis testing description
         st.write("# Hypothesis Testing 1")
