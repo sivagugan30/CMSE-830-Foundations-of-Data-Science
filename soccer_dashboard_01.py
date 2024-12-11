@@ -824,7 +824,7 @@ if st.session_state.page == 'data_handling':
         st.write("")
         # Display inference text
         st.write("""
-        The p-value is zero, and the  population mean does not lie in the confidence intervals of 'Runail'. This means the difference in purchase rates % is significant.
+        The p-value is zero, and the  population mean does not lie in the confidence intervals of 'Runail'. This means the difference in purchase value is significant.
         """)
 
         st.write("""
@@ -841,22 +841,7 @@ if st.session_state.page == 'data_handling':
         
         This means that 'Runail' does indeed stand out in terms of purchase behavior, and its average purchase value is significantly higher than 
         the overall average of all brands on the e-commerce platform. 
-        """)
-
-        st.write("""
-        The p-value is zero, and the confidence intervals for both groups do not overlap. This means the difference in purchase rates % is significant.
-        """)
-
-        st.write("""
-        - Confidence Interval for High Premium: [0.0615, 0.0635]
-        - Confidence Interval for Low Premium: [0.1285, 0.1314]
-        """)
-
-        # Inference
-        st.write("""
-        ### Inference:
-        The average purchase rate % for high-premium products is significantly higher than for low-premium products. 
-        We reject the null hypothesis and conclude that there is a significant difference in purchase behaviors basis product's premiumness
+        
         """)
 
     
