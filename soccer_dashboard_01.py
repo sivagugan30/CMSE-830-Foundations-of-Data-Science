@@ -703,6 +703,12 @@ elif st.session_state.page == 'what_player_to_buy':
 def show(image_url):
     st.image(image_url, use_column_width=True)
 
+#import streamlit as st
+
+# Function to display images
+def show(image_url):
+    st.image(image_url, use_column_width=True)
+
 # Streamlit page logic
 if st.session_state.page == 'data_handling':
     
@@ -712,33 +718,64 @@ if st.session_state.page == 'data_handling':
         # Display hypothesis testing description
         st.write("# Hypothesis Testing 1")
 
-        # Hypothesis test description
+        # Introduction to the hypothesis testing scenario
         st.write("""
-        'Runail' is the most popular brand on the platform. Does it truly stand out in terms of purchase behavior, 
-        or is its average purchase value similar to other brands? Let’s test if it’s significantly different from the 
-        overall average of all brands.
+        'Runail' is currently the most popular brand on the platform. But, we have a question: does it truly stand out in terms of purchase behavior,
+        or is its average purchase value quite similar to that of other brands? Our goal here is to test if 'Runail's purchase behavior is significantly 
+        different from the overall average purchase value of all brands. Let's dig into the data and find out.
         """)
 
         # Display brand images using raw GitHub URLs
         show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_1.png')  # Raw GitHub URL
+        
+        st.write("""
+        To answer this, we'll start by visualizing the purchase distribution for 'Runail'. The plot you see above gives us an idea of its 
+        distribution, but it's a bit unclear. Let’s take a closer look at it through a bar graph that plots the mean and variance to better visualize the trend.
+        """)
+
+        # Show the second image (visualizing data)
         show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_2.png')
+
+        st.write("""
+        As you can see in the bar graph above, we now have a clearer picture of the mean and variance of 'Runail' compared to other brands. 
+        This visualization will help us understand the spread and central tendency of its purchase behavior.
+        """)
+
+        st.write("""
+        Now that we’ve visualized the data, it’s time to apply a One-Sample t-test to check if 'Runail's average purchase value is significantly 
+        different from the overall population's mean. A t-test will help us determine if the difference in means is statistically significant or just due to random chance.
+        """)
+
+        # Mentioning the next step
+        st.write("""
+        Let's look at the results of the One-Sample t-test and see if 'Runail' really stands out.
+        """)
+
+        # Display the result of the t-test with a third image
         show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_3.png')
 
-        # Subtitle for t-test
-        st.subheader("One-sample t-test")
+        # Subtitle for t-test results
+        st.subheader("After performing the One-Sample t-test")
 
-        # Display more brand-related images
+        # Show the final image after t-test analysis
         show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_4.png')
 
         # Display inference text
         st.write("""
         ### Inference: 
 
-        Since the population mean (0.146) is not within the 95% confidence interval for the 'runail' sample's mean 
-        (0.204, 0.233), we reject the null hypothesis.
+        From the t-test results, we observe that the population mean (0.146) is not within the 95% confidence interval of 'Runail’s sample mean 
+        (0.204, 0.233). This leads us to reject the null hypothesis that 'Runail’s average purchase value is similar to the overall average.
+        
+        This means that 'Runail' does indeed stand out in terms of purchase behavior, and its average purchase value is significantly higher than 
+        the overall average of all brands on the e-commerce platform. In simpler terms, 'Runail' is not just popular, it is also driving distinct 
+        purchasing patterns compared to other brands!
+        """)
 
-        This suggests that 'runail' does indeed stand out in terms of purchase behavior, and its average purchase value 
-        is significantly different from the overall average of all brands on the e-commerce platform.
+        st.write("""
+        This analysis opens up further questions about what factors contribute to this purchasing behavior. 
+        Could it be pricing, promotions, or something else that drives customers to make higher-value purchases with 'Runail'? 
+        The exploration continues, but for now, we have the evidence that this brand truly does stand out.
         """)
 
 
