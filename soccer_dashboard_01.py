@@ -738,7 +738,7 @@ if st.session_state.page == 'data_handling':
         show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_2.png')
         st.write("")
         st.write("""
-        As you can see in the bar graph above, we now have a clearer picture of the mean and variance of 'Runail' compared to other brands. 
+        As you can see in the bar graph above and below, we now have a understanding of the mean and variance of 'Runail' compared to other brands. 
          """)
         st.write("")
         # Display the result of the t-test with a third image
