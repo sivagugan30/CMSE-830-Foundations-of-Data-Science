@@ -728,7 +728,7 @@ if st.session_state.page == 'data_handling':
         st.write("First, let’s check the price distribution.")
         
         st.write("")
-        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/price_3.png')
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/price_1.png')
         st.write("")
         
         st.write("""
