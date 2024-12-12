@@ -708,9 +708,11 @@ if st.session_state.page == 'data_handling':
     
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "Hypothesis Testing 1", "Hypothesis Testing 2", "Bayesian Model"])
 
+   
     with tab5:
         st.title("Bayesian Recommendation System")
         
+        # Introduction to the formula
         st.write("### Posterior Probability Formula")
         st.latex(r"""
         P(purchase | product, user) = \frac{
@@ -720,37 +722,50 @@ if st.session_state.page == 'data_handling':
         P(purchase)
         }{P(product) \cdot P(user)}
         """)
-    
-        st.write("""
-        This formula computes the probability of a purchase event, given the observed features for both the product and user.
-        """)
         
+        st.write("""
+        This formula computes the probability of a purchase event based on the observed features for both the product and user. 
+        By calculating the likelihoods of various product and user characteristics, we can predict the probability that a user will purchase a particular product.
+        """)
+    
+        # Feature Likelihood Table
         st.write("### Feature Likelihood Table")
         
-        # Create the DataFrame
+        # Create the DataFrame with observed likelihoods for product and user
         data = {
-            "Feature": ["Brand (RUNAIL) ", "Premiumness (HIGH) ", "Category (292) ", "Prior"],
+            "Feature": ["Brand (RUNAIL)", "Premiumness (HIGH)", "Category (292)", "Prior"],
             "Product": [0.073735, 0.044598, 0.080365, 0.051892],
             "User": [0.014652, 0.012371, 0.013636, 0.016463]
         }
         
         df10 = pd.DataFrame(data)
-
-        st.write(f"For user = 399445659 and product = 5809910 which belongs to High Premium, 'runail' brand below are the calculated likelihoods: ")
-        
+    
+        st.write(f"For user = 399445659 and product = 5809910, which belongs to High Premium and 'RUNAIL' brand, the calculated likelihoods are shown below:")
+    
         # Display the DataFrame as a table in Streamlit
         st.table(df10)
-
+    
+        # Moving forward with the recommendation logic
+        st.write("### Product Recommendation Strategy")
+        
+        st.write("""
+        Now, using the above likelihoods, we can calculate the posterior probabilities for a user purchasing different products. 
+        By ranking these probabilities in descending order, we can recommend the products with the highest likelihood of purchase to users.
+        """)
+    
         # Display message
         st.write("Probabilities of a user buying different products - 2 users, 10 products")
         st.write("")
-        
-        # Show image
+    
+        # Show image to visualize the recommendation system
         st.image('https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/bayesian_1.png')
-        
+    
         st.write("")
-        st.write("Based on these probabilities, we can rank them in descending order and recommend products to users.")
-        
+        st.write("""
+        Based on these probabilities, we can rank the products in descending order of purchase likelihood and make product recommendations to users, 
+        ensuring they receive personalized suggestions that maximize the likelihood of conversion.
+        """)
+
     with tab4:
         # Display hypothesis testing description
         st.write("# Hypothesis Testing 2")
