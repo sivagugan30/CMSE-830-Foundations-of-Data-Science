@@ -713,37 +713,45 @@ if st.session_state.page == 'data_handling':
         
         st.write("### Posterior Probability Formula")
         st.latex(r"""
-        P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}
+        P(purchase | product, user) = \frac{
+        P(premiumness|product) \cdot P(premiumness|user) \cdot 
+        P(category|product) \cdot P(category|user) \cdot 
+        P(brand|product) \cdot P(brand|user) \cdot
+        P(product) \cdot P(user) \cdot P(purchase)
+        }{P(marginal)}
         """)
+        
         st.write("""
-        Where:
-        - \(P(A|B)\): Posterior Probability (likelihood of a purchase given observed features)
-        - \(P(B|A)\): Likelihood (probability of observed features given a purchase)
-        - \(P(A)\): Prior Probability (overall likelihood of a purchase)
-        - \(P(B)\): Marginal Probability (normalizing constant)
-        """)
-        st.latex(r"""
-        P(A|B) = \frac{
-        \big(P(B_{premiumness}|A) \cdot P(B_{category\_id}|A) \cdot P(B_{brand}|A)\big) \cdot 
-        \big(P(user)\cdot P(product)\big) \cdot P(A)}{P(B)}
+        This formula calculates the probability of a purchase event occurring, given the observed features of both the product and the user. Here's the breakdown of components:
+        
+        - **\(P(purchase | product, user)\):** Posterior probability of a purchase.
+        - **\(P(premiumness|product)\):** Likelihood of the product being premium.
+        - **\(P(premiumness|user)\):** Likelihood of the user interacting with premium products.
+        - **\(P(category|product)\):** Likelihood of the product's category.
+        - **\(P(category|user)\):** Likelihood of the user interacting with product categories.
+        - **\(P(brand|product)\):** Likelihood of the product's brand.
+        - **\(P(brand|user)\):** Likelihood of the user interacting with product brands.
+        - **\(P(product)\):** Prior probability of the product being interacted with.
+        - **\(P(user)\):** Prior probability of the user interacting with any product.
+        - **\(P(purchase)\):** Prior probability of a purchase event.
+        - **\(P(marginal)\):** Normalizing constant.
         """)
     
-        st.write("### Likelihood Components")
+        st.write("### Likelihood Components Table")
+        st.write("The likelihoods are derived as follows:")
         
-        st.write("The table below summarizes the likelihoods considered for both the product and the user:")
-        
-        # Create table-like structure
         st.write("""
-        | **Product Likelihood**             | **User Likelihood**              |
+        | **Product Likelihoods**            | **User Likelihoods**             |
         |------------------------------------|----------------------------------|
-        | \(P(B_{premiumness}|A)\): Likelihood based on premiumness of the product | \(P(B_{premiumness}|A)\): Likelihood based on user’s interaction with premium products |
-        | \(P(B_{category\_id}|A)\): Likelihood based on the product’s category ID | \(P(B_{category\_id}|A)\): Likelihood based on user’s interaction with product categories |
-        | \(P(B_{brand}|A)\): Likelihood based on the product’s brand            | \(P(B_{brand}|A)\): Likelihood based on user’s interaction with product brands |
+        | \(P(premiumness|product)\): Based on product's premiumness | \(P(premiumness|user)\): Based on user's premium product interactions |
+        | \(P(category|product)\): Based on product's category       | \(P(category|user)\): Based on user's interaction with categories |
+        | \(P(brand|product)\): Based on product's brand             | \(P(brand|user)\): Based on user's interaction with brands |
         """)
-        
+    
         st.write("""
-        These likelihoods are combined with prior probabilities, user probabilities, and product probabilities to compute the posterior probability \(P(A|B)\).
+        By combining these components with prior probabilities, we derive the posterior probability \(P(purchase | product, user)\).
         """)
+
     
 
 
