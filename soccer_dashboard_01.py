@@ -720,36 +720,39 @@ if st.session_state.page == 'data_handling':
         P(product) \cdot P(user) \cdot P(purchase)
         }{P(marginal)}
         """)
-        
-        st.write("""
-        This formula calculates the probability of a purchase event occurring, given the observed features of both the product and the user. Here's the breakdown of components:
-        
-        - **\(P(purchase | product, user)\):** Posterior probability of a purchase.
-        - **\(P(premiumness|product)\):** Likelihood of the product being premium.
-        - **\(P(premiumness|user)\):** Likelihood of the user interacting with premium products.
-        - **\(P(category|product)\):** Likelihood of the product's category.
-        - **\(P(category|user)\):** Likelihood of the user interacting with product categories.
-        - **\(P(brand|product)\):** Likelihood of the product's brand.
-        - **\(P(brand|user)\):** Likelihood of the user interacting with product brands.
-        - **\(P(product)\):** Prior probability of the product being interacted with.
-        - **\(P(user)\):** Prior probability of the user interacting with any product.
-        - **\(P(purchase)\):** Prior probability of a purchase event.
-        - **\(P(marginal)\):** Normalizing constant.
-        """)
-    
-        st.write("### Likelihood Components Table")
-        st.write("The likelihoods are derived as follows:")
-        
-        st.write("""
-        | **Product Likelihoods**            | **User Likelihoods**             |
-        |------------------------------------|----------------------------------|
-        | \(P(premiumness|product)\): Based on product's premiumness | \(P(premiumness|user)\): Based on user's premium product interactions |
-        | \(P(category|product)\): Based on product's category       | \(P(category|user)\): Based on user's interaction with categories |
-        | \(P(brand|product)\): Based on product's brand             | \(P(brand|user)\): Based on user's interaction with brands |
-        """)
     
         st.write("""
-        By combining these components with prior probabilities, we derive the posterior probability \(P(purchase | product, user)\).
+        This formula computes the probability of a purchase event, given the observed features for both the product and user.
+        """)
+        
+        st.write("### Feature Likelihood Table")
+        
+        # Define table data
+        table_data = {
+            "Feature": ["Brand", "Premiumness", "Category", " ", "Prior"],
+            "Product": [
+                r"$P(\text{Brand}|\text{Product})$",
+                r"$P(\text{Premiumness}|\text{Product})$",
+                r"$P(\text{Category}|\text{Product})$",
+                " ",
+                r"$P(\text{Product})$"
+            ],
+            "User": [
+                r"$P(\text{Brand}|\text{User})$",
+                r"$P(\text{Premiumness}|\text{User})$",
+                r"$P(\text{Category}|\text{User})$",
+                " ",
+                r"$P(\text{User})$"
+            ]
+        }
+        
+        # Display the table
+        st.write("The likelihoods and priors used in the model are summarized below:")
+        st.table(pd.DataFrame(table_data))
+        
+        st.write("""
+        The posterior probability combines these likelihoods with the priors \(P(Product)\) and \(P(User)\), 
+        along with the normalizing constant \(P(marginal)\), to calculate \(P(purchase | product, user)\).
         """)
 
     
