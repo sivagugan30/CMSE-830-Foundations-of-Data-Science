@@ -714,7 +714,7 @@ if st.session_state.page == 'data_handling':
 
         st.write("")
         # Introduction to the formula
-        st.write("### Conditional Probability Formula:")
+        st.write("### Posterior Probability (general) :")
         
         st.latex(r"""
         P(A | B) = \frac{
