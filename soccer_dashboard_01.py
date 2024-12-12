@@ -711,34 +711,40 @@ if st.session_state.page == 'data_handling':
     with tab5:
         st.title("Bayesian Recommendation System")
         
-        st.write("### Posterior Probability Concept")
+        st.write("### Posterior Probability Formula")
+        st.latex(r"""
+        P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}
+        """)
         st.write("""
-        This recommendation system utilizes Bayesian inference to estimate the likelihood of a user purchasing a product based on observed features. 
+        Where:
+        - \(P(A|B)\): Posterior Probability (likelihood of a purchase given observed features)
+        - \(P(B|A)\): Likelihood (probability of observed features given a purchase)
+        - \(P(A)\): Prior Probability (overall likelihood of a purchase)
+        - \(P(B)\): Marginal Probability (normalizing constant)
+        """)
+        st.latex(r"""
+        P(A|B) = \frac{
+        \big(P(B_{premiumness}|A) \cdot P(B_{category\_id}|A) \cdot P(B_{brand}|A)\big) \cdot 
+        \big(P(user)\cdot P(product)\big) \cdot P(A)}{P(B)}
+        """)
     
-        **Key Components:**
-        - **Prior Probability (P(A))**: The overall likelihood of any user making a purchase in the dataset.
-        - **Likelihood (P(B|A))**: The probability of observing specific features (e.g., premiumness, category_id, and brand) given that a purchase occurred. 
-          - Calculated separately for the product and user-specific interactions.
-        - **Marginal Probability (P(B))**: A normalization constant ensuring probabilities sum to 1. Here, it's simplified as 1.
-        - **Posterior Probability (P(A|B))**: The final probability of a purchase occurring given the observed features.
+        st.write("### Likelihood Components")
         
-        **Steps:**
-        1. Compute user-specific and product-specific likelihoods for key features.
-        2. Multiply these likelihoods along with the prior probability, user probability, and product probability.
-        3. Normalize by the marginal probability to obtain the posterior probability.
-    
-        The system integrates data on user behavior, product attributes, and historical purchases to provide personalized recommendations.
-        """)
-        st.write("### How It Works:")
+        st.write("The table below summarizes the likelihoods considered for both the product and the user:")
+        
+        # Create table-like structure
         st.write("""
-        - For a given user and product, the model calculates feature-specific probabilities such as:
-            - **Premiumness:** Likelihood of a user/product interacting based on premium status.
-            - **Category ID:** Likelihood based on the product's category.
-            - **Brand:** Likelihood based on the product's brand.
-        - The probabilities are then combined using Bayes' Theorem to determine the probability of purchase (Posterior Probability).
-    
-        This allows us to prioritize and recommend the most likely products for each user!
+        | **Product Likelihood**             | **User Likelihood**              |
+        |------------------------------------|----------------------------------|
+        | \(P(B_{premiumness}|A)\): Likelihood based on premiumness of the product | \(P(B_{premiumness}|A)\): Likelihood based on user’s interaction with premium products |
+        | \(P(B_{category\_id}|A)\): Likelihood based on the product’s category ID | \(P(B_{category\_id}|A)\): Likelihood based on user’s interaction with product categories |
+        | \(P(B_{brand}|A)\): Likelihood based on the product’s brand            | \(P(B_{brand}|A)\): Likelihood based on user’s interaction with product brands |
         """)
+        
+        st.write("""
+        These likelihoods are combined with prior probabilities, user probabilities, and product probabilities to compute the posterior probability \(P(A|B)\).
+        """)
+    
 
 
             
