@@ -753,6 +753,8 @@ if st.session_state.page == 'data_handling':
         }
         
         df10 = pd.DataFrame(data)
+
+        st.write(f"For user = {user_id} and product = {product_id} which belongs to High Premium, '{observed_brand}' brand below are the calculated likelihoods: ")
         
         # Display the DataFrame as a table in Streamlit
         st.table(df10)
