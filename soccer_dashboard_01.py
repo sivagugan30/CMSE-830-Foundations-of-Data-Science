@@ -745,7 +745,17 @@ if st.session_state.page == 'data_handling':
         along with the normalizing constant \(P(marginal)\), to calculate \(P(purchase | product, user)\).
         """)
 
-    
+        # Create the DataFrame
+        data = {
+            "Feature": ["Brand", "Premiumness", "Category", "Prior"],
+            "Product": [0.073735, 0.044598, 0.080365, 0.051892],
+            "User": [0.014652, 0.012371, 0.013636, 0.016463]
+        }
+        
+        df10 = pd.DataFrame(data)
+        
+        # Display the DataFrame as a table in Streamlit
+        st.table(df10)
 
 
             
