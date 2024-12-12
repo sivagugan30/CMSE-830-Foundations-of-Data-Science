@@ -714,9 +714,9 @@ if st.session_state.page == 'data_handling':
         st.write("### Posterior Probability Formula")
         st.latex(r"""
         P(purchase | product, user) = \frac{
-        P(premiumness|product) \cdot P(premiumness|user) \cdot 
-        P(category|product) \cdot P(category|user) \cdot 
-        P(brand|product) \cdot P(brand|user) \cdot
+        P(premiumness(product)|purchase) \cdot P(premiumness(user)|purchase) \cdot 
+        P(category(product)|purchase) \cdot P(category(user)|purchase) \cdot 
+        P(brand(product)|purchase) \cdot P(brand(user)|purchase) \cdot
         P(purchase)
         }{P(product) \cdot P(user)}
         """)
@@ -727,24 +727,6 @@ if st.session_state.page == 'data_handling':
         
         st.write("### Feature Likelihood Table")
         
-        # Define the table data as a dictionary
-        table_data = {
-            "Feature": ["Brand", "Premiumness", "Category", "Prior"],
-            "Product": ["P(Brand | Product)", "P(Premiumness | Product)", "P(Category | Product)", "P(Product)"],
-            "User": ["P(Brand | User)", "P(Premiumness | User)", "P(Category | User)", "P(User)"]
-        }
-        
-        # Convert to a DataFrame for display
-        table_df = pd.DataFrame(table_data)
-        
-        # Render the table
-        st.table(table_df)
-        
-        st.write("""
-        The posterior probability combines these likelihoods with the priors \(P(Product)\) and \(P(User)\), 
-        along with the normalizing constant \(P(marginal)\), to calculate \(P(purchase | product, user)\).
-        """)
-
         # Create the DataFrame
         data = {
             "Feature": ["Brand (RUNAIL) ", "Premiumness (HIGH) ", "Category (292) ", "Prior"],
