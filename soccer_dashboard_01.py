@@ -714,6 +714,13 @@ if st.session_state.page == 'data_handling':
         
         # Introduction to the formula
         st.write("### Posterior Probability Formula")
+        
+        st.latex(r"""
+        P(A | B) = \frac{
+        P(B|A) \cdot P(A) 
+        }{P(B)}
+        """)
+        
         st.latex(r"""
         P(purchase | product, user) = \frac{
         P(premiumness(product)|purchase) \cdot P(premiumness(user)|purchase) \cdot 
@@ -755,7 +762,7 @@ if st.session_state.page == 'data_handling':
 
 
         
-        st.subheader("### Example - Probabilities of a user buying different products")
+        st.write("### Example - Probabilities of a user buying different products")
         st.write("For 2 users and 10 products, let's calculate the likelihood!")
         
         # Show image to visualize the recommendation system
