@@ -711,16 +711,20 @@ if st.session_state.page == 'data_handling':
    
     with tab5:
         st.title("Bayesian Recommendation System")
-        
+
+        st.write("")
         # Introduction to the formula
-        st.write("### Posterior Probability Formula")
+        st.write("### Conditional Probability Formula:")
         
         st.latex(r"""
         P(A | B) = \frac{
         P(B|A) \cdot P(A) 
         }{P(B)}
         """)
-        
+        st.write("")
+
+        st.write("### Posterior Probability for Purchase Prediction:")
+        st.write("")
         st.latex(r"""
         P(purchase | product, user) = \frac{
         P(premiumness(product)|purchase) \cdot P(premiumness(user)|purchase) \cdot 
