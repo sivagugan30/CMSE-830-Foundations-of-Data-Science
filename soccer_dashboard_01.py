@@ -727,28 +727,18 @@ if st.session_state.page == 'data_handling':
         
         st.write("### Feature Likelihood Table")
         
-        # Define table data
+        # Define the table data as a dictionary
         table_data = {
-            "Feature": ["Brand", "Premiumness", "Category", " ", "Prior"],
-            "Product": [
-                r"$P(\text{Brand}|\text{Product})$",
-                r"$P(\text{Premiumness}|\text{Product})$",
-                r"$P(\text{Category}|\text{Product})$",
-                " ",
-                r"$P(\text{Product})$"
-            ],
-            "User": [
-                r"$P(\text{Brand}|\text{User})$",
-                r"$P(\text{Premiumness}|\text{User})$",
-                r"$P(\text{Category}|\text{User})$",
-                " ",
-                r"$P(\text{User})$"
-            ]
+            "Feature": ["Brand", "Premiumness", "Category", "Prior"],
+            "Product": ["P(Brand | Product)", "P(Premiumness | Product)", "P(Category | Product)", "P(Product)"],
+            "User": ["P(Brand | User)", "P(Premiumness | User)", "P(Category | User)", "P(User)"]
         }
         
-        # Display the table
-        st.write("The likelihoods and priors used in the model are summarized below:")
-        st.table(pd.DataFrame(table_data))
+        # Convert to a DataFrame for display
+        table_df = pd.DataFrame(table_data)
+        
+        # Render the table
+        st.table(table_df)
         
         st.write("""
         The posterior probability combines these likelihoods with the priors \(P(Product)\) and \(P(User)\), 
