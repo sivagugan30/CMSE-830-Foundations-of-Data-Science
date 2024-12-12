@@ -739,8 +739,8 @@ if st.session_state.page == 'data_handling':
         By calculating the likelihoods of various product and user characteristics, we can predict the probability that a user will purchase a particular product.
         """)
     
-        # Feature Likelihood Table
-        st.write("### Feature Likelihood Table")
+        # Moving forward with the recommendation logic
+        st.write("### Product Recommendation Strategy")
         
         # Create the DataFrame with observed likelihoods for product and user
         data = {
@@ -756,9 +756,6 @@ if st.session_state.page == 'data_handling':
         # Display the DataFrame as a table in Streamlit
         st.table(df10)
     
-        # Moving forward with the recommendation logic
-        st.write("### Product Recommendation Strategy")
-
         
         st.write("""
         Now, using the above likelihoods, we can calculate the posterior probabilities for a user purchasing different products. 
