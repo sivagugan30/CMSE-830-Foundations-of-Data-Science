@@ -758,8 +758,7 @@ if st.session_state.page == 'data_handling':
     
         # Moving forward with the recommendation logic
         st.write("### Product Recommendation Strategy")
-        st.write("## Product Recommendation Strategy")
-        st.write("# Product Recommendation Strategy")
+
         
         st.write("""
         Now, using the above likelihoods, we can calculate the posterior probabilities for a user purchasing different products. 
@@ -768,7 +767,7 @@ if st.session_state.page == 'data_handling':
 
 
         
-        st.write("### Example - Probabilities of a user buying different products")
+        st.write("#### Example - Probabilities of a user buying different products")
         st.write("For 2 users and 10 products, let's calculate the likelihood!")
         
         # Show image to visualize the recommendation system
