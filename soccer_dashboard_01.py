@@ -712,8 +712,11 @@ def show(image_url):
 # Streamlit page logic
 if st.session_state.page == 'data_handling':
     
-    tab1, tab2, tab3, tab4 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "Hypothesis Testing 1", "Hypothesis Testing 2"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "Hypothesis Testing 1", "Hypothesis Testing 2", "Bayesian Model"])
 
+    with tab5:
+
+        
     with tab4:
         # Display hypothesis testing description
         st.write("# Hypothesis Testing 2")
