@@ -709,7 +709,48 @@ if st.session_state.page == 'data_handling':
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "Hypothesis Testing 1", "Hypothesis Testing 2", "Bayesian Model"])
 
     with tab5:
-        st.write("# Bayesian Model")
+        st.title("Bayesian Recommendation System")
+    
+        st.write("Posterior Probability Concept")
+        # Display the formula using LaTeX
+        st.latex(r"""
+        P(\text{Purchase} | \text{User}, \text{Product}) = \frac{
+            P(\text{Premium} | \text{Product}) \cdot 
+            P(\text{Category} | \text{Product}) \cdot 
+            P(\text{Brand} | \text{Product}) \cdot 
+            P(\text{Premium} | \text{User}) \cdot 
+            P(\text{Category} | \text{User}) \cdot 
+            P(\text{Brand} | \text{User}) \cdot 
+            P(\text{Prior})
+        }{
+            P(\text{Marginal})
+        }
+        """)
+    
+        # Explanation of the concept
+        st.write("""
+        ### Explanation of the Posterior Probability Formula
+    
+        The posterior probability represents the updated belief about the likelihood of a user purchasing a specific product after considering various factors. This is calculated using Bayes' theorem, which combines prior knowledge with observed data.
+    
+        **Components of the Formula:**
+    
+        - **Numerator:**
+          - **\(P(\text{Premium} | \text{Product})\)**: Likelihood that the product has a specific premium status (e.g., High, Medium, Low).
+          - **\(P(\text{Category} | \text{Product})\)**: Likelihood that the product belongs to a certain category (e.g., electronics, clothing).
+          - **\(P(\text{Brand} | \text{Product})\)**: Likelihood that the product is from a specific brand.
+          - **\(P(\text{Premium} | \text{User})\)**: Likelihood that the user prefers products with a certain premium status.
+          - **\(P(\text{Category} | \text{User})\)**: Likelihood that the user is interested in a specific category of products.
+          - **\(P(\text{Brand} | \text{User})\)**: Likelihood that the user prefers products from a certain brand.
+          - **\(P(\text{Prior})\)**: Prior probability representing initial beliefs about purchase likelihood based on historical data.
+    
+        - **Denominator:**
+          - **\(P(\text{Marginal})\)**: Marginal likelihood, which normalizes the result to ensure that probabilities sum to one across all possible outcomes.
+    
+        This formula allows for personalized recommendations by integrating both product-specific and user-specific information, ultimately enhancing the relevance and accuracy of suggestions in an e-commerce context.
+        """)
+
+
             
     with tab4:
         # Display hypothesis testing description
