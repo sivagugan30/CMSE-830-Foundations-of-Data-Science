@@ -703,20 +703,14 @@ elif st.session_state.page == 'what_player_to_buy':
 def show(image_url):
     st.image(image_url, use_column_width=True)
 
-#import streamlit as st
-
-# Function to display images
-def show(image_url):
-    st.image(image_url, use_column_width=True)
-
 # Streamlit page logic
 if st.session_state.page == 'data_handling':
     
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "Hypothesis Testing 1", "Hypothesis Testing 2", "Bayesian Model"])
 
     with tab5:
-
-        
+        st.write("# Bayesian Model")
+            
     with tab4:
         # Display hypothesis testing description
         st.write("# Hypothesis Testing 2")
