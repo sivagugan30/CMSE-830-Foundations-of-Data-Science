@@ -708,6 +708,130 @@ if st.session_state.page == 'data_handling':
     
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "Hypothesis Testing 1", "Hypothesis Testing 2", "Bayesian Model"])
 
+    with tab3:
+        # Display hypothesis testing description
+        st.write("# Hypothesis Testing 1")
+
+        # Introduction to the hypothesis testing scenario
+        st.write("""
+        'Runail' is currently the most popular brand on the platform. 
+        
+        But, we have a question: does it truly stand out in terms of purchase rate%,
+        or is its average purchase rate% quite similar to that of other brands? 
+        """)
+        st.write("")
+        # Display brand images using raw GitHub URLs
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_1.png')  # Raw GitHub URL
+        st.write("")
+        st.write("""
+        Our goal here is to test if 'Runail's purchase behavior is significantly 
+        different from the overall average purchase rate% of all brands. Let's dig into the data and find out.
+        """)
+        st.write("")
+        # Show the second image (visualizing data)
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_2.png')
+        st.write("")
+        st.write("""
+        As you can see in the bar graph above and below, we now have a understanding of the mean and variance of 'Runail' compared to other brands. 
+         """)
+        st.write("")
+        # Display the result of the t-test with a third image
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_3.png')
+        st.write("")
+       # Mentioning the next step
+        st.write("""
+            Let's look at the results of the One-Sample t-test and see if 'Runail' really stands out.
+        """)
+        # Show the final image after t-test analysis
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_4.png')
+        st.write("")
+        # Display inference text
+        st.write("""
+        The p-value is zero, and the  population mean does not lie in the confidence intervals of 'Runail'. This means the difference in purchase rate % is significant.
+        """)
+
+        st.write("""
+        - Confidence Interval for Runail: [ 0.204826, 0.233416 ]
+        - Population mean : [ 0.204826, 0.233416 ]
+        """)
+        
+        
+        st.write("""
+        ### Inference: 
+
+        From the t-test results, we observe that the population mean (0.146) is not within the 95% confidence interval of 'Runail’s sample mean 
+        (0.204, 0.233). This leads us to reject the null hypothesis that 'Runail’s average purchase rate% is similar to the overall average.
+        
+        This means that 'Runail' does indeed stand out in terms of purchase behavior, and its average purchase rate % is significantly higher than 
+        the overall average of all brands on the e-commerce platform. 
+        
+        """)
+
+    with tab4:
+        # Display hypothesis testing description
+        st.write("# Hypothesis Testing 2")
+
+        # Hypothesis scenario introduction
+        st.write("""
+        High premiumness products are often considered more desirable due to their perceived higher quality and value. 
+        But, do they actually have a higher purchase rate % than low premiumness products? 
+        """)
+
+        # Price distribution
+        st.write("First, let’s check the price distribution.")
+        
+        st.write("")
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/price_1.png')
+        st.write("")
+        
+        st.write("""
+        The price distribution is skewed. After applying a log transformation, the distribution becomes normal.
+        Let's look at that.
+        """)
+        
+        st.write("")
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/price_2.png')
+        st.write("")
+        
+        # Splitting the data
+        st.write("""
+        Let's split the data into three buckets: low, medium, and high premiumness, to avoid class imbalance.
+        """)
+        
+        st.write("")
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/price_3.png')
+        st.write("")
+        
+        # Product comparison
+        st.write("""
+        Since we have two groups, we’ll use a Two-Sample t-test to check if the purchase values differ.
+        """)
+        st.write("")
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/product_1.png')
+        st.write("")
+    
+        # T-test results
+        st.subheader("After running the Two-Sample t-test")
+
+        st.write("")
+        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/product_2.png')
+        st.write("")
+        
+        st.write("""
+        The p-value is zero, and the confidence intervals for both groups do not overlap. This means the difference in purchase rates % is significant.
+        """)
+
+        st.write("""
+        - Confidence Interval for High Premium: [0.0615, 0.0635]
+        - Confidence Interval for Low Premium: [0.1285, 0.1314]
+        """)
+
+        # Inference
+        st.write("""
+        ### Inference:
+        The average purchase rate % for high-premium products is significantly higher than for low-premium products. 
+        We reject the null hypothesis and conclude that there is a significant difference in purchase behaviors basis product's premiumness
+        """)
    
     with tab5:
         st.title("Bayesian Recommendation System")
@@ -776,136 +900,14 @@ if st.session_state.page == 'data_handling':
         ensuring they receive personalized suggestions that maximize the likelihood of conversion.
         """)
 
-    with tab4:
-        # Display hypothesis testing description
-        st.write("# Hypothesis Testing 2")
-
-        # Hypothesis scenario introduction
-        st.write("""
-        High premiumness products are often considered more desirable due to their perceived higher quality and value. 
-        But, do they actually have a higher purchase rate % than low premiumness products? 
-        """)
-
-        # Price distribution
-        st.write("First, let’s check the price distribution.")
-        
-        st.write("")
-        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/price_1.png')
-        st.write("")
-        
-        st.write("""
-        The price distribution is skewed. After applying a log transformation, the distribution becomes normal.
-        Let's look at that.
-        """)
-        
-        st.write("")
-        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/price_2.png')
-        st.write("")
-        
-        # Splitting the data
-        st.write("""
-        Let's split the data into three buckets: low, medium, and high premiumness, to avoid class imbalance.
-        """)
-        
-        st.write("")
-        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/price_3.png')
-        st.write("")
-        
-        # Product comparison
-        st.write("""
-        Since we have two groups, we’ll use a Two-Sample t-test to check if the purchase values differ.
-        """)
-        st.write("")
-        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/product_1.png')
-        st.write("")
     
-        # T-test results
-        st.subheader("After running the Two-Sample t-test")
-
-        st.write("")
-        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/product_2.png')
-        st.write("")
-        
-        st.write("""
-        The p-value is zero, and the confidence intervals for both groups do not overlap. This means the difference in purchase rates % is significant.
-        """)
-
-        st.write("""
-        - Confidence Interval for High Premium: [0.0615, 0.0635]
-        - Confidence Interval for Low Premium: [0.1285, 0.1314]
-        """)
-
-        # Inference
-        st.write("""
-        ### Inference:
-        The average purchase rate % for high-premium products is significantly higher than for low-premium products. 
-        We reject the null hypothesis and conclude that there is a significant difference in purchase behaviors basis product's premiumness
-        """)
 
     
     
 
 
     
-    with tab3:
-        # Display hypothesis testing description
-        st.write("# Hypothesis Testing 1")
-
-        # Introduction to the hypothesis testing scenario
-        st.write("""
-        'Runail' is currently the most popular brand on the platform. 
-        
-        But, we have a question: does it truly stand out in terms of purchase rate%,
-        or is its average purchase rate% quite similar to that of other brands? 
-        """)
-        st.write("")
-        # Display brand images using raw GitHub URLs
-        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_1.png')  # Raw GitHub URL
-        st.write("")
-        st.write("""
-        Our goal here is to test if 'Runail's purchase behavior is significantly 
-        different from the overall average purchase rate% of all brands. Let's dig into the data and find out.
-        """)
-        st.write("")
-        # Show the second image (visualizing data)
-        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_2.png')
-        st.write("")
-        st.write("""
-        As you can see in the bar graph above and below, we now have a understanding of the mean and variance of 'Runail' compared to other brands. 
-         """)
-        st.write("")
-        # Display the result of the t-test with a third image
-        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_3.png')
-        st.write("")
-       # Mentioning the next step
-        st.write("""
-            Let's look at the results of the One-Sample t-test and see if 'Runail' really stands out.
-        """)
-        # Show the final image after t-test analysis
-        show(image_url='https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/brand_4.png')
-        st.write("")
-        # Display inference text
-        st.write("""
-        The p-value is zero, and the  population mean does not lie in the confidence intervals of 'Runail'. This means the difference in purchase rate % is significant.
-        """)
-
-        st.write("""
-        - Confidence Interval for Runail: [ 0.204826, 0.233416 ]
-        - Population mean : [ 0.204826, 0.233416 ]
-        """)
-        
-        
-        st.write("""
-        ### Inference: 
-
-        From the t-test results, we observe that the population mean (0.146) is not within the 95% confidence interval of 'Runail’s sample mean 
-        (0.204, 0.233). This leads us to reject the null hypothesis that 'Runail’s average purchase rate% is similar to the overall average.
-        
-        This means that 'Runail' does indeed stand out in terms of purchase behavior, and its average purchase rate % is significantly higher than 
-        the overall average of all brands on the e-commerce platform. 
-        
-        """)
-
+    
     
     with tab1:
         st.write('')
