@@ -752,11 +752,12 @@ if st.session_state.page == 'data_handling':
         Now, using the above likelihoods, we can calculate the posterior probabilities for a user purchasing different products. 
         By ranking these probabilities in descending order, we can recommend the products with the highest likelihood of purchase to users.
         """)
-    
-        # Display message
-        st.write("Probabilities of a user buying different products - 2 users, 10 products")
-        st.write("")
-    
+
+
+        
+        st.subheader("### Example - Probabilities of a user buying different products")
+        st.write("For 2 users and 10 products, let's calculate the likelihood!")
+        
         # Show image to visualize the recommendation system
         st.image('https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/bayesian_1.png')
     
