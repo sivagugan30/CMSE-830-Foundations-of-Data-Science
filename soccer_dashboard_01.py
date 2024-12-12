@@ -741,8 +741,16 @@ if st.session_state.page == 'data_handling':
         # Display the DataFrame as a table in Streamlit
         st.table(df10)
 
-
-            
+        # Display message
+        st.write("Probabilities of a user buying different products - 2 users, 10 products")
+        st.write("")
+        
+        # Show image
+        st.image('https://raw.githubusercontent.com/sivagugan30/CMSE-830-Foundations-of-Data-Science/main/bayesian_1.png')
+        
+        st.write("")
+        st.write("Based on these probabilities, we can rank them in descending order and recommend products to users.")
+        
     with tab4:
         # Display hypothesis testing description
         st.write("# Hypothesis Testing 2")
