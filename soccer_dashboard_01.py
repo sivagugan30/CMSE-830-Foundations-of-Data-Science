@@ -709,36 +709,36 @@ if st.session_state.page == 'data_handling':
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Data Cleaning & Pre-processing", "Feature Selection", "Hypothesis Testing 1", "Hypothesis Testing 2", "Bayesian Model"])
 
     with tab5:
-    st.title("Bayesian Recommendation System")
+        st.title("Bayesian Recommendation System")
+        
+        st.write("### Posterior Probability Concept")
+        st.write("""
+        This recommendation system utilizes Bayesian inference to estimate the likelihood of a user purchasing a product based on observed features. 
     
-    st.write("### Posterior Probability Concept")
-    st.write("""
-    This recommendation system utilizes Bayesian inference to estimate the likelihood of a user purchasing a product based on observed features. 
-
-    **Key Components:**
-    - **Prior Probability (P(A))**: The overall likelihood of any user making a purchase in the dataset.
-    - **Likelihood (P(B|A))**: The probability of observing specific features (e.g., premiumness, category_id, and brand) given that a purchase occurred. 
-      - Calculated separately for the product and user-specific interactions.
-    - **Marginal Probability (P(B))**: A normalization constant ensuring probabilities sum to 1. Here, it's simplified as 1.
-    - **Posterior Probability (P(A|B))**: The final probability of a purchase occurring given the observed features.
+        **Key Components:**
+        - **Prior Probability (P(A))**: The overall likelihood of any user making a purchase in the dataset.
+        - **Likelihood (P(B|A))**: The probability of observing specific features (e.g., premiumness, category_id, and brand) given that a purchase occurred. 
+          - Calculated separately for the product and user-specific interactions.
+        - **Marginal Probability (P(B))**: A normalization constant ensuring probabilities sum to 1. Here, it's simplified as 1.
+        - **Posterior Probability (P(A|B))**: The final probability of a purchase occurring given the observed features.
+        
+        **Steps:**
+        1. Compute user-specific and product-specific likelihoods for key features.
+        2. Multiply these likelihoods along with the prior probability, user probability, and product probability.
+        3. Normalize by the marginal probability to obtain the posterior probability.
     
-    **Steps:**
-    1. Compute user-specific and product-specific likelihoods for key features.
-    2. Multiply these likelihoods along with the prior probability, user probability, and product probability.
-    3. Normalize by the marginal probability to obtain the posterior probability.
-
-    The system integrates data on user behavior, product attributes, and historical purchases to provide personalized recommendations.
-    """)
-    st.write("### How It Works:")
-    st.write("""
-    - For a given user and product, the model calculates feature-specific probabilities such as:
-        - **Premiumness:** Likelihood of a user/product interacting based on premium status.
-        - **Category ID:** Likelihood based on the product's category.
-        - **Brand:** Likelihood based on the product's brand.
-    - The probabilities are then combined using Bayes' Theorem to determine the probability of purchase (Posterior Probability).
-
-    This allows us to prioritize and recommend the most likely products for each user!
-    """)
+        The system integrates data on user behavior, product attributes, and historical purchases to provide personalized recommendations.
+        """)
+        st.write("### How It Works:")
+        st.write("""
+        - For a given user and product, the model calculates feature-specific probabilities such as:
+            - **Premiumness:** Likelihood of a user/product interacting based on premium status.
+            - **Category ID:** Likelihood based on the product's category.
+            - **Brand:** Likelihood based on the product's brand.
+        - The probabilities are then combined using Bayes' Theorem to determine the probability of purchase (Posterior Probability).
+    
+        This allows us to prioritize and recommend the most likely products for each user!
+        """)
 
 
             
