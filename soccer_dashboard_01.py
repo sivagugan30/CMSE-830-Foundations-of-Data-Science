@@ -708,16 +708,6 @@ if st.session_state.page == 'data_handling':
     
     tab1, tab2= st.tabs(["Data Cleaning & Pre-processing", "Feature Selection"])
 
-
-    
-
-    
-    
-
-
-    
-    
-    
     with tab1:
         st.write('')
         st.write('Github Repository : https://github.com/sivagugan30/CMSE-830-Foundations-of-Data-Science')
