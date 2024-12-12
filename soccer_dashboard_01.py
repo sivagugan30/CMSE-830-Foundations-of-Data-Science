@@ -747,7 +747,7 @@ if st.session_state.page == 'data_handling':
 
         # Create the DataFrame
         data = {
-            "Feature": ["Brand (runail)", "Premiumness(High)", "Category (292)", "Prior"],
+            "Feature": ["Brand (RUNAIL) ", "Premiumness (HIGH) ", "Category (292) ", "Prior"],
             "Product": [0.073735, 0.044598, 0.080365, 0.051892],
             "User": [0.014652, 0.012371, 0.013636, 0.016463]
         }
