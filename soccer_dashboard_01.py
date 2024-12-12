@@ -718,7 +718,7 @@ if st.session_state.page == 'data_handling':
         P(category|product) \cdot P(category|user) \cdot 
         P(brand|product) \cdot P(brand|user) \cdot
         P(product) \cdot P(user) \cdot P(purchase)
-        }{P(marginal)}
+        }{P(product) \cdot P(user)}
         """)
     
         st.write("""
