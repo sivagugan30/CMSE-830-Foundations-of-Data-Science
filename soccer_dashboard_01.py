@@ -717,7 +717,7 @@ if st.session_state.page == 'data_handling':
         P(premiumness|product) \cdot P(premiumness|user) \cdot 
         P(category|product) \cdot P(category|user) \cdot 
         P(brand|product) \cdot P(brand|user) \cdot
-        P(product) \cdot P(user) \cdot P(purchase)
+        P(purchase)
         }{P(product) \cdot P(user)}
         """)
     
