@@ -71,17 +71,33 @@ elif options == "What Player to Buy?":
 elif options == "Data Handling":
     st.session_state.page = 'data_handling'
 
+import os
+
+# Access the API_KEY environment variable
+api_key = os.getenv("KEY11")
+
+if not api_key:
+    raise ValueError("API_KEY is not set. Ensure it's passed in the environment variables.")
+
+
+# Use the API key for API requests or other logic
+
+
 
 # Homepage
 if st.session_state.page == 'home':
     set_background(image_path='garnacho.jpeg')
     st.header("")
     st.markdown('<h1 style="color: white;">Soccer Analytics Dashboard 2024</h1>', unsafe_allow_html=True)
+    
+
+
 
 elif st.session_state.page == 'Instructions':
 
     # Description
     st.subheader("About the Dashboard:")
+    st.write(f"My API Key is: {api_key}")
     st.write(
         "This dashboard is your ultimate companion for soccer analytics, offering insights into player performance, "
         "categorization, and recommendations through visualizations, statistical analysis, and predictive modeling. "
