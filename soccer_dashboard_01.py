@@ -74,7 +74,7 @@ elif options == "Data Handling":
 import os
 
 # Access the API_KEY environment variable
-api_key = os.getenv("KEY11")
+api_key = os.getenv("KEY21")
 
 if not api_key:
     raise ValueError("API_KEY is not set. Ensure it's passed in the environment variables.")
