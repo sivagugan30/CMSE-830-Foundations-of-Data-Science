@@ -21,8 +21,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run Python script with SECRET KEY21
+      - name: Run Python script with SECRET OPENAI_API_KEY
         run: |
           python soccer_dashboard_01.py
         env:
-          KEY21: ${{ secrets.KEY21 }}  # Access the secret here
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}  # Access the secret here
