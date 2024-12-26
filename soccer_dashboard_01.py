@@ -85,6 +85,15 @@ elif st.session_state.page == 'Instructions':
 
     # Description
     st.subheader("About the Dashboard:")
+
+    from openai import OpenAI
+    
+    a = OpenAI().embeddings.create(
+                                                input="hi hello",
+                                                model="text-embedding-3-small"  # Specify the embedding model
+                                                ).data[0].embedding
+
+    st.write(a)
     #st.write(f"My API Key is: {api_key}")
     st.write(
         "This dashboard is your ultimate companion for soccer analytics, offering insights into player performance, "
